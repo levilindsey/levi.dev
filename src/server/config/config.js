@@ -11,7 +11,7 @@ var projectRoot = require('path').resolve(__dirname + '/../../..');
 
 var config = {};
 
-config.environment = process.argv[2] || 'development';
+config.environment = process.env.NODE_ENV || process.argv[2] || 'development';
 
 // Include secure configuration data
 config.app = secureConfig.app;
@@ -40,12 +40,12 @@ switch (config.environment) {
     config.app.url = 'http://localhost:' + config.app.port;
     break;
   case 'staging':
-    config.app.port = process.env.PORT || 3000;
-    config.app.url = 'http://localhost:' + config.app.port;
+    config.app.port = process.env.PORT || 80;
+    config.app.url = 'http://levi.sl:' + config.app.port;
     break;
   case 'production':
-    config.app.port = process.env.PORT || 3000;
-    config.app.url = 'http://localhost:' + config.app.port;
+    config.app.port = process.env.PORT || 80;
+    config.app.url = 'http://levi.sl:' + config.app.port;
     break;
   default:
     throw new Error('Invalid mode: ' + config.environment);

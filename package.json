@@ -1,12 +1,13 @@
 {
   "name": "levi.sl",
-  "version": "0.0.0",
+  "version": "0.0.0-1",
   "description": "A personal website",
   "private": false,
   "domains": [
     "levi.sl",
     "www.levi.sl"
   ],
+  "subdomain": "levisl",
   "dependencies": {
     "q": "^1.0.1",
     "express": "^4.6.1",
@@ -51,7 +52,6 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "postinstall": "bower install",
     "start": "node src/server/main",
     "test": "gulp test"
   }
