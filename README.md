@@ -1,4 +1,4 @@
-# levi.sl
+# levi.codes
 
 A personal website
 
@@ -16,7 +16,7 @@ A personal website
 
 ### Download local Software
 
-- Clone the project repository to your local machine: `git clone https://github.com/levisl176/levi.sl`
+- Clone the project repository to your local machine: `git clone https://github.com/levisl176/levi.codes`
 - Download all required local packages: `npm install`
 
 ## Running the App Locally

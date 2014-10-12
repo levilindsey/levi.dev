@@ -41,11 +41,11 @@ switch (config.environment) {
     break;
   case 'staging':
     config.app.port = process.env.PORT || 80;
-    config.app.url = 'http://levi.sl:' + config.app.port;
+    config.app.url = 'http://levi.codes:' + config.app.port;
     break;
   case 'production':
     config.app.port = process.env.PORT || 80;
-    config.app.url = 'http://levi.sl:' + config.app.port;
+    config.app.url = 'http://levi.codes:' + config.app.port;
     break;
   default:
     throw new Error('Invalid mode: ' + config.environment);
