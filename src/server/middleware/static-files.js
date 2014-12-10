@@ -27,7 +27,7 @@ function setUpStaticFiles(server) {
 
   // Set up the public files
   mountPath = '/';
-  staticPath = config.distPath;
+  staticPath = config.publicPath;
   server.use(mountPath, serveStatic(staticPath));
   console.log('Serving static files: staticPath=' + staticPath + ', mountPath=' + mountPath);
 }

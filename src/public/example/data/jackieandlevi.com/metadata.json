@@ -1,0 +1,34 @@
+
+{
+  "id": "jackieandlevi.com",
+  "titleShort": "Levi's\nPortfolio\nWebsite",
+  "titleLong": "Levi's Portfolio Website",
+  "urls": {
+    "homepage": "http://jackieandlevi.com",
+    "github": "https://github.com/levisl176/jackieandlevi.com"
+  },
+  "jobTitle": "",
+  "date": {
+    "start": "9/2012",
+    "end": "Present"
+  },
+  "categories": [
+    "side-project",
+    "web",
+    "website",
+    "app",
+    "front-end",
+    "back-end",
+    "mean-stack",
+    "node.js",
+    "express",
+    "angularjs",
+    "mongodb",
+    "gulp.js",
+    "animation"
+  ],
+  "images": [
+  ],
+  "videos": [],
+  "content": ""
+}
