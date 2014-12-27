@@ -1,7 +1,7 @@
 {
-  "name": "levi.codes",
+  "name": "levi.sl",
   "version": "0.0.7",
-  "description": "A portfolio website",
+  "description": "Levi Lindsey's web portfolio",
   "private": false,
   "domains": [
     "levi.codes",
@@ -9,7 +9,7 @@
     "levi.sl",
     "www.levi.sl"
   ],
-  "subdomain": "levicodes",
+  "subdomain": "levisl",
   "dependencies": {
     "express": "~4.10.1",
     "serve-static": "~1.7.1",
