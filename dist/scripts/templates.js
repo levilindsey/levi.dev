@@ -1,3 +1,0 @@
-angular.module("templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("components/svg-icon/svg-icon.html","<svg class=\"svg-icon\">\n  <use xlink:href=\"{{svgId}}\" />\n</svg>\n");
-$templateCache.put("components/toast/toast.html","{{text}}\n");
-$templateCache.put("routes/home/home.html","<h1>\n  Hello {{homeState.appName}}!\n  <svg-icon name=\"thumbs-up\"></svg-icon>\n</h1>");}]);
