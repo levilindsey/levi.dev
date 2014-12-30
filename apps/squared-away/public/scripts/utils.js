@@ -115,8 +115,8 @@
   function _standardizeMouseEvent(event) {
     event = event || window.event; // account for IE
     if (typeof event.pageX === 'undefined') { // account for IE
-      event.pageX = event.clientX + _getScrollLeft();
-      event.pageY = event.clientY + _getScrollTop();
+      event.pageX = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+      event.pageY = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
     }
     return event;
   }
@@ -125,31 +125,11 @@
     var rect = element.getBoundingClientRect();
 
     return {
-      left: rect.left + _getScrollLeft(),
-      top: rect.top + _getScrollTop(),
+      left: rect.left + document.body.scrollLeft + document.documentElement.scrollLeft,
+      top: rect.top + document.body.scrollTop + document.documentElement.scrollTop,
       width: rect.width,
       height: rect.height
     };
-  }
-
-  function _getPageOffset(element) {
-    var x = 0, y = 0;
-    while (element) {
-      x += element.offsetLeft;
-      y += element.offsetTop;
-      element = element.offsetParent;
-    }
-    x -= _getScrollLeft();
-    y -= _getScrollTop();
-    return { x: x, y: y };
-  }
-
-  function _getScrollLeft() {
-    return document.documentElement.scrollLeft;
-  }
-
-  function _getScrollTop() {
-    return document.documentElement.scrollTop;
   }
 
   function _getLinGrowthValue(initial, rate, time) {
@@ -280,7 +260,6 @@
 
     standardizeMouseEvent: _standardizeMouseEvent,
     standardizeClientRect: _standardizeClientRect,
-    getPageOffset: _getPageOffset,
 
     getSquaredDistance: _getSquaredDistance,
 
