@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% var baseDir = '/dancing-spokes'; %>
+  <% var cacheBuster = '.v1.0.2'; %>
+
+  <head>
+    <title>Dancing Spokes</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Dancing sticks of light!">
+
+    <link rel="icon"
+          type="image/png"
+          href="<%= baseDir %>/images/favicon-16x16<%= cacheBuster %>.png"
+          sizes="16x16">
+    <link rel="icon"
+          type="image/png"
+          href="<%= baseDir %>/images/favicon-32x32<%= cacheBuster %>.png"
+          sizes="32x32">
+  </head>
+  
+  <body>
+    <script src="<%= baseDir %>/dancingSpokes<%= cacheBuster %>.js"></script>
+
+    <script><%= analyticsScript %></script>
+  </body>
+</html>

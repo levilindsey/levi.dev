@@ -1,0 +1,259 @@
+
+body {
+  position: relative;
+  margin: 0;
+  background-color: #0A0A0A;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.errorMessage {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin-top: 80px;
+  color: #DD4444;
+  background: hsla(0, 0%, 0%, 0.7);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  z-index: 32090;
+  cursor: pointer;
+}
+
+.gridCollectionContainer {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  margin: auto;
+  z-index: 1;
+}
+
+.photoGridContainer {
+  margin: 0 auto 10px;
+}
+
+.photoGridBanner {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  box-shadow: -2px 5px 15px 0 #000000;
+  z-index: 20;
+  background: -webkit-linear-gradient(#A0A0A0, #808080);
+  background: -o-linear-gradient(#A0A0A0, #808080);
+  background: -moz-linear-gradient(#A0A0A0, #808080);
+  background: linear-gradient(#A0A0A0, #808080);
+  -webkit-border-radius: 6px 6px 0 0;
+  -moz-border-radius: 6px 6px 0 0;
+  -ms-border-radius: 6px 6px 0 0;
+  -o-border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
+}
+
+.photoGridBanner:hover {
+  background: -webkit-linear-gradient(#E0E0E0, #C0C0C0);
+  background: -o-linear-gradient(#E0E0E0, #C0C0C0);
+  background: -moz-linear-gradient(#E0E0E0, #C0C0C0);
+  background: linear-gradient(#E0E0E0, #C0C0C0);
+}
+
+.photoGridBanner:active {
+  box-shadow: 0 0 5px 0 #000000 inset;
+  background: -webkit-linear-gradient(#707070, #909090);
+  background: -o-linear-gradient(#707070, #909090);
+  background: -moz-linear-gradient(#707070, #909090);
+  background: linear-gradient(#707070, #909090);
+}
+
+.photoGridBanner.closed {
+  -webkit-border-radius: 6px 6px 6px 6px;
+  -moz-border-radius: 6px 6px 6px 6px;
+  -ms-border-radius: 6px 6px 6px 6px;
+  -o-border-radius: 6px 6px 6px 6px;
+  border-radius: 6px 6px 6px 6px;
+}
+
+.bannerTitleContainer {
+  position: absolute;
+  top: 4px; left: 0; right: 0;
+  margin: auto;
+  color: hsla(0, 0%, 0%, 1);
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.insetText {
+  display: block;
+  position: relative;
+}
+
+.insetText:before {
+  content: attr(text);
+  position: absolute;
+}
+
+.insetText:before {
+  left: 1px;
+  top: 1px;
+  color: hsla(0, 0%, 100%, 0.3);
+}
+
+.photoGridBanner:active .insetText:after {
+  content: attr(text);
+  position: absolute;
+}
+
+.photoGridBanner:active .insetText:before {
+  color: hsla(0, 0%, 100%, 0.15);
+}
+
+.insetText:after {
+  left: 2px;
+  top: 2px;
+  color: hsla(0, 0%, 100%, 0.15);
+}
+
+.tapThumbnailPromptContainer {
+  position: relative;
+  float: right;
+  margin: 18px 10px 0 0;
+  color: hsla(0, 0%, 0%, 1);
+  font-size: 20px;
+  font-weight: bold;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.tapThumbnailPromptContainer.hidden {
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: visibility 0s linear 0.21s, opacity 0.21s ease 0s;
+  -moz-transition: visibility 0s linear 0.21s, opacity 0.21s ease 0s;
+  -o-transition: visibility 0s linear 0.21s, opacity 0.21s ease 0s;
+  transition: visibility 0s linear 0.21s, opacity 0.21s ease 0s;
+}
+
+.tapThumbnailPromptContainer.visible {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: visibility 0s linear 0s, opacity 0.41s ease 0s;
+  -moz-transition: visibility 0s linear 0s, opacity 0.41s ease 0s;
+  -o-transition: visibility 0s linear 0s, opacity 0.41s ease 0s;
+  transition: visibility 0s linear 0s, opacity 0.41s ease 0s;
+}
+
+.bannerIcon {
+  display: none;
+  float: left;
+  margin: 9px 0 0 9px;
+  width: 32px;
+  height: 32px;
+  background: transparent url('/wedding/images/spritesheet.png') no-repeat;
+}
+
+.openGridIcon {
+  background-position: 0 -307px;
+}
+
+.photoGridBanner:hover>.openGridIcon {
+  background-position: -33px -307px;
+}
+
+.photoGridBanner:active>.openGridIcon {
+  background-position: -66px -307px;
+}
+
+.closeGridIcon {
+  background-position: 0 -340px;
+}
+
+.photoGridBanner:hover>.closeGridIcon {
+  background-position: -33px -340px;
+}
+
+.photoGridBanner:active>.closeGridIcon {
+  background-position: -66px -340px;
+}
+
+.photoGrid {
+  position: relative;
+  width: 100%;
+  height: 0;
+  background-color: #202020;
+  overflow: hidden;
+  -webkit-border-radius: 0 0 6px 6px;
+  -moz-border-radius: 0 0 6px 6px;
+  -ms-border-radius: 0 0 6px 6px;
+  -o-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+  -webkit-transition-property: height;
+  -moz-transition-property: height;
+  -ms-transition-property: height;
+  -o-transition-property: height;
+  transition-property: height;
+}
+
+.gridCell {
+  position: absolute;
+  /* NOTE: if changing these values, also change them in params.js */
+  width: 112px;
+  height: 84px;
+  -webkit-transition-property: top;
+  -moz-transition-property: top;
+  -ms-transition-property: top;
+  -o-transition-property: top;
+  transition-property: top;
+}
+
+.gridCell.nonLoaded {
+  background: #303030;
+}
+
+.gridCell>img {
+  display: block;
+  position: absolute;
+  margin: auto;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.gridCell>img:hover {
+  box-shadow: 0 0 24px 2px #030303;
+  z-index: 11;
+}
+
+.gridCell>img:active {
+  box-shadow: -1px 1px 6px 1px #000000;
+}
+
+svg {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.gridCell .imageErrorMessage:before {
+  content: ':( This image is feeling shy today.';
+  display: block;
+  position: absolute;
+  margin: auto;
+  width: 80%;
+  height: 80%;
+  top: 0; right: 0; bottom: 0; left: 0;
+  font-size: 16px;
+  text-align: center;
+  color: #D09090;
+}
+
+body .gridCell img.failedImage {
+  display: none;
+}
+
+.progressCircleContainer {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+}

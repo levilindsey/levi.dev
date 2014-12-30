@@ -1,0 +1,36 @@
+body
+  #pageColumn
+    header#mainTitle
+      img(id='title', src='#{baseDir}/images/title.png#{currentVersion}', alt='Squared Away Title')
+      h2#betaLabel
+        | ALPHA
+
+    section#noJavaScriptArea
+      p
+        | Hey! This spiffy web app needs JavaScript in order to run. Come back with a browser that has JavaScript turned on!
+
+    include playarea
+
+    #infoArea
+      include directions
+      include options
+      include music
+      include about
+
+  script(src='/home/scripts/googleanalytics.js')
+
+  script(src='#{baseDir}/scripts/stacktrace-min-0.4.js')
+  script(src='#{baseDir}/scripts/soundjs-0.4.1.min.js')
+
+  script(src='#{baseDir}/scripts/logger.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/utils.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/resources.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/block.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/previewwindow.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/bombwindow.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/centersquare.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/gamewindow.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/input.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/sound.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/game.js#{currentVersion}')
+  script(src='#{baseDir}/scripts/main.js#{currentVersion}')

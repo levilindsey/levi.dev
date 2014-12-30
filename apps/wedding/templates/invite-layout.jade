@@ -1,0 +1,21 @@
+- var currentVersion = '?v=2.3.1';
+- var baseDir = '/wedding';
+
+doctype html
+html(lang='en')
+  head
+    title
+      | We&apos;re Getting Married!
+    meta(charset='utf-8')
+    meta(name='description', content='Welcome to Jackie and Levi\'s wedding invite!')
+    meta(name='keywords', content='Levi Lindsey, Jackie Schwartzstein, Jackie Lindsey, marriage, wedding')
+    meta(name='author', content='Levi Lindsey, Jackie Schwartzstein')
+
+    link(href='#{baseDir}/styles/wedding.css#{currentVersion}', type='text/css', rel='stylesheet')
+    link(href='#{baseDir}/images/icon.ico#{currentVersion}', type='image/gif', rel='shortcut icon')
+  body
+
+    a#ribbon(href='/wedding/photos')
+      img(src='#{baseDir}/images/wedding_photos_ribbon.png', alt='Check out Jackie and Levi\'s wedding photos!')
+
+    block content

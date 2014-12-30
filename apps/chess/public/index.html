@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  
+
+  <head>
+    <title>Chess</title>
+    <meta charset="utf-8">
+    <meta name="description" content="A two-player game of chess">
+    <link rel="shortcut icon" href="/chess/images/favicon.v1.0.2.ico">
+    <link rel="stylesheet" href="/chess/main.v1.0.2.css">
+  </head>
+
+  <body>
+    <div id="mainArea">
+
+      <p id="turnDisplay">
+        It is <span id="playerColor">white</span>&apos;s turn
+      </p>
+
+      <p id="status"></p>
+      <p id="notification"></p>
+
+      <div id="chessBoard">
+        Sorry, but JavaScript must be enabled to play this game!
+      </div>
+
+      <button id="randomMove"
+              type="button">
+        Make Random Move
+      </button>
+      <button id="startNewGame"
+              type="button">
+        Start New Game
+      </button>
+
+      <div id="promotion">
+        <h2>Select how to promote your pawn</h2>
+
+        <img id="promoteToQueen"
+             src="/chess/images/whitequeen.v1.0.2.png"
+             alt="Promote to queen">
+        <img id="promoteToRook"
+             src="/chess/images/whiterook.v1.0.2.png"
+             alt="Promote to rook">
+        <img id="promoteToKnight"
+             src="/chess/images/whiteknight.v1.0.2.png"
+             alt="Promote to knight">
+        <img id="promoteToBishop"
+             src="/chess/images/whitebishop.v1.0.2.png"
+             alt="Promote to bishop">
+      </div>
+
+      <h2>Directions</h2>
+
+      <p>
+        First, tap a piece to select it. Then, tap on whichever square you want to move the piece to.
+      </p>
+      <p>
+        <em>Note:</em> Remember that once you have touched a piece, you must use that piece if at all possible.
+      </p>
+      <p>
+        <em>Note:</em>In order to castle, select the king as the piece to move.
+      </p>
+    </div>
+
+    <script src="/chess/scripts/chessboard.v1.0.2.js"></script>
+    <script src="/chess/scripts/chesspieces.v1.0.2.js"></script>
+    <script src="/chess/scripts/chessgame.v1.0.2.js"></script>
+    <script src="/chess/scripts/main.v1.0.2.js"></script>
+
+    <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-43971205-1', 'jackieandlevi.com');ga('send', 'pageview');</script>
+  </body>
+</html>

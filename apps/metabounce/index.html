@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% var baseDir = '/metabounce'; %>
+  <% var cacheBuster = '.v1.0.2'; %>
+
+  <head>
+    <title>MetaBounce</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Fun with JavaScript...and bouncing">
+
+    <link rel="icon"
+          type="image/png"
+          href="<%= baseDir %>/images/favicon-16x16<%= cacheBuster %>.png"
+          sizes="16x16">
+    <link rel="icon"
+          type="image/png"
+          href="<%= baseDir %>/images/favicon-32x32<%= cacheBuster %>.png"
+          sizes="32x32">
+  </head>
+
+  <body>
+    <script src="<%= baseDir %>/scripts/constants<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/util<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/colorShifter<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/touchAnimator<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/ballHandler<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/metaBounce<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-Bubble<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-Gravity<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-Growth<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-MetaBounceDependent<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-MetaBounceIndependent<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-MetaBubble<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-Resistance<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-Squish<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-Swarm<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/parameter-profiles/params-TouchOfDeath<%= cacheBuster %>.js"></script>
+
+    <script><%= analyticsScript %></script>
+  </body>
+</html>

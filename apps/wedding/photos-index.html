@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% var baseDir = '/wedding'; %>
+  <% var cacheBuster = '.v2.3.2'; %>
+
+  <head>
+    <title>Wedding Photos</title>
+    <meta charset="utf-8">
+    <meta name="description" content="Photos from Jackie and Levi Lindsey's wedding.">
+
+    <link rel="icon"
+          type="image/png"
+          href="<%= baseDir %>/images/favicon-16x16<%= cacheBuster %>.png"
+          sizes="16x16">
+    <link rel="icon"
+          type="image/png"
+          href="<%= baseDir %>/images/favicon-32x32<%= cacheBuster %>.png"
+          sizes="32x32">
+
+    <link rel="stylesheet" href="<%= baseDir %>/styles/photolightbox<%= cacheBuster %>.css">
+    <link rel="stylesheet" href="<%= baseDir %>/styles/dropdownphotogrid<%= cacheBuster %>.css">
+  </head>
+  <body>
+    <div id="noJavaScriptMsg" class="errorMessage">
+      :( Sorry, but this fancy web app requires JavaScript.
+    </div>
+
+    <script>
+      // Remove the no-JavaScript message
+      var body, noJavaScriptMessage;
+      body = document.getElementsByTagName('body')[0];
+      noJavaScriptMessage = document.getElementById('noJavaScriptMsg');
+      body.removeChild(noJavaScriptMessage);
+    </script>
+
+    <script src="<%= baseDir %>/scripts/params<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/util<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/log<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/animate<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/progressCircle<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/photoItem<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/photoGroup<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/photoMetadata<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/photoLightbox<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/photoGridCell<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/dropdownPhotoGrid<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/photoGridCollection<%= cacheBuster %>.js"></script>
+    <script src="<%= baseDir %>/scripts/index<%= cacheBuster %>.js"></script>
+
+    <script><%= analyticsScript %></script>
+  </body>
+</html>

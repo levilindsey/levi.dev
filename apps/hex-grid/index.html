@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<% var baseDir = '/hex-grid'; %>
+<% var cacheBuster = '.v1.3.0'; %>
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Hex Grid</title>
+
+  <link rel="icon"
+        type="image/png"
+        href="<%= baseDir %>/example/images/favicon-16x16<%= cacheBuster %>.png"
+        sizes="16x16">
+  <link rel="icon"
+        type="image/png"
+        href="<%= baseDir %>/example/images/favicon-32x32<%= cacheBuster %>.png"
+        sizes="32x32">
+
+  <link rel="stylesheet"
+        type="text/css"
+        href="<%= baseDir %>/dist/hex-grid<%= cacheBuster %>.css">
+  <link id="stylesheet"
+        rel="stylesheet"
+        type="text/css"
+        href="<%= baseDir %>/example/styles/main<%= cacheBuster %>.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700'
+        rel='stylesheet'
+        type='text/css'>
+
+  <script>
+    window.appRootPath = '/hex-grid/example';
+  </script>
+  <script defer
+          type="text/javascript"
+          src="<%= baseDir %>/example/dist/hex-grid-example<%= cacheBuster %>.js"></script>
+  <!--<script defer-->
+          <!--type="text/javascript"-->
+          <!--src="<%= baseDir %>/example/dist/hex-grid-example.min<%= cacheBuster %>.js"></script>-->
+</head>
+<body>
+  <div id="hex-grid-area"></div>
+
+  <script><%= analyticsScript %></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+
+<section id="playArea">
+  <div id="gameScreen">
+    <canvas id="gameCanvas"></canvas>
+    <div id="topLevelDisplayArea">Level: <span id="topLevelDisplayData">1</span></div>
+    <div id="topScoreDisplayArea">Score: <span id="topScoreDisplayData">0</span></div>
+    <div id="hintTextArea"></div><img id="helpButton" src="undefined/images/help.png" alt="help" class="canvasButton button"/><img id="musicButton" src="undefined/images/music_on.png" alt="toggle music" class="canvasButton button"/><img id="sfxButton" src="undefined/images/sfx_on.png" alt="toggle sfx" class="canvasButton button"/>
+  </div>
+  <div id="mainMenuScreen" class="screen"><img id="quickPlayButton" src="undefined/images/quick_play.png" alt="Quick play button" class="button"/><img id="mainMenuScreenCustomPlayButton" src="undefined/images/top_button_locked.png" alt="Custom play button"/><img id="prevButton" src="undefined/images/prev.png" alt="Previous chapter button" class="button"/><img id="nextButton" src="undefined/images/next.png" alt="Next chapter button" class="button"/>
+    <div id="chapterList"><img id="chapter1" src="undefined/images/chapter_1.png" alt="Chapter 1" class="chapterItem"/><img id="chapter2" src="undefined/images/chapter_locked.png" alt="Chapter 2" class="chapterItem"/><img id="chapter3" src="undefined/images/chapter_locked.png" alt="Chapter 3" class="chapterItem"/><img id="chapter4" src="undefined/images/chapter_locked.png" alt="Chapter 4" class="chapterItem"/><img id="chapter5" src="undefined/images/chapter_locked.png" alt="Chapter 5" class="chapterItem"/><img id="chapter6" src="undefined/images/chapter_locked.png" alt="Chapter 6" class="chapterItem"/><img id="chapter7" src="undefined/images/chapter_locked.png" alt="Chapter 7" class="chapterItem"/><img id="chapter8" src="undefined/images/chapter_locked.png" alt="Chapter 8" class="chapterItem"/></div>
+    <div id="chapterProgressIndicator">1/8</div>
+  </div>
+  <div id="gameOverScreen" class="screen">
+    <hgroup>
+      <h1 id="gameOverScreenHeader" class="screenTitle">Game Over</h1>
+      <h2 id="gameOverScreenSubHeader" class="screenSubTitle"></h2>
+    </hgroup><img id="nextChapterButton" src="undefined/images/next_chapter.png" alt="Next chapter button" class="button"/><img id="gameOverScreenCustomPlayButton" src="undefined/images/custom_play.png" alt="Custom play button"/><img id="playAgainButton" src="undefined/images/play_again.png" alt="Play again button" class="button"/><img id="gameOverMainMenuButton" src="undefined/images/main_menu.png" alt="Main menu button" class="button"/>
+    <table id="statsTable">
+      <tr>
+        <td>Score:</td>
+        <td id="scoreData"></td>
+      </tr>
+      <tr>
+        <td>Level:</td>
+        <td id="levelData"></td>
+      </tr>
+      <tr>
+        <td>Time:</td>
+        <td id="timeData"></td>
+      </tr>
+      <tr>
+        <td>Layers destroyed:</td>
+        <td id="layersCollapsedData"></td>
+      </tr>
+      <tr>
+        <td>Squares destroyed:</td>
+        <td id="squaresCollapsedData"></td>
+      </tr>
+      <tr>
+        <td>Blocks used:</td>
+        <td id="blocksHandledData"></td>
+      </tr>
+      <tr id="collapseBombCountRow">
+        <td>Collapse bombs used:</td>
+        <td id="collapseBombsUsedData"></td>
+      </tr>
+      <tr id="settleBombCountRow">
+        <td>Settle bombs used:</td>
+        <td id="settleBombsUsedData"></td>
+      </tr>
+    </table>
+  </div>
+  <div id="pauseScreen" class="screen">
+    <hgroup>
+      <h1 id="pauseScreenHeader" class="screenTitle">Game Paused</h1>
+      <h2 id="pauseScreenSubHeader" class="screenSubTitle"></h2>
+    </hgroup>
+    <p id="explanationTextArea"></p><img id="pauseScreenPlayGameButton" src="undefined/images/play_game.png" alt="Play game button" class="button"/><img id="unpauseButton" src="undefined/images/unpause.png" alt="Unpause game button" class="button"/><img id="restartButton" src="undefined/images/restart.png" alt="Restart game button" class="confirmationButton button"/><img id="pauseMainMenuButton" src="undefined/images/main_menu.png" alt="Main menu button" class="confirmationButton button"/>
+  </div>
+  <div id="customPlayScreen" class="screen">
+    <hgroup>
+      <h1 id="customPlayScreenHeader" class="screenTitle">Custom Play</h1>
+      <h2 class="screenSubTitle">Change the game parameters with the controls below.</h2>
+    </hgroup><img id="customPlayScreenPlayGameButton" src="undefined/images/play_game.png" alt="Play game button" class="button"/><img id="customPlayMainMenuButton" src="undefined/images/main_menu.png" alt="Main menu button" class="button"/>
+  </div>
+  <div id="loginScreen" class="screen">
+    <h1 class="screenTitle">Login</h1>
+    <p>Username: </p>
+    <input type="text" size="20" placeholder="your username"/>
+    <p class="credentialsErrorMsg">Invalid username</p>
+    <p>Password: </p>
+    <input type="text" size="20" placeholder="your username"/>
+    <p class="credentialsErrorMsg">Password does not match username</p><img id="loginSubmitButton" src="undefined/images/.png" alt="Submit" class="button"/>
+  </div>
+  <div id="createAccountScreen" class="screen">
+    <h1 class="screenTitle">Create Account</h1>
+    <p>Username: </p>
+    <input type="text" size="20" placeholder="your username"/>
+    <p class="credentialsErrorMsg">That username is unavailable</p>
+    <p>Password: </p>
+    <input type="text" size="20" placeholder="your username"/>
+    <p id="" class="credentialsErrorMsg">Passwords must be at least six characters long</p><img id="createAccountSubmitButton" src="undefined/images/.png" alt="Submit" class="button"/>
+  </div>
+  <div id="editAccountScreen" class="screen">
+    <h1 class="screenTitle">Edit Account</h1>
+    <p>Username: </p>
+    <input type="text" size="20" placeholder="your username"/>
+    <p class="credentialsErrorMsg">Invalid username</p>
+    <p>Password: </p>
+    <input type="text" size="20" placeholder="your username"/>
+    <p class="credentialsErrorMsg">Password does not match username</p><img id="editAccountSubmitButton" src="undefined/images/.png" alt="Submit" class="button"/><img id="deleteAccountSubmitButton" src="undefined/images/.png" alt="Submit" class="button"/>
+  </div>
+  <div id="profileStatsScreen" class="screen">
+    <h1 class="screenTitle">Your Stats</h1>
+    <table id="profileStatsTable"></table>
+  </div>
+</section>
