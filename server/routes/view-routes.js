@@ -42,7 +42,7 @@ function attachDefaultRouteForApp(server, appPath) {
   routeName = new RegExp('^\/' + appName + '(?:\/.*)?$');
 
   appUsesServerSideTemplating = checkWhetherAppUsesServerSideTemplating(appPath);
-  indexFilePath = appUsesServerSideTemplating ? appPath + '/templates/index' : appPath + 'public/index.html';
+  indexFilePath = appUsesServerSideTemplating ? appPath + '/templates/index' : appPath + '/public/index.html';
 
 //  server.route(routeName).get(handleRequest);
   server.get(routeName, handleRequest);
