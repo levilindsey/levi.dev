@@ -57,7 +57,7 @@ function attachDefaultRouteForApp(server, appPath) {
       content = {};
       res.render(indexFilePath, content);
     } else {
-      res.sendfile(indexFilePath);
+      res.sendFile(indexFilePath);
     }
   }
 
