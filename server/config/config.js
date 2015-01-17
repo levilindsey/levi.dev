@@ -46,7 +46,7 @@ switch (config.environment) {
     break;
   case 'staging':
     config.app.port = process.env.PORT || 3000;
-    config.app.url = 'http://levi.sl:' + config.app.port;
+    config.app.url = 'http://levi.codes:' + config.app.port;
 
     // TODO: set up the actual db params
     config.db.port = '27017';
@@ -54,7 +54,7 @@ switch (config.environment) {
     break;
   case 'production':
     config.app.port = process.env.PORT || 3000;
-    config.app.url = 'http://levi.sl:' + config.app.port;
+    config.app.url = 'http://levi.codes:' + config.app.port;
 
     // TODO: set up the actual db params
     config.db.port = '27017';

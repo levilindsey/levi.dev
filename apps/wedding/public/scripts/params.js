@@ -17,7 +17,7 @@
   moduleParams.TITLE = 'Photo Viewer';
   moduleParams.VERSION = '??.??.??';
   moduleParams.LICENSE =
-      'The MIT License (MIT). Copyright (c) 2014 Levi Lindsey <levi@levi.sl>.';
+      'The MIT License (MIT). Copyright (c) 2014 Levi Lindsey <levi@levi.codes>.';
 
   // --- Photo metadata parameters --- //
 
