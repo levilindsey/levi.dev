@@ -1,0 +1,43 @@
+
+{
+  "id": "jackieandlevi.com",
+  "titleShort": "Levi's\nPortfolio\nWebsite",
+  "titleLong": "Levi's Portfolio Website",
+  "urls": {
+    "homepage": "http://jackieandlevi.com",
+    "github": "https://github.com/levisl176/jackieandlevi.com"
+  },
+  "jobTitle": "",
+  "date": "2013",
+  "categories": [
+    "side-project",
+    "web",
+    "website",
+    "app",
+    "front-end",
+    "back-end",
+    "mean-stack",
+    "node.js",
+    "express",
+    "angularjs",
+    "mongodb",
+    "gulp.js",
+    "animation"
+  ],
+  "images": [
+    {
+      "fileName": "v1/screenshot1.png",
+      "description": "This is the original design for jackieandlevi.com. The home page had a Venn diagram containing links to pages about Jackie, Levi, and both of them."
+    },
+    {
+      "fileName": "v1/screenshot2.png",
+      "description": "This was Jackie's about page."
+    },
+    {
+      "fileName": "v1/screenshot4.png",
+      "description": "This was Levi's about page."
+    }
+  ],
+  "videos": [],
+  "content": "#### The personal web site of Jackie and Levi Lindsey\r\n\r\nThe site hosted at this domain has gone through many iterations.\r\n\r\n- It was originally used as an [invite and RSVP system][wedding-url] for [Jackie][jackie-url] and [Levi's][levi-url]\r\n  [wedding][wedding-photos-url].\r\n- Later, it was used as a [simple portfolio site][v2-url] for both Levi and Jackie.\r\n- Levi is currently developing a newer version of the site that will involve better designs and delightful interactions.\r\n\r\n\r\n[wedding-url]: http:\/\/jackieandlevi.com\/wedding\/invite\r\n[jackie-url]: http:\/\/jackieandlevi.com\/jackie\r\n[levi-url]: http:\/\/levi.codes\r\n[wedding-photos-url]: http:\/\/jackieandlevi.com\/wedding\/photos\r\n[v2-url]: http:\/\/jackieandlevi.com\r\n[v3-url]: http:\/\/jackieandlevi.com"
+}

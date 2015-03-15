@@ -30,4 +30,4 @@ selenium
 .idea
 aws_config.json
 secure-config.js
-dist
+#dist
