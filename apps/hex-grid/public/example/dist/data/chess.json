@@ -4,7 +4,7 @@
   "titleLong": "Chess",
   "urls": {
     "demo": "http://levi.codes/chess",
-    "github": "https://github.com/levisl176/chess"
+    "github": "https://github.com/levilindsey/chess"
   },
   "jobTitle": "",
   "date": "10/2013",
@@ -62,5 +62,5 @@
     }
   ],
   "videos": [],
-  "content": "#### A simple, two-player game of chess\r\n\r\nLevi developed this app in a day. It includes a button to generate a random valid play for the current player.\r\n\r\nIt currently support game play across remote machines, but Levi plans on implementing this in the future. It currently\r\ndoes not support an AI player, but Levi also plans on implementing a simple form of this in the future.\r\n\r\n[main-url]: http:\/\/levi.codes\/chess"
+  "content": "#### A simple, two-player game of chess\n\nLevi developed this app in a day. It includes a button to generate a random valid play for the current player.\n\nIt currently support game play across remote machines, but Levi plans on implementing this in the future. It currently\ndoes not support an AI player, but Levi also plans on implementing a simple form of this in the future.\n\n[main-url]: http:\/\/levi.codes\/chess"
 }
