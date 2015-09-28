@@ -14,7 +14,7 @@ exports.attachRoutes = function (server, appPath, config) {
     var dirs = req.path.split('/');
 
     if (dirs[2] === '' || dirs.length === 2) {
-      res.redirect(301, 'http://fat-cat-chat.jit.su/');
+      res.redirect(301, 'http://fat-cat-chat.mod.bz/');
     } else {
       next();
     }
