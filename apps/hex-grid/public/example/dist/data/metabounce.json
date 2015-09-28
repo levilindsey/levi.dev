@@ -37,5 +37,5 @@
     }
   ],
   "videos": [],
-  "content": "#### Fun with SVG, balls, and bouncing!\n\nThis is a project in which Levi played around with balls and bouncing. This is just for fun, so enjoy!\n\nThe color of each ball is always shifting to another random value. At any given point, the hue, saturation, and\nlightness components of the ball colors are each constrained to a random global range. This creates an interesting\neffect with independently fluctuating colors that almost always seem cohesive.\n\n\n[main-url]: http:\/\/levi.codes\/metabounce\n[codepen-url]: http:\/\/codepen.io\/levisl176\/pen\/lqmAE"
+  "content": "#### Fun with SVG, balls, and bouncing!\r\n\r\nThis is a project in which Levi played around with balls and bouncing. This is just for fun, so enjoy!\r\n\r\nThe color of each ball is always shifting to another random value. At any given point, the hue, saturation, and\r\nlightness components of the ball colors are each constrained to a random global range. This creates an interesting\r\neffect with independently fluctuating colors that almost always seem cohesive.\r\n\r\n\r\n[main-url]: http:\/\/levi.codes\/metabounce\r\n[codepen-url]: http:\/\/codepen.io\/levisl176\/pen\/lqmAE"
 }

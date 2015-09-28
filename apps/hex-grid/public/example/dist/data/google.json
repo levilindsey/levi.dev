@@ -3,9 +3,9 @@
   "titleShort": "Google",
   "titleLong": "Google",
   "urls": {
-    "homepage": "http://google.com"
+    "homepage": "https://google.com"
   },
-  "jobTitle": "Front End Software Engineer",
+  "jobTitle": "Software Engineer",
   "date": {
     "start": "4/2015",
     "end": "Present"
@@ -14,7 +14,6 @@
     "work",
     "web",
     "front-end",
-    "back-end",
     "data-driven",
     "angularjs",
     "dart"
@@ -23,5 +22,5 @@
   ],
   "videos": [
   ],
-  "content": "_[Google][main-url] is a multinational corporation specializing in Internet-related services and products._\n\nLevi works for Google as a Front End Software Engineer.\n\n\n[main-url]: http:\/\/google.com"
+  "content": "_[Google][main-url] is a multinational corporation specializing in Internet-related services and products._\r\n\r\nLevi works for Google in Mountain View as a Software Engineer. He works on a CRM (customer\r\nrelationship management) application used by the sales teams at Google.\r\n\r\n\r\n\r\n[main-url]: http:\/\/google.com"
 }

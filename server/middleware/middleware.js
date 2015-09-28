@@ -16,13 +16,11 @@ exports.init = function (server) {
  */
 function attachExpressMiddleware(server) {
   var config = require('../config/config'),
-      db = require('../database/db'),
       morgan = require('morgan'), // For logging
       favicon = require('serve-favicon'), // For serving our favicon
       bodyParser = require('body-parser'), // For parsing urlencoded and json request bodies
       cookieParser = require('cookie-parser'),
-      session = require('express-session'),
-      MongoStore = require('connect-mongo')(session);
+      session = require('express-session');
 
   // Set up the templating engine
   server.set('views', __dirname);
@@ -32,14 +30,6 @@ function attachExpressMiddleware(server) {
   server.use(favicon(config.app.faviconPath));
   server.use(bodyParser.json());
   server.use(cookieParser());
-  // TODO: add database support on NodeJitsu
-//  server.use(session({
-//    secret: config.app.sessionSecret,
-//    store: new MongoStore({
-//      mongoose_connection: db.getDatabaseConnection(),
-//      collection: 'sessions'
-//    })
-//  }));
   server.use(handleError);
 }
 
