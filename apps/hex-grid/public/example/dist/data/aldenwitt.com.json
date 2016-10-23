@@ -1,0 +1,45 @@
+{
+  "id": "aldenwitt.com",
+  "titleShort": "Portfolio\nWebsite:\nSongwriter",
+  "titleLong": "Portfolio for a songwriter",
+  "urls": {
+    "homepage": "http://aldenwitt.com",
+    "github": "https://github.com/levilindsey/aldenwitt.com"
+  },
+  "jobTitle": "",
+  "date": {
+    "start": "7/2016",
+    "end": "10/2016"
+  },
+  "categories": [
+    "side-project",
+    "web",
+    "website",
+    "frontend",
+    "data-driven",
+    "angular",
+    "gulp.js",
+    "typescript",
+    "animation"
+  ],
+  "images": [
+    {
+      "fileName": "screenshot1.png",
+      "description": "Alden Witt's homepage is a polaroid. His website aims for realism and shows an envelope, polaroid, and napkin animating over a notepad on a rough wooden desk."
+    },
+    {
+      "fileName": "screenshot2.png",
+      "description": "Alden Witt's Contact page is a napkin."
+    },
+    {
+      "fileName": "screenshot3.png",
+      "description": "Alden Witt's Bio page is an envelope."
+    },
+    {
+      "fileName": "screenshot4.png",
+      "description": "aldenwitt.com is also responsive for mobile screens."
+    }
+  ],
+  "videos": [],
+  "content": "This website is a professional portfolio for songwriter Alden Witt, \"the best unsigned writer in \r\nNashville.\"\r\n\r\nThis website uses Angular 2 with Typescript. It also makes use of my custom animation framework for \r\nsliding the different pages in and out of view.\r\n\r\n[main-url]: http:\/\/aldenwitt.com"
+}
