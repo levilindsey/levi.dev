@@ -10,8 +10,8 @@
   "categories": [
     "side-project",
     "web",
-    "website",
-    "frontend",
+    "web-site",
+    "front-end",
     "jquery",
     "php"
   ],
@@ -46,5 +46,5 @@
     }
   ],
   "videos": [],
-  "content": "_[Rainy Day Ukes][main-url] is a web-based handmade ukulele business._\r\n\r\nLevi built this website for his friend's business.\r\n\r\nAll designs were done by the supremely talented graphic designer [Ryan Maher][ryan-url].\r\n\r\n\r\n[main-url]: http:\/\/rainydayukes.com\r\n[ryan-url]: http:\/\/linkedin.com\/in\/ryanmichaelmaher"
+  "content": "_[Rainy Day Ukes][main-url] is a web-based handmade ukulele business._\n\nLevi built this website for his friend's business.\n\nAll designs were done by the supremely talented graphic designer [Ryan Maher][ryan-url].\n\n\n[main-url]: http:\/\/rainydayukes.com\n[ryan-url]: http:\/\/linkedin.com\/in\/ryanmichaelmaher"
 }

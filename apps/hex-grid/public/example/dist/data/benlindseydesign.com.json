@@ -14,10 +14,10 @@
   "categories": [
     "side-project",
     "web",
-    "website",
-    "frontend",
+    "web-site",
+    "front-end",
     "data-driven",
-    "angular",
+    "angularjs",
     "gulp.js"
   ],
   "images": [
@@ -27,5 +27,5 @@
     }
   ],
   "videos": [],
-  "content": "This website is a professional portfolio interaction designer for Ben Lindsey.\r\n\r\n[main-url]: http:\/\/benlindseydesign.com"
+  "content": "This website is a professional portfolio for Ben Lindsey.\n\n[main-url]: http:\/\/benlindseydesign.com"
 }

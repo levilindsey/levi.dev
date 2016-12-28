@@ -11,8 +11,8 @@
   "categories": [
     "side-project",
     "web",
-    "website",
-    "frontend",
+    "web-site",
+    "front-end",
     "php",
     "jquery",
     "animations"
@@ -48,5 +48,5 @@
     }
   ],
   "videos": [],
-  "content": "#### A wedding invite and RSVP system\r\n\r\nLevi developed this simple web app as the invite and RSVP system for his and [Jackie's][jackie-url] wedding.\r\n\r\n\r\n[main-url]: http:\/\/levi.codes\/wedding\/invite\r\n[jackie-url]: http:\/\/jackieandlevi.com\/jackie"
+  "content": "#### A wedding invite and RSVP system\n\nLevi developed this simple web app as the invite and RSVP system for his and [Jackie's][jackie-url] wedding.\n\n\n[main-url]: http:\/\/levi.codes\/wedding\/invite\n[jackie-url]: http:\/\/jackieandlevi.com\/jackie"
 }

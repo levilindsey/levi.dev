@@ -1,7 +1,7 @@
 ## The Cover-Letter Schpiel
 
 With a background as a lead applications engineer across a wide array of platforms, Levi currently specializes in
-frontend engineering.
+front-end engineering.
 
 Levi is a seasoned technical leader with experience guiding many projects through all stages of development. He
 develops with an emphasis on modular, maintainable, and self-documented code. He takes pride in his work and strives
@@ -18,7 +18,7 @@ Levi is a huge advocate of open-source technology. You can fork all of his side-
 
 Levi currently works at [Google][google-url] as a Front End Software Engineer.
 
-Levi is originally from from Olympia, WA. He now lives in Sunnyvale, CA with his wife. She is [a beautiful marine
+Levi is originally from from Olympia, WA. He now lives in Seattle, WA with his wife. She is [a beautiful marine
 mammal ecologist][jackie-url] whom he met at the University of Washington in Seattle.
 
 Outside the realm of computer science, Levi has many hobbies/interests. First and foremost, he is a musician. In
