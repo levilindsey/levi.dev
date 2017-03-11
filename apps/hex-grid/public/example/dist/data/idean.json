@@ -6,6 +6,7 @@
     "homepage": "http://idean.com"
   },
   "jobTitle": "UI Developer",
+  "location": "Palo Alto, CA",
   "date": {
     "start": "3/2014",
     "end": "3/2015"
@@ -13,12 +14,12 @@
   "categories": [
     "work",
     "web",
-    "front-end",
+    "frontend",
     "back-end",
     "user-experience",
     "data-driven",
     "mean-stack",
-    "angularjs",
+    "angular",
     "node.js",
     "mongodb",
     "express",
@@ -54,5 +55,5 @@
       "description": "Idean's UX Rap!"
     }
   ],
-  "content": "_[Idean][main-url] is a global design agency dedicated to delivering the best possible User Experience._\n\nLevi used JavaScript to create awesome user experiences across many different projects for many different clients.\nUnfortunately, all of the projects he worked on are under NDAs, so he cannot disclose too much detail about any of\nthem.\n\n### Project A: Enterprise Security-Management Application\n\nLevi developed a high-fidelity prototype for the client’s enterprise security-management application. This included an\nAngularJS framework with an intricate front-end routing mechanism.\n\n_Front and back end: Node.js, AngularJS, MongoDB, Gulp, SASS_\n\n### Project B: Enterprise Storage-Management Application\n\nLevi developed a first-iteration of the front-end for the client's enterprise storage-management application. This\nincluded a complex SVG-based workspace in which resources were graphically configured within tree structures.\n\n_Front end: AngularJS, Gulp, SVG, SASS_\n\n### Project C: Analytics Dashboard\n\nLevi developed a web portal for analyzing data collected from mobile applications. This included highly configurable\ndata visualizations.\n\n_Front end: AngularJS, D3.js, Gulp, SASS_\n\n### Project D: Web Portal for SDK Specifications\n\nLevi developed a web portal for displaying the specifications of the client's RESTful API. This included the ability\nto test out and tweak each of the different API calls directly from the portal. Levi also created a simple test server\nfor handling the requests.\n\n_Front and back end: Node.js, AngularJS, MongoDB, Gulp, SASS_\n\n### Project E: Checkout Wizard\n\nLevi helped develop a complex checkout wizard system for the client's translation service. This involved many custom\nwidgets for each page in addition to complex routing logic. This also required interfacing with server APIs to update\nthe quote data after each step.\n\n_Front end: AngularJS, Gulp, SASS_\n\n### Project E: Content Management System\n\nLevi developed the full-stack infrastructure for a content management system.\n\n_Front and back end: Node.js, AngularJS, MongoDB, Grunt, SASS_\n\n### Project F: WordPress site\n\nLevi updated and maintained the client's pre-existing WordPress website.\n\n### Project G: Squarespace site\n\nLevi customized the client's pre-existing Squarespace website.\n\n[main-url]: http:\/\/idean.com"
+  "content": "_[Idean][main-url] is a global design agency dedicated to delivering the best possible User Experience._\n\nLevi used JavaScript to create awesome user experiences across many different projects for many different clients.\nUnfortunately, all of the projects he worked on are under NDAs, so he cannot disclose too much detail about any of\nthem.\n\n### Project A: Enterprise Security-Management Application\n\nLevi developed a high-fidelity prototype for the client’s enterprise security-management application. This included an\nAngularJS framework with an intricate frontend routing mechanism.\n\n_Front and back end: Node.js, AngularJS, MongoDB, Gulp, SASS_\n\n### Project B: Enterprise Storage-Management Application\n\nLevi developed a first-iteration of the frontend for the client's enterprise storage-management application. This\nincluded a complex SVG-based workspace in which resources were graphically configured within tree structures.\n\n_Front end: AngularJS, Gulp, SVG, SASS_\n\n### Project C: Analytics Dashboard\n\nLevi developed a web portal for analyzing data collected from mobile applications. This included highly configurable\ndata visualizations.\n\n_Front end: AngularJS, D3.js, Gulp, SASS_\n\n### Project D: Web Portal for SDK Specifications\n\nLevi developed a web portal for displaying the specifications of the client's RESTful API. This included the ability\nto test out and tweak each of the different API calls directly from the portal. Levi also created a simple test server\nfor handling the requests.\n\n_Front and back end: Node.js, AngularJS, MongoDB, Gulp, SASS_\n\n### Project E: Checkout Wizard\n\nLevi helped develop a complex checkout wizard system for the client's translation service. This involved many custom\nwidgets for each page in addition to complex routing logic. This also required interfacing with server APIs to update\nthe quote data after each step.\n\n_Front end: AngularJS, Gulp, SASS_\n\n### Project E: Content Management System\n\nLevi developed the full-stack infrastructure for a content management system.\n\n_Front and back end: Node.js, AngularJS, MongoDB, Grunt, SASS_\n\n### Project F: WordPress site\n\nLevi updated and maintained the client's pre-existing WordPress website.\n\n### Project G: Squarespace site\n\nLevi customized the client's pre-existing Squarespace website.\n\n[main-url]: http:\/\/idean.com"
 }
