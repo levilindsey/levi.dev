@@ -1,5 +1,4 @@
 var fs = require('fs'),
-    secureConfig = require('./secure-config'),
     path = require('path'),
 
     config = {};
@@ -7,8 +6,9 @@ var fs = require('fs'),
 // TODO: change this to use Node.js environment variables
 config.environment = 'production';
 
-// Merge in the secure configuration data
-config.app = secureConfig.app;
+// This is just some random string that we can use to make our sessions a
+// little more secure.
+config.app.sessionSecret = process.env.SESSION_SECRET;
 
 // Locations of some important files
 config.app.projectRootPath = path.resolve(__dirname + '/../..');
