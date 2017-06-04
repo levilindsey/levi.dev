@@ -13,7 +13,7 @@
     "url": "https://github.com/levilindsey/levi.codes"
   },
   "scripts": {
-    "start": "node server/main.js",
+    "start": "node server/main.js"
   },
   "domains": [
     "levi.codes",
