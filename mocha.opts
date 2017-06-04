@@ -1,6 +1,0 @@
---require chai
---require sinon
---require sinon-chai
---require chai-as-promised
---reporter dot
---ui tdd

@@ -6,8 +6,6 @@ config.appsPath = 'apps';
 config.serverPath = 'server';
 
 config.templatesSrc = config.appsPath + '/*/*index.html';
-config.frontEndTestsSrc = config.appsPath + '/**/*_test.js';
-config.serverTestsSrc = config.serverPath + '/tests/**/*_test.js';
 
 config.templatesDist = config.appsPath;
 
@@ -38,20 +36,6 @@ gulp.task('templates', function () {
       .pipe(gulp.dest(config.templatesDist));
 });
 
-gulp.task('tests-once', ['server-tests-once', 'front-end-tests-once']);
-
-gulp.task('server-tests-once', function () {
-  return gulp.src(config.serverTestsSrc, {read: false})
-      .pipe(plugins.plumber())
-      .pipe(plugins.mocha({reporter: 'dot', ui: 'tdd'}));
-});
-
-gulp.task('front-end-tests-once', function () {
-  return gulp.src(config.frontEndTestsSrc)
-      .pipe(plugins.plumber())
-      .pipe(plugins.karma({configFile: 'karma.conf.js', action: 'run'}));
-});
-
 gulp.task('bump', function () {
   return gulp.src(['./bower.json', './package.json'])
       .pipe(plugins.plumber())
@@ -64,5 +48,5 @@ gulp.task('server', function () {
 });
 
 gulp.task('default', function () {
-  gulp.start('server', 'templates', 'tests-once');
+  gulp.start('server', 'templates');
 });

@@ -30,5 +30,5 @@
     }
   ],
   "videos": [],
-  "content": "#### Fun with SVG animations and dancing sticks of light!\n\nThe color of each spoke is always shifting to another random value. At any given point, the hue, saturation, and\nlightness components of the spoke colors are each constrained to a random global range. This creates an interesting\neffect with independently fluctuating colors that almost always seem cohesive.\n\n\n[main-url]: http:\/\/levi.codes\/dancing-spokes"
+  "content": "#### Fun with SVG animations and dancing sticks of light!\r\n\r\nThe color of each spoke is always shifting to another random value. At any given point, the hue, saturation, and\r\nlightness components of the spoke colors are each constrained to a random global range. This creates an interesting\r\neffect with independently fluctuating colors that almost always seem cohesive.\r\n\r\n\r\n[main-url]: http:\/\/levi.codes\/dancing-spokes"
 }
