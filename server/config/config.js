@@ -6,6 +6,8 @@ var fs = require('fs'),
 // TODO: change this to use Node.js environment variables
 config.environment = 'production';
 
+config.app = {};
+
 // This is just some random string that we can use to make our sessions a
 // little more secure.
 config.app.sessionSecret = process.env.SESSION_SECRET;
