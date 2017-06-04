@@ -31,3 +31,4 @@ selenium
 aws_config.json
 secure-config.js
 #dist
+.env
