@@ -16,7 +16,7 @@ body {
 /* --- Tile styles --- */
 
 [data-hg-tile-title] {
-  font-family: Georgia, serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
   font-style: italic;
   color: #FAFAFA;
 }
@@ -56,6 +56,20 @@ div[data-hg-post-logo] {
 
 [data-hg-post-date] {
   color: #999999;
+  text-align: right;
+}
+
+[data-hg-post-location] {
+  color: #999999;
+  font-size: 14px;
+  font-style: italic;
+  text-align: right;
+}
+
+[data-hg-post-job-title] {
+  color: #999999;
+  font-size: 14px;
+  font-style: italic;
   text-align: right;
 }
 

@@ -1,0 +1,9 @@
+# For deploying apps on Google Cloud Platform
+runtime: nodejs
+env: flex
+manual_scaling:
+  instances: 1
+
+# Temporary setting to keep gcloud from uploading node_modules
+skip_files:
+ - ^node_modules$
