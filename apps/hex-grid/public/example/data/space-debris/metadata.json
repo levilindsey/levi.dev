@@ -1,7 +1,7 @@
 {
   "id": "space-debris",
   "titleShort": "Space\nFlight\nGame",
-  "titleLong": "Space Debris",
+  "titleLong": "Space Debris: A space-flight simulation game",
   "urls": {
     "demo": "http://levi.codes/space-debris",
     "github": "https://github.com/levilindsey/space-debris"
@@ -10,7 +10,7 @@
   "location": "",
   "date": {
     "start": "6/2015",
-    "end": "5/2017"
+    "end": "9/2018"
   },
   "categories": [
     "side-project",
@@ -24,7 +24,16 @@
     "es2015",
     "game"
   ],
-  "images": [],
+  "images": [
+    {
+      "fileName": "screenshot1.png",
+      "description": "This shows the starting screen for the space-debris game. You pilot a ship that is constantly surrounded by oncoming asteroids. You can either try to escape them or destroy them with your torpedoes."
+    },
+    {
+      "fileName": "screenshot2.png",
+      "description": "This shows the ship flying and shooting torpedoes."
+    }
+  ],
   "videos": [],
   "content": ""
 }

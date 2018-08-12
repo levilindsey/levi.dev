@@ -1,0 +1,28 @@
+{
+  "id": "google-cloud-platform",
+  "titleShort": "Google:\nCloud\nPlatform",
+  "titleLong": "Google: Cloud Platform",
+  "urls": {
+    "homepage": "https://cloud.google.com/"
+  },
+  "jobTitle": "Senior software Engineer",
+  "location": "Seattle, WA",
+  "date": {
+    "start": "1/2017",
+    "end": "Present"
+  },
+  "categories": [
+    "work",
+    "web",
+    "frontend",
+    "data-driven",
+    "angularjs",
+    "typescript",
+    "angular-2"
+  ],
+  "images": [
+  ],
+  "videos": [
+  ],
+  "content": "_[Google][google-url] is a multinational corporation specializing in Internet-related services and products. [Google Cloud Platform][cloud-url] (GCP) is a cloud computing service that offers hosting on the same supporting infrastructure that Google uses internally for their end-user products. The Cloud Console is the web UI for end users of GCP._\r\n\r\nLevi currently works on the frontend framework for the Cloud Console. Specifically, he works on things like bootstrapping the application, the top-level UI layout, and deferred loading, routing, and navigation.\r\n\r\n[google-url]: https:\/\/google.com\/about\r\n[cloud-url]: https:\/\/cloud.google.com"
+}

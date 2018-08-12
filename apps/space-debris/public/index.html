@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+  <title>Space Debris</title>
+
+  <!-- Favicons for browsers -->
+  <link rel="icon" type="image/png" href="/space-debris/favicon-16x16.v1.0.1.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/space-debris/favicon-32x32.v1.0.1.png" sizes="32x32">
+
+  <!-- Icons for showing on the home screens of Android and iOS devices -->
+  <link href="http://levi.codes/space-debris/apple-touch-icon.v1.0.1.png" rel="apple-touch-icon">
+  <link href="http://levi.codes/space-debris/apple-touch-icon-76x76.v1.0.1.png" rel="apple-touch-icon" sizes="76x76">
+  <link href="http://levi.codes/space-debris/apple-touch-icon-120x120.v1.0.1.png" rel="apple-touch-icon" sizes="120x120">
+  <link href="http://levi.codes/space-debris/apple-touch-icon-152x152.v1.0.1.png" rel="apple-touch-icon" sizes="152x152">
+
+  <link href="/space-debris/styles/main.css" rel="stylesheet">
+
+  <script defer src="/space-debris/scripts/lib.js"></script>
+  <script defer src="/space-debris/scripts/space-debris.js"></script>
+</head>
+
+<body>
+<!-- The gulp-index.html task will inject the SVG store here -->
+<!-- inject:svg-store:svg -->
+<!-- endinject -->
+
+<canvas id="game-area"></canvas>
+
+<div class="overlays">
+  <div class="score"></div>
+
+  <div class="health">
+    <div class="current"></div>
+    <div class="capacity"></div>
+  </div>
+
+  <div class="toast">
+    <dl>
+      <div>
+        <dt>Turning:</dt>
+        <dd>&larr;, &uarr;, &rarr;, &darr;</dd>
+      </div>
+      <div>
+        <dt>Thrusters:</dt>
+        <dd>D</dd>
+      </div>
+      <div>
+        <dt>Blasters:</dt>
+        <dd>F</dd>
+      </div>
+      <div>
+        <dt>Brakes:</dt>
+        <dd>S</dd>
+      </div>
+      <div>
+        <dt>Pause:</dt>
+        <dd>SPACE</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="pause-screen">
+    <div class="pause-menu">
+      <h2 class="title">
+        Paused
+      </h2>
+
+      <div class="pause-menu-content">
+        <div class="stats">
+          <h3 class="new-record">
+            New record!
+          </h3>
+
+          <dl>
+            <div>
+              <dt>Score:</dt>
+              <dd class="pause-menu-score">0 points</dd>
+            </div>
+            <div>
+              <dt>Time:</dt>
+              <dd class="pause-menu-total-run-time">0 seconds</dd>
+            </div>
+            <div>
+              <dt>Highest score:</dt>
+              <dd class="pause-menu-highest-score">0 points</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="pause-menu-controls">
+          <hr>
+
+          <h3>
+            Controls
+          </h3>
+
+          <dl>
+            <div>
+              <dt>Turning:</dt>
+              <dd>&larr;, &uarr;, &rarr;, &darr;</dd>
+            </div>
+            <div>
+              <dt>Thrusters:</dt>
+              <dd>D</dd>
+            </div>
+            <div>
+              <dt>Blasters:</dt>
+              <dd>F</dd>
+            </div>
+            <div>
+              <dt>Brakes:</dt>
+              <dd>O</dd>
+            </div>
+            <div>
+              <dt>Pause:</dt>
+              <dd>SPACE</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <button class="play">Resume</button>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

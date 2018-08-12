@@ -49,7 +49,7 @@ config.vendorScriptsSrc =
 config.vendorStylesSrc =
     [config.bowerPath + '/**/*.css', '!' + config.bowerPath + '/**/*.min.css'];
 
-// --- Front-end routes --- //
+// --- Frontend routes --- //
 
 config.analyticsScriptPath = '/home/scripts/googleanalytics.js';
 

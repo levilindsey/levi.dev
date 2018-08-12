@@ -1,0 +1,31 @@
+ul,
+ol,
+dl,
+dd,
+dt,
+li,
+div,
+html,
+body,
+p,
+form,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+img,
+button {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#game-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
