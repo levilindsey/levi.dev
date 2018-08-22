@@ -17208,7 +17208,9 @@ function _initApp() {
   _gamex.PhysicsEngine.create(_config.physicsConfig);
 
   var canvas = document.getElementById('game-area');
-  var programConfigs = [_programs.bloomProgramWrapperConfig, _programs.flatColorProgramWrapperConfig, _programs.generalModelProgramWrapperConfig, _programs.starPointsProgramWrapperConfig];
+  var programConfigs = [
+  // bloomProgramWrapperConfig,e
+  _programs.flatColorProgramWrapperConfig, _programs.generalModelProgramWrapperConfig, _programs.starPointsProgramWrapperConfig];
   var textures = [];
   controller.initialize(canvas, programConfigs, textures, _scene.SceneImpl).then(function () {
     var body = document.querySelector('body');
