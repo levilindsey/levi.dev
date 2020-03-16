@@ -3,7 +3,7 @@
   "titleShort": "Portfolio\nWebsite:\nSongwriter",
   "titleLong": "Portfolio for a songwriter",
   "urls": {
-    "homepage": "http://aldenwitt.com",
+    "homepage": "http://levi.dev/aldenwitt.com",
     "github": "https://github.com/levilindsey/aldenwitt.com"
   },
   "jobTitle": "",
@@ -42,5 +42,5 @@
     }
   ],
   "videos": [],
-  "content": "This website is a professional portfolio for songwriter Alden Witt, \"the best unsigned writer in Nashville.\"\r\n\r\nThis website uses Angular 2 with Typescript. It also makes use of my custom animation framework for sliding the different pages in and out of view.\r\n\r\n[main-url]: http:\/\/aldenwitt.com"
+  "content": "This website was a professional portfolio for songwriter Alden Witt, \"the best unsigned writer in Nashville.\" It has since been deprecated.\r\n\r\nThis website uses Angular 2 with Typescript. It also makes use of my custom animation framework for sliding the different pages in and out of view.\r\n\r\n[main-url]: https:\/\/levi.dev\/aldenwitt.com"
 }

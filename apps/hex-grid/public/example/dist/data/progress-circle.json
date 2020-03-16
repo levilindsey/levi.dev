@@ -3,7 +3,7 @@
   "titleShort": "Web Doodle:\nProgress\nCircle",
   "titleLong": "Progress Circle",
   "urls": {
-    "demo": "http://levi.codes/progress-circle",
+    "demo": "https://levi.dev/progress-circle",
     "github": "https://github.com/levilindsey/progress-circle",
     "codepen": "http://codepen.io/levisl176/pen/ndklu"
   },
@@ -30,5 +30,5 @@
     }
   ],
   "videos": [],
-  "content": "#### A progress circle built using SVG\r\n\r\nThe progress circle consists of a ring of color-shifting dots.\r\n\r\nSpecifically, the dots revolve in a clockwise direction while the colors of the dots transition in such a way to make the colors appear to transition in a counter-clockwise direction.\r\n\r\nThis project uses a separate custom animation package Levi developed.\r\n\r\n\r\n[main-url]: http:\/\/levi.codes\/progress-circle\r\n[codepen-url]: http:\/\/codepen.io\/levisl176\/pen\/ndklu"
+  "content": "#### A progress circle built using SVG\r\n\r\nThe progress circle consists of a ring of color-shifting dots.\r\n\r\nSpecifically, the dots revolve in a clockwise direction while the colors of the dots transition in such a way to make the colors appear to transition in a counter-clockwise direction.\r\n\r\nThis project uses a separate custom animation package Levi developed.\r\n\r\n\r\n[main-url]: https:\/\/levi.dev\/progress-circle\r\n[codepen-url]: http:\/\/codepen.io\/levisl176\/pen\/ndklu"
 }

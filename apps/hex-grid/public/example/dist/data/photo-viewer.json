@@ -3,7 +3,7 @@
   "titleShort": "Web App:\nPhoto Viewer",
   "titleLong": "Photo Viewer",
   "urls": {
-    "demo": "http://levi.codes/photo-viewer",
+    "demo": "https://levi.dev/photo-viewer",
     "github": "https://github.com/levilindsey/photo-viewer"
   },
   "jobTitle": "",
@@ -57,5 +57,5 @@
     }
   ],
   "videos": [],
-  "content": "#### A general-purpose photo-viewer application\r\n\r\nThis fancy web app is loaded with bells and whistles. A smattering of them includes:\r\n\r\n- Expandable, animated photo grids, which display large collections of photo thumbnails\r\n- A lightbox for conveniently viewing and navigating through medium-sized versions of the images\r\n- Full-screen mode for viewing and navigating through the original, full-sized versions of the images\r\n- A very flashy SVG-based progress circle\r\n- Use of the XHR2 progress event for displaying the download progress of larger images\r\n\r\nThis app was originally built to show off the photos from Levi and [Jackie's][jackie-url] wedding.\r\n\r\n\r\n[main-url]: http:\/\/levi.codes\/wedding\/photos\r\n[jackie-url]: http:\/\/jackieandlevi.com\/jackie"
+  "content": "#### A general-purpose photo-viewer application\r\n\r\nThis fancy web app is loaded with bells and whistles. A smattering of them includes:\r\n\r\n- Expandable, animated photo grids, which display large collections of photo thumbnails\r\n- A lightbox for conveniently viewing and navigating through medium-sized versions of the images\r\n- Full-screen mode for viewing and navigating through the original, full-sized versions of the images\r\n- A very flashy SVG-based progress circle\r\n- Use of the XHR2 progress event for displaying the download progress of larger images\r\n\r\nThis app was originally built to show off the photos from Levi and [Jackie's][jackie-url] wedding.\r\n\r\n\r\n[main-url]: https:\/\/levi.dev\/wedding\/photos\r\n[jackie-url]: http:\/\/jackieandlevi.com\/jackie"
 }

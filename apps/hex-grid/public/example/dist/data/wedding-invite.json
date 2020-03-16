@@ -3,7 +3,7 @@
   "titleShort": "Web App:\nWedding\nSite",
   "titleLong": "Wedding Invite and RSVP System",
   "urls": {
-    "demo": "http://levi.codes/wedding/invite",
+    "demo": "https://levi.dev/wedding/invite",
     "github": "https://github.com/levilindsey/wedding-invite"
   },
   "jobTitle": "",
@@ -49,5 +49,5 @@
     }
   ],
   "videos": [],
-  "content": "#### A wedding invite and RSVP system\r\n\r\nLevi developed this simple web app as the invite and RSVP system for his and [Jackie's][jackie-url] wedding.\r\n\r\n[main-url]: http:\/\/levi.codes\/wedding\/invite\r\n[jackie-url]: http:\/\/jackieandlevi.com\/jackie"
+  "content": "#### A wedding invite and RSVP system\r\n\r\nLevi developed this simple web app as the invite and RSVP system for his and [Jackie's][jackie-url] wedding.\r\n\r\n[main-url]: https:\/\/levi.dev\/wedding\/invite\r\n[jackie-url]: http:\/\/jackieandlevi.com\/jackie"
 }
