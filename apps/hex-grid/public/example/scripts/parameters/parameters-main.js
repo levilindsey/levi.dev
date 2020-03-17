@@ -64,6 +64,9 @@
 
     createDatGui();
 
+    window.app.parameters.updateToPreSetConfigs.call(window.app.parameters,
+        window.app.miscParams.config.preSetConfigs[window.app.miscParams.config.defaultPreSet]);
+
     var debouncedResize = window.hg.util.debounce(resize, 300);
     window.addEventListener('resize', debouncedResize, false);
   }
@@ -255,6 +258,8 @@
     parameters.grid.annotations.refresh();
     window.hg.Grid.config.computeDependentValues();
     window.hg.controller.resetGrid(parameters.grid);
+    parameters.grid.setBackgroundColor();
+    parameters.grid.resize();
 
     refreshDatGui();
   }
@@ -279,7 +284,8 @@
       });
 
       // Update the recurrence of any transient job
-      if (window.hg.controller.transientJobs[moduleName]) {
+      if (window.hg.controller.transientJobs[moduleName] &&
+          window.hg.controller.transientJobs[moduleName].toggleRecurrence) {
         window.hg.controller.transientJobs[moduleName].toggleRecurrence(
           parameters.grid,
           window.hg[moduleName].config.isRecurring,

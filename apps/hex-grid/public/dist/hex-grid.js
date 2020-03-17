@@ -8637,10 +8637,11 @@ if (typeof define === 'function' && define.amd) {
 
     grid.svg.style.display = 'block';
     grid.svg.style.position = 'relative';
-    grid.svg.style.width = '1px';
-    grid.svg.style.height = '1px';
+    grid.svg.style.width = '100%';
+    grid.svg.style.height = '100%';
     grid.svg.style.zIndex = '1000';
     grid.svg.style.overflow = 'visible';
+    grid.svg.style.pointerEvents = 'none';
     grid.svg.setAttribute('data-hg-svg', 'data-hg-svg');
 
     grid.svgDefs = document.createElementNS(window.hg.util.svgNamespace, 'defs');
@@ -9240,6 +9241,7 @@ if (typeof define === 'function' && define.amd) {
     document.addEventListener('mousemove', handlePointerMove, false);
     document.addEventListener('mousedown', handlePointerDown, false);
     document.addEventListener('mouseup', handlePointerUp, false);
+    document.addEventListener('keydown', handleKeyDown, false);
     // TODO: add touch support
 
     function handlePointerOver(event) {
@@ -9300,6 +9302,15 @@ if (typeof define === 'function' && define.amd) {
         }
 
         createClickAnimation(input.grid, tile);
+      }
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === 'Escape' || event.key === 'Esc') {
+        // Close any open post
+        if (input.grid.isPostOpen) {
+          window.hg.controller.transientJobs.ClosePostJob.create(input.grid, input.grid.expandedTile);
+        }
       }
     }
 
@@ -10697,6 +10708,7 @@ if (typeof define === 'function' && define.amd) {
     tile.element.id = 'hg-' + id;
     tile.element.setAttribute('data-hg-tile', 'data-hg-tile');
     tile.element.style.cursor = 'pointer';
+    tile.element.style.pointerEvents = 'auto';
 
     // Set the color and vertices
     draw.call(tile);
@@ -11284,6 +11296,9 @@ if (typeof define === 'function' && define.amd) {
 
   config.activeScreenOpacity = 0.0;
   config.inactiveScreenOpacity = 0.8;
+  config.inactiveScreenHue = 230;
+  config.inactiveScreenSaturation = 1;
+  config.inactiveScreenLightness = 4;
 
   config.fontSize = 18;
 
@@ -11331,8 +11346,9 @@ if (typeof define === 'function' && define.amd) {
 
     var patternId = 'hg-pattern-' + tilePost.tile.postData.id;
 
-    var screenColorString = 'hsl(' + window.hg.Grid.config.backgroundHue + ',' +
-      window.hg.Grid.config.backgroundSaturation + '%,' + window.hg.Grid.config.backgroundLightness + '%)';
+    var screenColorString = 'hsl(' + window.hg.TilePost.config.inactiveScreenHue + ',' +
+      window.hg.TilePost.config.inactiveScreenSaturation + '%,' +
+      window.hg.TilePost.config.inactiveScreenLightness + '%)';
 
     var outerSideLength = window.hg.Grid.config.tileOuterRadius * 2;
 

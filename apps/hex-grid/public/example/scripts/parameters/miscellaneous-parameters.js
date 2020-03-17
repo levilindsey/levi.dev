@@ -54,9 +54,64 @@
     }
   ];
 
+  config.defaultPreSet = 'raven-scale';
+
   config.preSetConfigs = {};
 
-  // TODO: implement these different presets
+  config.preSetConfigs['raven-scale'] = {
+    Grid: {
+      tileOuterRadius: 80,
+      tileGap: 4,
+      backgroundHue: 265,
+      backgroundSaturation: 24,
+      backgroundLightness: 5,
+      tileHue: 270,
+      tileSaturation: 0,
+      tileLightness: 7
+    },
+    TilePost: {
+      inactiveScreenOpacity: 0.8,
+      inactiveScreenHue: 265,
+      inactiveScreenSaturation: 1,
+      inactiveScreenLightness: 4
+    },
+    LineJob: {
+      lineWidth: 4,
+      startSaturation: 0,
+      startLightness: 100,
+      startOpacity: 0.3,
+      endSaturation: 0,
+      endLightness: 80,
+      endOpacity: 0,
+      sameDirectionProb: 0.6
+    },
+    HighlightRadiateJob: {
+      deltaSaturation: 30,
+      deltaLightness: 20,
+    },
+    HighlightHoverJob: {
+      // deltaSaturation: 30,
+      deltaLightness: 20,
+    },
+    ColorWaveJob: {
+      deltaSaturation: 30,
+      wavelength: 2000,
+      period: 1500,
+      originY: 2000
+    },
+    DisplacementWaveJob: {
+      period: 1000000,
+      tileDeltaX: 0,
+      tileDeltaY: 0
+    },
+    OpenPostJob: {
+      expandedDisplacementTileCount: 3,
+      fadePostDurationOffset: 300
+    },
+    ClosePostJob: {
+      duration: 200
+    }
+  };
   config.preSetConfigs['stormy-sea'] = {
     LineJob: {
       isRecurring: true
@@ -121,20 +176,6 @@
       expandedDisplacementTileCount: 4
     }
   };
-  //config.preSetConfigs['scales'] = {
-  //  Grid: {
-  //    tileOuterRadius: 95,
-  //    tileGap: -50,
-  //    tileHue: 147,
-  //    tileLightness: 13
-  //  },
-  //  LineJob: {
-  //    isRecurring: false
-  //  },
-  //  OpenPostJob: {
-  //    expandedDisplacementTileCount: 5
-  //  }
-  //};
   config.preSetConfigs['crazy-flux'] = {
     Grid: {
       tileOuterRadius: 60,
