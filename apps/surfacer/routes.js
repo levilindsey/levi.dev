@@ -1,4 +1,4 @@
-var surfacerRouteRegex = /^\/surfacer(?:\/.*)?$/;
+var surfacerRouteRegex = /^\/(surfacer|squirrel|squirrels|squirrel-away)(?:\/.*)?$/;
 
 var surfacerRedirectUrl = 'https://levilindsey.github.io/surfacer';
 
