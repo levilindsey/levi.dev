@@ -17,6 +17,7 @@ config.app.projectRootPath = path.resolve(__dirname + '/../..');
 config.app.appsPath = config.app.projectRootPath + '/apps';
 config.app.homePath = config.app.appsPath + '/hex-grid';
 config.app.pageMissingPath = config.app.appsPath + '/page-missing';
+config.app.sitemapPath = config.app.appsPath + '/sitemap.xml';
 config.app.bowerComponentsPath = config.app.projectRootPath + '/bower_components';
 config.app.faviconPath = config.app.homePath + '/public/images/favicon-32x32.png';
 

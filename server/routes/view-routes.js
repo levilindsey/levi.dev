@@ -5,9 +5,15 @@ exports.attachRoutes = function (server) {
   console.log('Attaching view-route handlers');
 
   config.app.apps.forEach(function (appName) {
-    if (appName !== 'hex-grid' && appName !== 'page-missing') {
+    if (appName !== 'hex-grid' &&
+        appName !== 'page-missing' &&
+        appName !== 'sitemap.xml') {
       attachRoutesForApp(server, config.app.appsPath + '/' + appName);
     }
+  });
+
+  server.get(new RegExp('^\/sitemap\.xml$'), function (req, res, next) {
+    res.sendFile(config.app.sitemapPath);
   });
 
   attachRoutesForApp(server, config.app.homePath);
