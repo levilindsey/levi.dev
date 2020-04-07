@@ -5152,12 +5152,14 @@ if (typeof define === 'function' && define.amd) {
 
   /**
    * @param {Grid} grid
+   * @param {Boolean} isPairedWithAnotherOpen
    * @returns {?Window.hg.ClosePostJob}
    */
-  function closePost(grid) {
+  function closePost(grid, isPairedWithAnotherOpen) {
     // If a post is open, close it; otherwise, do nothing
     if (grid.isPostOpen) {
-      return controller.transientJobs.ClosePostJob.create(grid, grid.expandedTile);
+      return controller.transientJobs.ClosePostJob.create(
+          grid, grid.expandedTile, isPairedWithAnotherOpen);
     } else {
       return null;
     }
@@ -5247,20 +5249,22 @@ if (typeof define === 'function' && define.amd) {
     handleSafariBrowser(grid);
     handleIosBrowser();
     handleSmallScreen();
+  }
 
-    // ---  --- //
+  /**
+   * @param {Grid} grid
+   * @param {String} postId
+   */
+  function getTileFromPostId(grid, postId) {
+    var i, count;
 
-    function getTileFromPostId(grid, postId) {
-      var i, count;
-
-      for (i = 0, count = grid.originalTiles.length; i < count; i += 1) {
-        if (grid.originalTiles[i].holdsContent && grid.originalTiles[i].postData.id === postId) {
-          return grid.originalTiles[i];
-        }
+    for (i = 0, count = grid.originalTiles.length; i < count; i += 1) {
+      if (grid.originalTiles[i].holdsContent && grid.originalTiles[i].postData.id === postId) {
+        return grid.originalTiles[i];
       }
-
-      return null;
     }
+
+    return null;
   }
 
   /**
@@ -5299,6 +5303,8 @@ if (typeof define === 'function' && define.amd) {
     internal.postData[grid.index] = postData;
 
     setGridFilteredPostData(grid, postData);
+
+    openPostForHash(grid);
   }
 
   /**
@@ -5343,6 +5349,18 @@ if (typeof define === 'function' && define.amd) {
   /**
    * @param {Grid} grid
    */
+  function openPostForHash(grid) {
+    if (location.hash.length > 1) {
+      var tile = getTileFromPostId(grid, location.hash.substr(1));
+      if (tile) {
+        internal.inputs[0].createClickAnimation(grid, tile);
+      }
+    }
+  }
+
+  /**
+   * @param {Grid} grid
+   */
   function handleSafariBrowser(grid) {
     if (window.hg.util.checkForSafari()) {
       console.info('Is a Safari browser');
@@ -5364,7 +5382,7 @@ if (typeof define === 'function' && define.amd) {
   }
 
   function handleSmallScreen() {
-    if (document.documentElement.clientWidth < 800) {
+    if (document.documentElement.clientWidth < 1250) {
       console.info('Is a small-screen browser');
       controller.isSmallScreen = true;
     } else {
@@ -9308,6 +9326,10 @@ if (typeof define === 'function' && define.amd) {
 
     input.grid = grid;
 
+    // Exposing this function so that we can automatically open the post corresponding to the URL.
+    // How this is accessed should be refactored.
+    input.createClickAnimation = createClickAnimation;
+
     addPointerEventListeners.call(input);
   }
 
@@ -9403,7 +9425,8 @@ if (typeof define === 'function' && define.amd) {
       if (event.key === 'Escape' || event.key === 'Esc') {
         // Close any open post
         if (input.grid.isPostOpen) {
-          window.hg.controller.transientJobs.ClosePostJob.create(input.grid, input.grid.expandedTile);
+          window.hg.controller.transientJobs.ClosePostJob.create(
+              input.grid, input.grid.expandedTile, false);
         }
       }
     }
@@ -9431,7 +9454,7 @@ if (typeof define === 'function' && define.amd) {
 
       // Close any open post
       if (grid.isPostOpen) {
-        window.hg.controller.transientJobs.ClosePostJob.create(grid, grid.expandedTile);
+        window.hg.controller.transientJobs.ClosePostJob.create(grid, grid.expandedTile, true);
       }
 
       // Open the post for the given tile
@@ -9442,7 +9465,7 @@ if (typeof define === 'function' && define.amd) {
 
       // Close any open post
       if (grid.isPostOpen) {
-        window.hg.controller.transientJobs.ClosePostJob.create(grid, grid.expandedTile);
+        window.hg.controller.transientJobs.ClosePostJob.create(grid, grid.expandedTile, false);
       }
     }
   }
@@ -11715,6 +11738,28 @@ if (typeof define === 'function' && define.amd) {
  */
 
 /**
+ * @typedef {Object} ShiftStatus
+ * @property {Number} timeStart
+ * @property {Number} timeEnd
+ */
+
+/**
+ * @typedef {ShiftStatus} NonContentTileShiftStatus
+ * @property {Number} hueDeltaStart
+ * @property {Number} hueDeltaEnd
+ * @property {Number} saturationDeltaStart
+ * @property {Number} saturationDeltaEnd
+ * @property {Number} lightnessDeltaStart
+ * @property {Number} lightnessDeltaEnd
+ */
+
+/**
+ * @typedef {ShiftStatus} ContentTileShiftStatus
+ * @property {Number} opacityDeltaStart
+ * @property {Number} opacityDeltaEnd
+ */
+
+/**
  * This module defines a constructor for ColorShiftJob objects.
  *
  * ColorShiftJob objects animate the colors of the tiles in a random fashion.
@@ -11727,12 +11772,22 @@ if (typeof define === 'function' && define.amd) {
 
   var config = {};
 
-  // TODO:
+  config.hueDeltaMin = -20;
+  config.hueDeltaMax = 20;
+  config.saturationDeltaMin = 0;
+  config.saturationDeltaMax = 0;
+  config.lightnessDeltaMin = 0;
+  config.lightnessDeltaMax = 0;
+
+  config.imageBackgroundScreenOpacityDeltaMin = -0.05;
+  config.imageBackgroundScreenOpacityDeltaMax = 0.05;
+
+  config.transitionDurationMin = 200;
+  config.transitionDurationMax = 2000;
 
   //  --- Dependent parameters --- //
 
   config.computeDependentValues = function () {
-    // TODO:
   };
 
   config.computeDependentValues();
@@ -11740,8 +11795,180 @@ if (typeof define === 'function' && define.amd) {
   // ------------------------------------------------------------------------------------------- //
   // Private dynamic functions
 
+  /**
+   * Creates a shift status object for each tile to keep track of their individual animation
+   * progress.
+   *
+   * @this ColorShiftJob
+   */
+  function initTileShiftStatuses() {
+    var job, i, count;
+
+    job = this;
+
+    job.shiftStatusesNonContentTiles = [];
+    job.shiftStatusesContentTiles = [];
+
+    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
+      job.shiftStatusesNonContentTiles[i] = {
+        timeStart: 0,
+        timeEnd: 0,
+        hueDeltaStart: 0,
+        hueDeltaEnd: 0,
+        saturationDeltaStart: 0,
+        saturationDeltaEnd: 0,
+        lightnessDeltaStart: 0,
+        lightnessDeltaEnd: 0,
+      };
+    }
+
+    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
+      job.shiftStatusesContentTiles[i] = {
+        timeStart: 0,
+        timeEnd: 0,
+        opacityDeltaStart: 0,
+        opacityDeltaEnd: 0,
+      };
+    }
+  }
+
   // ------------------------------------------------------------------------------------------- //
   // Private static functions
+
+  /**
+   * Updates the animation progress of the given non-content tile.
+   *
+   * @param {Number} currentTime
+   * @param {Tile} tile
+   * @param {NonContentTileShiftStatus} shiftStatus
+   */
+  function updateNonContentTile(currentTime, tile, shiftStatus) {
+    if (currentTime > shiftStatus.timeEnd) {
+      assignNewNonContentTileTransition(currentTime, shiftStatus);
+    }
+
+    var progress = (currentTime - shiftStatus.timeStart) /
+        (shiftStatus.timeEnd - shiftStatus.timeStart);
+
+    tile.currentColor.h += progress *
+        (shiftStatus.hueDeltaEnd - shiftStatus.hueDeltaStart) +
+        shiftStatus.hueDeltaStart;
+    tile.currentColor.s += progress *
+        (shiftStatus.saturationDeltaEnd - shiftStatus.saturationDeltaStart) +
+        shiftStatus.saturationDeltaStart;
+    tile.currentColor.l += progress *
+        (shiftStatus.lightnessDeltaEnd - shiftStatus.lightnessDeltaStart) +
+        shiftStatus.lightnessDeltaStart;
+  }
+
+  /**
+   * Updates the animation progress of the given content tile.
+   *
+   * @param {Number} currentTime
+   * @param {Tile} tile
+   * @param {ContentTileShiftStatus} shiftStatus
+   */
+  function updateContentTile(currentTime, tile, shiftStatus) {
+    if (currentTime > shiftStatus.timeEnd) {
+      assignNewContentTileTransition(currentTime, shiftStatus);
+    }
+
+    var progress = (currentTime - shiftStatus.timeStart) /
+        (shiftStatus.timeEnd - shiftStatus.timeStart);
+
+    tile.imageScreenOpacity += progress *
+        (shiftStatus.opacityDeltaEnd - shiftStatus.opacityDeltaStart) +
+        shiftStatus.opacityDeltaStart;
+    // tile.imageScreenOpacity += -tileProgress * config.opacity *
+    //     config.deltaOpacityImageBackgroundScreen;
+  }
+
+  /**
+   * @param {Number} currentTime
+   * @param {NonContentTileShiftStatus} shiftStatus
+   */
+  function assignNewNonContentTileTransition(currentTime, shiftStatus) {
+    assignNewTransitionDuration(currentTime, shiftStatus);
+
+    shiftStatus.hueDeltaStart = shiftStatus.hueDeltaEnd;
+    shiftStatus.hueDeltaEnd = getNewHueDelta();
+
+    shiftStatus.saturationDeltaStart = shiftStatus.saturationDeltaEnd;
+    shiftStatus.saturationDeltaEnd = getNewSaturationDelta();
+
+    shiftStatus.lightnessDeltaStart = shiftStatus.lightnessDeltaEnd;
+    shiftStatus.lightnessDeltaEnd = getNewLightnessDelta();
+  }
+
+  /**
+   * @param {Number} currentTime
+   * @param {ContentTileShiftStatus} shiftStatus
+   */
+  function assignNewContentTileTransition(currentTime, shiftStatus) {
+    assignNewTransitionDuration(currentTime, shiftStatus);
+
+    shiftStatus.opacityDeltaStart = shiftStatus.opacityDeltaEnd;
+    shiftStatus.opacityDeltaEnd = getNewOpacityDelta();
+  }
+
+  /**
+   * Create a new duration value, and set up the start and end time to account for any time gap
+   * between the end of the last transition and the current time.
+   *
+   * @param {Number} currentTime
+   * @param {ShiftStatus} shiftStatus
+   */
+  function assignNewTransitionDuration(currentTime, shiftStatus) {
+    var elapsedTimeSinceEnd = currentTime - shiftStatus.timeEnd;
+    var newDuration = getNewTransitionDuration();
+    while (newDuration <= elapsedTimeSinceEnd) {
+      elapsedTimeSinceEnd -= newDuration;
+      newDuration = getNewTransitionDuration();
+    }
+
+    shiftStatus.timeStart = currentTime - elapsedTimeSinceEnd;
+    shiftStatus.timeEnd = shiftStatus.timeStart + newDuration;
+  }
+
+  /**
+   * @returns {Number} A random shift transition duration value between the configured min and max.
+   */
+  function getNewTransitionDuration() {
+    return Math.random() * (config.transitionDurationMax - config.transitionDurationMin) +
+        config.transitionDurationMin;
+  }
+
+  /**
+   * @returns {Number} A random hue delta value between the configured min and max.
+   */
+  function getNewHueDelta() {
+    return Math.random() * (config.hueDeltaMax - config.hueDeltaMin) + config.hueDeltaMin;
+  }
+
+  /**
+   * @returns {Number} A random saturation delta value between the configured min and max.
+   */
+  function getNewSaturationDelta() {
+    return Math.random() * (config.saturationDeltaMax - config.saturationDeltaMin) +
+        config.saturationDeltaMin;
+  }
+
+  /**
+   * @returns {Number} A random lightness delta value between the configured min and max.
+   */
+  function getNewLightnessDelta() {
+    return Math.random() * (config.lightnessDeltaMax - config.lightnessDeltaMin) +
+        config.lightnessDeltaMin;
+  }
+
+  /**
+   * @returns {Number} A random opacity delta value between the configured min and max.
+   */
+  function getNewOpacityDelta() {
+    return Math.random() * (config.imageBackgroundScreenOpacityDeltaMax -
+        config.imageBackgroundScreenOpacityDeltaMin) +
+        config.imageBackgroundScreenOpacityDeltaMin;
+  }
 
   // ------------------------------------------------------------------------------------------- //
   // Public dynamic functions
@@ -11753,10 +11980,22 @@ if (typeof define === 'function' && define.amd) {
    * @param {Number} startTime
    */
   function start(startTime) {
-    var job = this;
+    var job, i, count;
+
+    job = this;
 
     job.startTime = startTime;
     job.isComplete = false;
+
+    for (i = 0, count = job.shiftStatusesNonContentTiles.length; i < count; i += 1) {
+      job.shiftStatusesNonContentTiles[i].timeStart = startTime;
+      job.shiftStatusesNonContentTiles[i].timeEnd = startTime;
+    }
+
+    for (i = 0, count = job.shiftStatusesContentTiles.length; i < count; i += 1) {
+      job.shiftStatusesContentTiles[i].timeStart = startTime;
+      job.shiftStatusesContentTiles[i].timeEnd = startTime;
+    }
   }
 
   /**
@@ -11769,11 +12008,19 @@ if (typeof define === 'function' && define.amd) {
    * @param {Number} deltaTime
    */
   function update(currentTime, deltaTime) {
-    var job;
+    var job, i, count;
 
     job = this;
 
-    // TODO:
+    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
+      updateNonContentTile(currentTime, job.grid.allNonContentTiles[i],
+          job.shiftStatusesNonContentTiles[i]);
+    }
+
+    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
+      updateContentTile(currentTime, job.grid.contentTiles[i],
+          job.shiftStatusesContentTiles[i]);
+    }
   }
 
   /**
@@ -11814,7 +12061,7 @@ if (typeof define === 'function' && define.amd) {
     var job = this;
 
     config.computeDependentValues();
-    // TODO:
+    initTileShiftStatuses.call(job);
   }
 
   // ------------------------------------------------------------------------------------------- //
@@ -11829,6 +12076,8 @@ if (typeof define === 'function' && define.amd) {
     var job = this;
 
     job.grid = grid;
+    job.shiftStatusesNonContentTiles = null;
+    job.shiftStatusesContentTiles = null;
     job.startTime = 0;
     job.isComplete = true;
 
@@ -12780,8 +13029,9 @@ if (typeof define === 'function' && define.amd) {
    * @param {Grid} grid
    * @param {Tile} tile
    * @param {Function} onComplete
+   * @param {Boolean} isPairedWithAnotherOpen
    */
-  function ClosePostJob(grid, tile, onComplete) {
+  function ClosePostJob(grid, tile, onComplete, isPairedWithAnotherOpen) {
     var job = this;
 
     job.grid = grid;
@@ -12796,6 +13046,11 @@ if (typeof define === 'function' && define.amd) {
     job.cancel = cancel;
     job.onComplete = onComplete;
     job.init = init;
+
+    if (!isPairedWithAnotherOpen) {
+      // If there isn't another OpenPostJob that will assign the hash, then clear it here.
+      history.pushState({}, document.title, '/');
+    }
 
     console.log('ClosePostJob created: tileIndex=' + job.baseTile.originalIndex);
   }
@@ -13530,7 +13785,7 @@ if (typeof define === 'function' && define.amd) {
 
   var config = {};
 
-  config.duration = 500;
+  config.duration = 200;
 
   config.deltaHue = 0;
   config.deltaSaturation = 0;
@@ -15878,6 +16133,10 @@ if (typeof define === 'function' && define.amd) {
     job.onComplete = onComplete;
     job.init = init;
 
+    // Update the location hash to reference the current post.
+    var hash = job.baseTile.postData ? '#' + job.baseTile.postData.id : '';
+    history.pushState({}, document.title, hash);
+
     console.log('OpenPostJob created: tileIndex=' + job.baseTile.originalIndex);
   }
 
@@ -16736,7 +16995,7 @@ if (typeof define === 'function' && define.amd) {
       backgroundHue: 265,
       backgroundSaturation: 15,
       backgroundLightness: 3,
-      tileHue: 270,
+      tileHue: 260,
       tileSaturation: 10,
       tileLightness: 7
     },
@@ -16767,8 +17026,8 @@ if (typeof define === 'function' && define.amd) {
     ColorWaveJob: {
       deltaSaturation: 20,
       deltaLightness: 14,
-      wavelength: 2000,
-      period: 2000,
+      wavelength: 4000,
+      period: 4500,
       originY: 2000
     },
     DisplacementWaveJob: {
@@ -16857,7 +17116,18 @@ if (typeof define === 'function' && define.amd) {
       tileLightness: 50
     },
     LineJob: {
-      isRecurring: true
+      isRecurring: true,
+      lineWidth: 100,
+      duration: 3000,
+      startSaturation: 100,
+      startLightness: 60,
+      startOpacity: 0.7,
+      endSaturation: 100,
+      endLightness: 60,
+      endOpacity: 0,
+      sameDirectionProb: 0.25,
+      avgDelay: 20,
+      delayDeviationRange: 10
     },
     Input: {
       contentTileClickAnimation: 'None',
@@ -16869,6 +17139,10 @@ if (typeof define === 'function' && define.amd) {
       tileDeltaY: -120,
       originX: 2000,
       originY: 1800
+    },
+    ColorShiftJob: {
+      hueDeltaMin: -180,
+      hueDeltaMax: 180,
     }
   };
   config.preSetConfigs['wire-frame'] = {
@@ -17159,6 +17433,7 @@ if (typeof define === 'function' && define.amd) {
 
     var debouncedResize = window.hg.util.debounce(resize, 300);
     window.addEventListener('resize', debouncedResize, false);
+    debouncedResize();
   }
 
   function resize() {
@@ -17460,7 +17735,76 @@ if (typeof define === 'function' && define.amd) {
   }
 
   function createColorShiftItems(folder) {
-    // TODO:
+    folder.add(window.hg.ColorShiftJob.config, 'transitionDurationMin', 1, 10000)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.transitionDurationMax = Math.max(
+              window.hg.ColorShiftJob.config.transitionDurationMin,
+              window.hg.ColorShiftJob.config.transitionDurationMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'transitionDurationMax', 1, 10000)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.transitionDurationMin = Math.min(
+              window.hg.ColorShiftJob.config.transitionDurationMin,
+              window.hg.ColorShiftJob.config.transitionDurationMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'hueDeltaMin', -360, 360)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.hueDeltaMax = Math.max(
+              window.hg.ColorShiftJob.config.hueDeltaMin,
+              window.hg.ColorShiftJob.config.hueDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'hueDeltaMax', -360, 360)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.hueDeltaMin = Math.min(
+              window.hg.ColorShiftJob.config.hueDeltaMin,
+              window.hg.ColorShiftJob.config.hueDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'saturationDeltaMin', -100, 100)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.saturationDeltaMax = Math.max(
+              window.hg.ColorShiftJob.config.saturationDeltaMin,
+              window.hg.ColorShiftJob.config.saturationDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'saturationDeltaMax', -100, 100)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.saturationDeltaMin = Math.min(
+              window.hg.ColorShiftJob.config.saturationDeltaMin,
+              window.hg.ColorShiftJob.config.saturationDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'lightnessDeltaMin', -100, 100)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.lightnessDeltaMax = Math.max(
+              window.hg.ColorShiftJob.config.lightnessDeltaMin,
+              window.hg.ColorShiftJob.config.lightnessDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'lightnessDeltaMax', -100, 100)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.lightnessDeltaMin = Math.min(
+              window.hg.ColorShiftJob.config.lightnessDeltaMin,
+              window.hg.ColorShiftJob.config.lightnessDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'imageBackgroundScreenOpacityDeltaMin', -1.0, 1.0)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax = Math.max(
+              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin,
+              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'imageBackgroundScreenOpacityDeltaMax', -1.0, 1.0)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin = Math.min(
+              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin,
+              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax
+          );
+        });
   }
 
   function createColorWaveItems(folder) {
@@ -17603,7 +17947,7 @@ if (typeof define === 'function' && define.amd) {
       'triggerOpenPost': window.hg.controller.transientJobs.OpenPostJob.createRandom.bind(
           window.hg.controller, transientParams.grid),
       'triggerClosePost': window.hg.controller.transientJobs.ClosePostJob.createRandom.bind(
-              window.hg.controller, transientParams.grid),
+              window.hg.controller, transientParams.grid, false),
       'triggerTogglePost': function () {
         if (transientParams.grid.isPostOpen) {
           data.triggerClosePost();
