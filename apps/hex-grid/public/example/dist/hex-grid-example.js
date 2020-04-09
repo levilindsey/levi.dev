@@ -6201,6 +6201,13 @@ if (typeof define === 'function' && define.amd) {
     };
   }
 
+  /**
+   * @returns {Boolean}
+   */
+  function isSmallScreen() {
+    return window.innerWidth < 660;
+  }
+
   // ------------------------------------------------------------------------------------------- //
   // Expose this module
 
@@ -6245,6 +6252,7 @@ if (typeof define === 'function' && define.amd) {
     checkForSafari: checkForSafari,
     checkForIos: checkForIos,
     debounce: debounce,
+    isSmallScreen: isSmallScreen,
     svgNamespace: 'http://www.w3.org/2000/svg',
     xlinkNamespace: 'http://www.w3.org/1999/xlink'
   };
@@ -9417,17 +9425,13 @@ if (typeof define === 'function' && define.amd) {
           // TODO:
         }
 
-        createClickAnimation(input.grid, tile);
+        createClickAnimation.call(input, input.grid, tile);
       }
     }
 
     function handleKeyDown(event) {
       if (event.key === 'Escape' || event.key === 'Esc') {
-        // Close any open post
-        if (input.grid.isPostOpen) {
-          window.hg.controller.transientJobs.ClosePostJob.create(
-              input.grid, input.grid.expandedTile, false);
-        }
+        closeOpenPost.call(input, false);
       }
     }
 
@@ -9436,6 +9440,9 @@ if (typeof define === 'function' && define.amd) {
 
       if (event.target.getAttribute('data-hg-tile')) {
         tileIndex = event.target.getAttribute('data-hg-index');
+        return input.grid.allTiles[tileIndex];
+      } else if (event.target.parentElement.getAttribute('data-hg-tile')) {
+        tileIndex = event.target.parentElement.getAttribute('data-hg-index');
         return input.grid.allTiles[tileIndex];
       } else {
         return null;
@@ -9446,16 +9453,17 @@ if (typeof define === 'function' && define.amd) {
   /**
    * @param {Grid} grid
    * @param {Tile} tile
+   * @this Input
    */
   function createClickAnimation(grid, tile) {
+    var input = this;
+
     if (tile.holdsContent) {
       // Trigger an animation for the click
       config.possibleClickAnimations[config.contentTileClickAnimation](grid, tile);
 
       // Close any open post
-      if (grid.isPostOpen) {
-        window.hg.controller.transientJobs.ClosePostJob.create(grid, grid.expandedTile, true);
-      }
+      closeOpenPost.call(input, true);
 
       // Open the post for the given tile
       window.hg.controller.transientJobs.OpenPostJob.create(grid, tile);
@@ -9464,9 +9472,21 @@ if (typeof define === 'function' && define.amd) {
       config.possibleClickAnimations[config.emptyTileClickAnimation](grid, tile);
 
       // Close any open post
-      if (grid.isPostOpen) {
-        window.hg.controller.transientJobs.ClosePostJob.create(grid, grid.expandedTile, false);
-      }
+      closeOpenPost.call(input, false);
+    }
+  }
+
+  /**
+   * @param {Boolean} isPairedWithAnotherOpen
+   * @this Input
+   */
+  function closeOpenPost(isPairedWithAnotherOpen) {
+    var input = this;
+
+    // Close any open post
+    if (input.grid.isPostOpen) {
+      window.hg.controller.transientJobs.ClosePostJob.create(
+          input.grid, input.grid.expandedTile, isPairedWithAnotherOpen);
     }
   }
 
@@ -9619,8 +9639,8 @@ if (typeof define === 'function' && define.amd) {
         break;
     }
 
-    var horizontalPadding = 1.15 * window.hg.Grid.config.tileShortLengthWithGap;
-    var verticalPadding = 2.25 * window.hg.Grid.config.tileOuterRadius;
+    var horizontalPadding = 1.4 * window.hg.Grid.config.tileShortLengthWithGap;
+    var verticalPadding = 2.65 * window.hg.Grid.config.tileOuterRadius;
 
     var width, height, paddingX, paddingY, gradientColor1String,
       gradientColor2String, innerWrapperPaddingFromCss, innerWrapperVerticalPadding;
@@ -9635,6 +9655,14 @@ if (typeof define === 'function' && define.amd) {
       height = horizontalSideLength;
       paddingX = verticalPadding;
       paddingY = horizontalPadding;
+    }
+
+    // Mobile responsiveness.
+    if (window.hg.util.isSmallScreen()) {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      paddingX = 0;
+      paddingY = 80;
     }
 
     width -= paddingX * 2;
@@ -9661,6 +9689,7 @@ if (typeof define === 'function' && define.amd) {
     var innerWrapper = document.createElement('div');
     var title = document.createElement('h1');
     var content = document.createElement('div');
+    var closeButton = document.createElement('a');
     var logo = document.createElement('div');
     var date = document.createElement('div');
     var location = document.createElement('div');
@@ -9673,6 +9702,7 @@ if (typeof define === 'function' && define.amd) {
     pagePost.tile.grid.parent.appendChild(container);
     container.appendChild(outerWrapper);
     outerWrapper.appendChild(innerWrapper);
+    innerWrapper.appendChild(closeButton);
     innerWrapper.appendChild(logo);
     innerWrapper.appendChild(date);
     innerWrapper.appendChild(location);
@@ -9688,6 +9718,7 @@ if (typeof define === 'function' && define.amd) {
     pagePost.elements.container = container;
     pagePost.elements.title = title;
     pagePost.elements.content = content;
+    pagePost.elements.closeButton = closeButton;
     pagePost.elements.logo = logo;
     pagePost.elements.date = date;
     pagePost.elements.urls = urls;
@@ -9747,6 +9778,17 @@ if (typeof define === 'function' && define.amd) {
 
     content.setAttribute('data-hg-post-content', 'data-hg-post-content');
     content.innerHTML = converter.makeHtml(pagePost.tile.postData.content);
+
+    closeButton.setAttribute('data-hg-post-close', 'data-hg-post-close');
+    closeButton.setAttribute('href', '#');
+    closeButton.innerHTML = '&#9587;';
+    closeButton.addEventListener('click', function () {
+      // Close any open post
+      var grid = pagePost.tile.grid;
+      if (grid.isPostOpen) {
+        window.hg.controller.transientJobs.ClosePostJob.create(grid, grid.expandedTile, false);
+      }
+    }, false);
 
     logo.setAttribute('data-hg-post-logo', 'data-hg-post-logo');
     logo.style.backgroundImage = 'url(' + pagePost.tile.postData.logoSrc + ')';
@@ -10732,6 +10774,7 @@ if (typeof define === 'function' && define.amd) {
     tile.svg = svg;
     tile.grid = grid;
     tile.element = null;
+    tile.polygonElement = null;
     tile.currentAnchor = {x: anchorX, y: anchorY};
     tile.originalAnchor = {x: anchorX, y: anchorY};
     tile.sectorAnchorOffset = {x: Number.NaN, y: Number.NaN};
@@ -10808,19 +10851,60 @@ if (typeof define === 'function' && define.amd) {
    * @this Tile
    */
   function createElement() {
-    var tile, id;
-
-    tile = this;
-
-    id = !isNaN(tile.originalIndex) ? tile.originalIndex : parseInt(Math.random() * 1000000 + 1000);
+    var tile = this;
 
     tile.originalVertexDeltas = computeVertexDeltas(tile.outerRadius, tile.isVertical);
     tile.currentVertexDeltas = tile.originalVertexDeltas.slice(0);
     tile.vertices = [];
     updateVertices.call(tile, tile.currentAnchor.x, tile.currentAnchor.y);
 
+    createElementForNoTilePost.call(tile);
+  }
+
+  /**
+   * @this Tile
+   */
+  function createElementForTilePost() {
+    var tile, id;
+
+    tile = this;
+
+    id = !isNaN(tile.originalIndex) ? tile.originalIndex : parseInt(Math.random() * 1000000 + 1000);
+
+    if (tile.element) {
+      tile.svg.removeChild(tile.element);
+    }
+    tile.element = document.createElementNS(window.hg.util.svgNamespace, 'a');
+    tile.svg.appendChild(tile.element);
+    tile.polygonElement = document.createElementNS(window.hg.util.svgNamespace, 'polygon');
+    tile.element.appendChild(tile.polygonElement);
+
+    tile.element.id = 'hg-' + id;
+    tile.element.setAttribute('data-hg-tile', 'data-hg-tile');
+    tile.element.style.cursor = 'pointer';
+    tile.element.style.pointerEvents = 'auto';
+    tile.element.setAttribute('href', '#' + tile.postData.id);
+
+    // Set the vertices
+    draw.call(tile);
+  }
+
+  /**
+   * @this Tile
+   */
+  function createElementForNoTilePost() {
+    var tile, id;
+
+    tile = this;
+
+    id = !isNaN(tile.originalIndex) ? tile.originalIndex : parseInt(Math.random() * 1000000 + 1000);
+
+    if (tile.element) {
+      tile.svg.removeChild(tile.element);
+    }
     tile.element = document.createElementNS(window.hg.util.svgNamespace, 'polygon');
     tile.svg.appendChild(tile.element);
+    tile.polygonElement = tile.element;
 
     tile.element.id = 'hg-' + id;
     tile.element.setAttribute('data-hg-tile', 'data-hg-tile');
@@ -10880,9 +10964,13 @@ if (typeof define === 'function' && define.amd) {
   function createTilePost() {
     var tile = this;
 
+    createElementForTilePost.call(tile);
+
     tile.element.setAttribute('data-hg-post-tilePost', 'data-hg-post-tilePost');
 
     tile.tilePost = new window.hg.TilePost(tile);
+
+    draw.call(tile);
   }
 
   /**
@@ -10892,6 +10980,8 @@ if (typeof define === 'function' && define.amd) {
    */
   function destroyTilePost() {
     var tile = this;
+
+    createElementForNoTilePost.call(tile);
 
     tile.element.removeAttribute('data-hg-post-tilePost');
 
@@ -11178,15 +11268,15 @@ if (typeof define === 'function' && define.amd) {
     for (i = 0, pointsString = ''; i < 12;) {
       pointsString += tile.vertices[i++] + ',' + tile.vertices[i++] + ' ';
     }
-    tile.element.setAttribute('points', pointsString);
+    tile.polygonElement.setAttribute('points', pointsString);
 
     if (!tile.holdsContent) {
       // Set the color
       colorString = 'hsl(' + tile.currentColor.h + ',' +
       tile.currentColor.s + '%,' +
       tile.currentColor.l + '%)';
-      tile.element.setAttribute('fill', colorString);
-    } else {
+      tile.polygonElement.setAttribute('fill', colorString);
+    } else if (tile.tilePost) {
       // Set the position and opacity of the TilePost
       tile.tilePost.draw();
     }
