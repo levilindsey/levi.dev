@@ -1,7 +1,7 @@
-# levi.codes
+# levi.dev
 
 #### Levi Lindsey's web portfolio
 
-_See this running at [levi.codes][demo-url]!_
+_See this running at [levi.dev][demo-url]!_
 
-[demo-url]: http://levi.codes
+[demo-url]: https://levi.dev
