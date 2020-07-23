@@ -16,6 +16,10 @@
     "start": "node server/main.js"
   },
   "domains": [
+    "levi.dev",
+    "www.levi.dev",
+    "levilindsey.com",
+    "www.levilindsey.com",
     "levi.codes",
     "www.levi.codes",
     "levi.sl",
