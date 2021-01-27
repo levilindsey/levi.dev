@@ -4,9 +4,20 @@ html, body, #dashboard {
   margin: 0;
   padding: 0;
   border: 0;
-  overflow: hidden;
   font-family: 'Open Sans', sans-serif;
   color: #EEEEEE;
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  overflow-y: scroll;
+}
+
+#dashboard {
+  max-width: 100%;
 }
 
 div {
@@ -63,8 +74,8 @@ body {
 #dashboard {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
+  justify-content: start;
+  align-items: center;
   width: 500px;
 }
 
@@ -76,6 +87,7 @@ body {
 }
 
 #news, #games>div {
+  width: calc(100% - 32px);
   background-color: #333333;
   padding: 2em;
   border-radius: 5px;
@@ -104,10 +116,15 @@ body {
   #dashboard {
     width: 500px;
   }
+
+  #news, #games>div {
+    width: calc(100% - 3em);
+    padding: 2em 1em;
+  }
 }
 
 @media (max-width: 364px) {
   #dashboard {
-    width: calc(100% - 16px);
+    width: 100%;
   }
 }
