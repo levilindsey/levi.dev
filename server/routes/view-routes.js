@@ -1,10 +1,10 @@
-var fs = require('fs'),
-    config = require('../config/config');
+const fs = require('fs');
+const config = require('../config/config');
 
-exports.attachRoutes = function (server) {
+exports.attachRoutes = server => {
   console.log('Attaching view-route handlers');
 
-  config.app.apps.forEach(function (appName) {
+  config.app.apps.forEach(appName => {
     if (appName !== 'hex-grid' &&
         appName !== 'page-missing' &&
         appName !== 'sitemap.xml') {
@@ -12,7 +12,7 @@ exports.attachRoutes = function (server) {
     }
   });
 
-  server.get(new RegExp('^\/sitemap\.xml$'), function (req, res, next) {
+  server.get(new RegExp('^\/sitemap\.xml$'), (req, res, next) => {
     res.sendFile(config.app.sitemapPath);
   });
 
@@ -40,15 +40,15 @@ function attachRoutesForApp(server, appPath) {
  * @param {string} appPath
  */
 function attachDefaultRouteForApp(server, appPath) {
-  var appName, routeName, indexFilePath, appUsesServerSideTemplating;
-
-  appName = appPath.split('/').pop();
+  const appName = appPath.split('/').pop();
 
 //  routeName = '/' + appName;
-  routeName = new RegExp('^\/' + appName + '(?:\/.*)?$');
+  const routeName = new RegExp('^\/' + appName + '(?:\/.*)?$');
 
-  appUsesServerSideTemplating = checkWhetherAppUsesServerSideTemplating(appPath);
-  indexFilePath = appUsesServerSideTemplating ? appPath + '/templates/index' : appPath + '/public/index.html';
+  const appUsesServerSideTemplating = checkWhetherAppUsesServerSideTemplating(appPath);
+  const indexFilePath = appUsesServerSideTemplating ?
+      appPath + '/templates/index' :
+      appPath + '/public/index.html';
 
 //  server.route(routeName).get(handleRequest);
   server.get(routeName, handleRequest);
@@ -57,10 +57,14 @@ function attachDefaultRouteForApp(server, appPath) {
 
   // Handles a request for this app
   function handleRequest(req, res, next) {
-    var content;
+    // Check whether this request was directed to the portfolio.
+    if (config.portfolioDomains.indexOf(req.hostname) < 0) {
+      next();
+      return;
+    }
 
     if (appUsesServerSideTemplating) {
-      content = {};
+      const content = {};
       res.render(indexFilePath, content);
     } else {
       res.sendFile(indexFilePath);

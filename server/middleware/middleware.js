@@ -1,10 +1,10 @@
-var config = require('../config/config');
+const config = require('../config/config');
 
 /**
  * @param {Object} server
  */
-exports.init = function (server) {
-  var staticFiles = require('./static-files');
+exports.init = server => {
+  const staticFiles = require('./static-files');
 
   attachExpressMiddleware(server);
   attachCacheBusterRemover(server);
@@ -15,12 +15,12 @@ exports.init = function (server) {
  * @param {Object} server
  */
 function attachExpressMiddleware(server) {
-  var config = require('../config/config'),
-      morgan = require('morgan'), // For logging
-      favicon = require('serve-favicon'), // For serving our favicon
-      bodyParser = require('body-parser'), // For parsing urlencoded and json request bodies
-      cookieParser = require('cookie-parser'),
-      session = require('express-session');
+  const config = require('../config/config');
+  const morgan = require('morgan'); // For logging
+  const favicon = require('serve-favicon'); // For serving our favicon
+  const bodyParser = require('body-parser'); // For parsing urlencoded and json request bodies
+  const cookieParser = require('cookie-parser');
+  const session = require('express-session');
 
   // Set up the templating engine
   server.set('views', __dirname);
@@ -42,7 +42,7 @@ function attachExpressMiddleware(server) {
  * @param {Object} server
  */
 function attachCacheBusterRemover(server) {
-  server.use(function (req, res, next) {
+  server.use((req, res, next) => {
     req.url = req.url.replace(/\/([^\/]+)\.v[\d.\-]+\.(css|js|json|jpg|png|gif|svg|ico|m4a|ogg)$/i, '/$1.$2');
     next();
   });

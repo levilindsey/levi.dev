@@ -30,4 +30,11 @@ selenium
 aws_config.json
 secure-config.js
 #dist
+
+# Contains secret configuration details
+app.json
+app.yaml
 .env
+
+# Firebase service account private key
+*firebase-adminsdk*.json

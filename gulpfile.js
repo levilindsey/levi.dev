@@ -1,6 +1,6 @@
 // TODO: split this apart into separate files for each task within the gulp directory
 
-var config = {};
+const config = {};
 
 config.appsPath = 'apps';
 config.serverPath = 'server';
@@ -23,30 +23,30 @@ config.analyticsScript =
 
 // ---  --- //
 
-var gulp = require('gulp');
-var plugins = require('gulp-load-plugins')();
+const gulp = require('gulp');
+const plugins = require('gulp-load-plugins')();
 
-gulp.task('templates', function () {
+gulp.task('templates', () => {
   return gulp.src(config.templatesSrc)
       .pipe(plugins.plumber())
       .pipe(plugins.template({analyticsScript: config.analyticsScript}))
-      .pipe(plugins.rename(function (path) {
+      .pipe(plugins.rename(path => {
         path.dirname += '/public';
       }))
       .pipe(gulp.dest(config.templatesDist));
 });
 
-gulp.task('bump', function () {
+gulp.task('bump', () => {
   return gulp.src(['./bower.json', './package.json'])
       .pipe(plugins.plumber())
       .pipe(plugins.bump({type: 'patch'})) // 'major'|'minor'|'patch'|'prerelease'
       .pipe(gulp.dest('./'));
 });
 
-gulp.task('server', function () {
+gulp.task('server', () => {
   require(config.serverMainPath);
 });
 
-gulp.task('default', function () {
+gulp.task('default', () => {
   gulp.start('server', 'templates');
 });

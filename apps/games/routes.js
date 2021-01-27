@@ -1,5 +1,5 @@
-const homeRouteRegex = '/';
-const hexGridRouteRegex = /^\/hex-grid(?:\/.*)?$/;
+const gamesDomainRouteRegex = /^.*$/;
+const gamesPathRouteRegex = /^\/(games)(?:\/.*)?$/;
 
 let indexFilePath = '/public/index.html';
 
@@ -7,16 +7,15 @@ let indexFilePath = '/public/index.html';
 exports.attachRoutes = (server, appPath, config) => {
   indexFilePath = appPath + indexFilePath;
 
-  server.get(homeRouteRegex, handleRootRequest);
-  server.get(hexGridRouteRegex, handleHexGridRequest);
+  server.get(gamesDomainRouteRegex, handleGamesDomainRequest);
+  server.get(gamesPathRouteRegex, handleGamesPathRequest);
 
   // ---  --- //
 
   // Handles a request for this app.
-  function handleRootRequest(req, res, next) {
-    console.log('req.hostname:' + req.hostname);
+  function handleGamesDomainRequest(req, res, next) {
     // Check whether this request was directed to the portfolio.
-    if (config.portfolioDomains.indexOf(req.hostname) < 0) {
+    if (config.gamesDomains.indexOf(req.hostname) < 0) {
       next();
       return;
     }
@@ -25,19 +24,12 @@ exports.attachRoutes = (server, appPath, config) => {
   }
 
   // Handles a request for this app.
-  function handleHexGridRequest(req, res, next) {
+  function handleGamesPathRequest(req, res, next) {
     // Check whether this request was directed to the portfolio.
     if (config.portfolioDomains.indexOf(req.hostname) < 0) {
       next();
-      return;
     }
 
-    const dirs = req.path.split('/');
-
-    if (dirs[2] === '' || dirs.length === 2) {
-      res.sendFile(indexFilePath);
-    } else {
-      next();
-    }
+    res.sendFile(indexFilePath);
   }
 };
