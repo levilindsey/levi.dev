@@ -1,5 +1,5 @@
-exports.attachRoutes = function (server) {
-  var viewRoutes = require('./view-routes');
+exports.attachRoutes = server => {
+  const viewRoutes = require('./view-routes');
 
   viewRoutes.attachRoutes(server);
 };

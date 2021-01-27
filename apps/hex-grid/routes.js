@@ -1,10 +1,10 @@
-var homeRouteRegex = '/';
-var hexGridRouteRegex = /^\/hex-grid(?:\/.*)?$/;
+const homeRouteRegex = '/';
+const hexGridRouteRegex = /^\/hex-grid(?:\/.*)?$/;
 
-var indexFilePath = '/public/index.html';
+let indexFilePath = '/public/index.html';
 
 // Attaches the route handlers for this app.
-exports.attachRoutes = function (server, appPath, config) {
+exports.attachRoutes = (server, appPath, config) => {
   indexFilePath = appPath + indexFilePath;
 
   server.get(homeRouteRegex, handleRootRequest);
@@ -14,12 +14,25 @@ exports.attachRoutes = function (server, appPath, config) {
 
   // Handles a request for this app.
   function handleRootRequest(req, res, next) {
+    console.log('req.hostname:' + req.hostname);
+    // Check whether this request was directed to the portfolio.
+    if (config.portfolioDomains.indexOf(req.hostname) < 0) {
+      next();
+      return;
+    }
+
     res.sendFile(indexFilePath);
   }
 
   // Handles a request for this app.
   function handleHexGridRequest(req, res, next) {
-    var dirs = req.path.split('/');
+    // Check whether this request was directed to the portfolio.
+    if (config.portfolioDomains.indexOf(req.hostname) < 0) {
+      next();
+      return;
+    }
+
+    const dirs = req.path.split('/');
 
     if (dirs[2] === '' || dirs.length === 2) {
       res.sendFile(indexFilePath);

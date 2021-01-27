@@ -1,0 +1,87 @@
+html, body, #dashboard {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  font-family: 'Open Sans', sans-serif;
+  color: #EEEEEE;
+}
+
+div {
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 1em 0;
+  color: hsla(52, 100%, 64%, 1);
+  text-align: center;
+  text-shadow: #000000 1px 1px 3px;
+}
+
+a, a:hover, a:active, a:visited {
+  color: #18ffff;
+  text-decoration: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #101919 url("/games/images/background.png") repeat;
+  background-size: 1920px 1425px; /*3840 2850*/
+}
+
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 500px;
+}
+
+#dashboard>div, #games>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#news, #games>div {
+  background-color: #333333;
+  padding: 2em;
+  border-radius: 8px;
+}
+
+#news>h2, #games>div>h3 {
+  margin-top: 0;
+}
+
+#games p {
+  text-align: justify;
+}
+
+@media (max-width: 880px) {
+  #dashboard {
+    width: 500px;
+  }
+}
+
+@media (max-width: 540px) {
+  #dashboard {
+    width: 500px;
+  }
+}
+
+@media (max-width: 364px) {
+  #dashboard {
+    width: calc(100% - 16px);
+  }
+}

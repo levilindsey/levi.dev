@@ -1,4 +1,4 @@
-var config = {};
+const config = {};
 
 // --- Server file-system paths --- //
 

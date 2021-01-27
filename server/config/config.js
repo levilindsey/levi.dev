@@ -1,9 +1,10 @@
-var fs = require('fs'),
-    path = require('path'),
+const fs = require('fs');
+const path = require('path');
 
-    config = {};
+const config = {};
 
 // TODO: change this to use Node.js environment variables
+// config.environment = 'development';
 config.environment = 'production';
 
 config.app = {};
@@ -32,6 +33,16 @@ config.analyticsScript =
 config.app.cacheMaxAge = 2592000000;
 
 config.app.apps = fs.readdirSync(config.app.appsPath);
+
+config.portfolioDomains = [
+  'localhost',
+  'levi.dev',
+  'www.levi.dev',
+];
+
+config.gamesDomains = [
+  'games.levi.dev',
+];
 
 // Mode-specific parameters
 switch (config.environment) {
