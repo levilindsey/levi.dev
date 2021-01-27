@@ -17,7 +17,7 @@
   moduleParams.TITLE = 'Progress Circle';
   moduleParams.VERSION = '??.??.??';
   moduleParams.LICENSE =
-      'The MIT License (MIT). Copyright (c) 2014 Levi Lindsey <levi@levi.codes>.';
+      'The MIT License (MIT). Copyright (c) 2014 Levi Lindsey <levi@levi.dev>.';
 
   // --- Progress circle parameters --- //
 
