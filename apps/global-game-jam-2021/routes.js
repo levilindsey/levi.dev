@@ -10,8 +10,8 @@ exports.attachRoutes = (server, appPath, config) => {
 
   // Handles a request for this app.
   function handleRequest(req, res, next) {
-    // Check whether this request was directed to the games subdomain.
-    if (config.gamesDomains.indexOf(req.hostname) < 0) {
+    // Check whether this request was directed to the portfolio.
+    if (config.portfolioDomains.indexOf(req.hostname) < 0) {
       next();
       return;
     }
