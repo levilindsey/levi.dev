@@ -1,4 +1,4 @@
-const routeRegex = /^\/(global-game-jam-2021|globalgamejam2021|ggj2021|ggj21)(?:\/.*)?$/;
+const routeRegex = /^\/(ooboloo|global-game-jam-2021|globalgamejam2021|ggj2021|ggj21)(?:\/.*)?$/;
 
 const githubUrl = 'https://levilindsey.github.io/global-game-jam-2021';
 
