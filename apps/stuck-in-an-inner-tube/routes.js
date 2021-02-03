@@ -1,6 +1,6 @@
 const routeRegex = /^\/(stuck-in-an-inner-tube|tube-climber|ld47|ludum-dare-47)(?:\/.*)?$/;
 
-const redirectUrl = 'https://levilindsey.github.io/tube-climber';
+const redirectUrl = 'https://levilindsey.github.io/ludum-dare-47';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
