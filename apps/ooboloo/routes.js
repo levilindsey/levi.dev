@@ -1,6 +1,7 @@
 const routeRegex = /^\/(ooboloo|global-game-jam-2021|globalgamejam2021|ggj2021|ggj21)(?:\/.*)?$/;
 
 const githubUrl = 'https://levilindsey.github.io/global-game-jam-2021';
+const itchioUrl = 'https://levilindsey.itch.io/ooboloo';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {

@@ -9445,9 +9445,11 @@ if (typeof define === 'function' && define.amd) {
     'reverbNation': 'Reverb Nation',
     'resume': 'Resume',
     'youtube': 'YouTube',
+    'itchio': 'itch.io',
     'ludum-dare': 'Ludum Dare',
     'global-game-jam': 'Global Game Jam',
     'blog': 'Blog',
+    'games': 'Games',
   };
 
   config.monthLabels = {

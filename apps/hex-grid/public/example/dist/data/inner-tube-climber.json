@@ -3,7 +3,7 @@
   "titleShort": "2D platformer\nendless\nclimber",
   "titleLong": "Inner-Tube Climber: A 2D platformer endless climber",
   "urls": {
-    "demo": "https://levi.dev/inner-tube-climber",
+    "demo": "https://levilindsey.itch.io/stuck-in-an-inner-tube",
     "ludum-dare": "https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube",
     "github": "https://github.com/levilindsey/stuck-in-an-inner-tube"
   },
@@ -15,8 +15,12 @@
   },
   "categories": [
     "side-project",
-    "frontend",
+    "art",
     "animation",
+    "music",
+    "mobile",
+    "android",
+    "ios",
     "app",
     "godot",
     "game",
