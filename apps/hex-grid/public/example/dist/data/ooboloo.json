@@ -1,0 +1,59 @@
+{
+  "id": "ooboloo",
+  "titleShort": "2D platformer\ncollecting\nblobs",
+  "titleLong": "OoboloO: A 2D platformer with collecting and losing blobs",
+  "urls": {
+    "demo": "https://levilindsey.itch.io/ooboloo",
+    "global-game-jam": "https://globalgamejam.org/2021/games/ooboloo-2",
+    "github": "https://github.com/levilindsey/global-game-jam-2021/"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "1/2021",
+  "categories": [
+    "side-project",
+    "art",
+    "animation",
+    "music",
+    "app",
+    "godot",
+    "game",
+    "2D",
+    "game-jam",
+    "teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "screenshot_gameplay_1.png",
+      "description": "A screenshot showing gameplay of OoboloO."
+    },
+    {
+      "fileName": "screenshot_gameplay_2.png",
+      "description": "A screenshot showing gameplay of OoboloO."
+    },
+    {
+      "fileName": "screenshot_gameplay_3.png",
+      "description": "A screenshot showing gameplay of OoboloO."
+    },
+    {
+      "fileName": "screenshot_gameplay_4.png",
+      "description": "A screenshot showing gameplay of OoboloO."
+    },
+    {
+      "fileName": "cover_art.png",
+      "description": "OoboloO's fancy cover art!"
+    },
+    {
+      "fileName": "ooboloo-game-over-screen.png",
+      "description": "OoboloO's game-over screen."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "qNUtp4FSwaY",
+      "description": "A demonstration of the gameplay for OoboloO."
+    }
+  ],
+  "content": "_You're a slime that's lost some of your blobs! Collect them and make your way to the exit while avoiding the vicious cave enemies - but be careful, as they are also your only means of maneuvering!_\r\n\r\nThis was made by:\r\n\r\n-   Connie Wan\r\n-   Daisy Muradyan\r\n-   Levi Lindsey\r\n-   Zaven Muradyan\r\n\r\n## Global Game Jam 2021\r\n\r\nThis game was created as a submission for [Global Game Jam 2021](https:\/\/globalgamejam.org\/2021\/games\/ooboloo-2). All design, code, images, sound effects, and music were created in under 48 hours.\r\n\r\n### The theme: \"Lost and found\"\r\n\r\nThe theme for the game jam was \"lost and found\". This game addresses the theme by having the player collect little bits of themselves that are scattered around the level, but while doing so the player also loses bits of themselves.\r\n\r\n## Software used\r\n\r\n-   Game engine: [Godot](https:\/\/godotengine.org\/)\r\n-   Art: [Krita](https:\/\/krita.org\/)\r\n-   Art: [Aseprite](https:\/\/www.aseprite.org\/)\r\n-   Music: [DefleMask](https:\/\/deflemask.com\/)\r\n-   Sound effects: [Bfxr](https:\/\/www.bfxr.net\/)\r\n-   Particle effects: [Pixel FX Designer](https:\/\/codemanu.itch.io\/particle-fx-designer)\r\n"
+}

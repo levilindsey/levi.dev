@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <% var baseDir = '/games'; %>
-<% var cacheBuster = '.v1.0.0'; %>
+<% var cacheBuster = '.v1.0.1'; %>
 
 <head>
   <meta charset="utf-8">
@@ -42,15 +42,17 @@
   <h1>Levi Lindsey is making games!</h1>
 
   <div id="news">
-    <h2>Follow Levi's game-related news!</h2>
+    <h2>Follow Levi's game-related activity!</h2>
     <ul>
       <li><a href="https://blog.levi.dev">Subscribe to his blog</a></li>
       <li><a href="https://twitter.com/levisl">Follow him on Twitter</a></li>
+      <li><a href="https://levilindsey.itch.io/">Follow him on itch.io</a></li>
     </ul>
   </div>
 
   <div id="games">
     <h2>Check out Levi's games!</h2>
+
     <div>
       <h3>Inner-Tube Climber</h3>
       <p><em>Oh no! The player is stuck inside a "loop"--that is, their inner tube&mdash;from a tragic inner-tubing accident that left them stuck in the bottom of an endless crevasse!</em></p>
@@ -61,18 +63,21 @@
         <li><a href="https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube">Original Ludum Dare submission</a></li>
       </ul>
     </div>
+
+    <div>
+      <h3>OoboloO</h3>
+      <p><em>You're a slime that's lost some of your blobs! Collect them and make your way to the exit while avoiding the vicious cave enemies - but be careful, as they are also your only means of maneuvering!</em></p>
+      <p>This is a puzzle-platformer game, with novel blob/resource management!</p>
+      <ul>
+        <li><span><a href="https://levilindsey.itch.io/ooboloo">itch.io</a></span></li>
+        <li><a href="https://globalgamejam.org/2021/games/ooboloo-2">Global Game Jam submission</a></li>
+      </ul>
+    </div>
   </div>
 
   <div id="portfolio-link">
     <a href="https://levi.dev">Or check out Levi's portfolio</a>
   </div>
-</div>
-
-<!-- In theory, statically including all this text in the HTML should give SEO more to work with?
-  -->
-<div id="combined-metadata-dump-for-all-games">
-<!-- inject:combinedMetadata -->
-<!-- endinject -->
 </div>
 
 <script><%= analyticsScript %></script>

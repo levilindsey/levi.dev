@@ -3,7 +3,8 @@
   "titleShort": "Sabbatical:\nGame dev\nexploration",
   "titleLong": "Sabbatical: Adventures in game development",
   "urls": {
-    "blog": "https://blog.levi.dev"
+    "blog": "https://blog.levi.dev",
+    "games": "https://games.levi.dev"
   },
   "jobTitle": "",
   "location": "",
@@ -13,7 +14,9 @@
   },
   "categories": [
     "work",
+    "art",
     "animation",
+    "music",
     "godot",
     "game",
     "2D"
@@ -25,5 +28,5 @@
     }
   ],
   "videos": [],
-  "content": "Levi's tinkering with [Godot](https:\/\/godotengine.org\/) and 2D platformers, while on sabbatical from his job at Google.\r\n\r\nFollow along by subscribing to Levi's [blog](https:\/\/blog.levi.dev)!\r\n\r\nIn particular, if you're curious about Levi's motivations and goals for his sabbatical, check out [his first post](https:\/\/blog.levi.dev\/2021\/01\/wait-what-am-i-doing.html).\r\n"
+  "content": "Levi's tinkering with [Godot](https:\/\/godotengine.org\/) and 2D platformers, while on sabbatical from his job at Google.\r\n\r\nFollow along by subscribing to Levi's [blog](https:\/\/blog.levi.dev)!\r\n\r\nIn particular, if you're curious about Levi's motivations and goals for his sabbatical, check out [his first post](https:\/\/blog.levi.dev\/2021\/01\/wait-what-am-i-doing.html).\r\n\r\nCheck out the games Levi made during his sabbatical at [games.levi.dev](https:\/\/games.levi.dev)."
 }

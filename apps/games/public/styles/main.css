@@ -32,6 +32,7 @@ ul {
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
+  margin-bottom: 0;
 }
 
 li {
@@ -39,6 +40,8 @@ li {
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
+  text-align: center;
+  font-weight: bold;
 }
 
 li>a, li>span {
@@ -98,12 +101,17 @@ body {
   margin-top: 0;
 }
 
+#games>div {
+  margin-bottom: 1.5em;
+}
+
 #games p {
   text-align: justify;
 }
 
 #portfolio-link {
-  margin: 60px 0;
+  margin-top: 1.5em;
+  padding-bottom: 1.5em;
 }
 
 @media (max-width: 880px) {
