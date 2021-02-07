@@ -3,11 +3,10 @@ const routeRegex = /^\/(inner-tube-climber)(?:\/.*)?$/;
 const androidRegex = /(\bandroid\b)/i;
 const iosRegex = /(\bmac os\b|\bios\b|\biphone\b|\bipad\b|\bipod\b)/i;
 
-const githubUrl = 'https://levilindsey.github.io/tube-climber';
 const itchioUrl = 'https://levilindsey.itch.io/stuck-in-an-inner-tube';
 // FIXME
-const androidStoreUrl = 'https://levilindsey.github.io/tube-climber';
-const iosStoreUrl = 'https://levilindsey.github.io/tube-climber';
+const androidStoreUrl = itchioUrl;
+const iosStoreUrl = itchioUrl;
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
