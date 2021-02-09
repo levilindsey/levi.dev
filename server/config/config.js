@@ -36,16 +36,20 @@ config.app.cacheMaxAge = 2592000000;
 config.app.apps = fs.readdirSync(config.app.appsPath);
 
 config.portfolioDomains = [
-  'localhost',
-  'levi.dev',
   'www.levi.dev',
+  'levi.dev',
+  'www.levilindsey.com',
+  'levilindsey.com',
+  'localhost',
 ];
 
 config.gamesDomains = [
   'games.levi.dev',
+  'www.games.levi.dev',
 ];
 
 config.snoringCatDomains = [
+  'www.snoringcat.games',
   'snoringcat.games',
 ];
 
