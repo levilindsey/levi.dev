@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<% var baseDir = '/snoring-cat'; %>
+<% var cacheBuster = '.v1.0.1'; %>
+
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
+  <title>Snoring Cat</title>
+
+  <meta name="description"
+        content="Snoring Cat LLC makes pixel-art platformer games using Godot.">
+
+  <link rel="icon"
+        type="image/png"
+        href="<%= baseDir %>/images/icon-32<%= cacheBuster %>.png"
+        sizes="32x32">
+
+  <link rel="stylesheet"
+        type="text/css"
+        href="<%= baseDir %>/styles/main<%= cacheBuster %>.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700'
+        rel='stylesheet'
+        type='text/css'>
+
+  <script>
+    window.appRootPath = '/games';
+  </script>
+  <script defer
+          type="text/javascript"
+          src="<%= baseDir %>/games<%= cacheBuster %>.js"></script>
+</head>
+<body>
+<div id="dashboard">
+  <h1>Welcome to Snoring Cat!</h1>
+  <p>
+    Good stuff coming soon.
+  </p>
+  <div>
+    <img src="<%= baseDir %>/images/icon-512.png"
+         alt="A pixel-art image of a sleeping cat rolled up around itself.">
+  </div>
+</div>
+
+<script>
+  // FIXME: Add analytics
+</script>
+</body>
+</html>

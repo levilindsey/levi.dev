@@ -45,6 +45,10 @@ config.gamesDomains = [
   'games.levi.dev',
 ];
 
+config.snoringCatDomains = [
+  'snoringcat.games',
+];
+
 // Mode-specific parameters
 switch (config.environment) {
   case 'development':
