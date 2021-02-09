@@ -55,9 +55,9 @@ li>a, li>span {
 
 h1, h2, h3, h4, h5 {
   margin: 1em 0;
-  color: hsla(52, 100%, 64%, 1);
+  color: #ffbf7a;
   text-align: center;
-  text-shadow: #000000 1px 1px 3px;
+  text-shadow: #000000 2px 2px 2px;
 }
 
 a, a:hover, a:active, a:visited {
