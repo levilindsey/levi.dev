@@ -18,12 +18,17 @@ body {
 }
 
 #dashboard {
+  height: auto;
   max-width: 100%;
 }
 
-div {
+div, p {
   padding: 0;
   margin: 0;
+}
+
+p {
+  margin-bottom: 1em;
 }
 
 ul {
@@ -66,11 +71,15 @@ a, a:hover, a:active, a:visited {
   text-decoration: none;
 }
 
+a:hover, a:hover:visited {
+  color: #d1fffc;
+}
+
+a:active, a:active:visited {
+  color: #10adb3;
+}
+
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: #222222;
 }
 
@@ -78,6 +87,7 @@ body {
   width: 500px;
 }
 
+body,
 #dashboard,
 #contact,
 #email,
@@ -89,19 +99,23 @@ body {
   align-items: center;
 }
 
-p {
-  margin: 0 2em 2em;
+#cat {
+  margin: 0 0 2em;
 }
 
-#contact {
-  font-size: 0.6em;
-
+.card {
   background-color: #333333;
   box-shadow: 2px 2px 2px #000000;
 
   border-radius: 8px;
   padding: 2em;
-  margin: 2em;
+  margin: 0 0 2em;
+
+  align-self: stretch;
+}
+
+#contact {
+  font-size: 0.6em;
 }
 
 #contact h2 {
@@ -123,14 +137,15 @@ p {
   #dashboard {
     width: 500px;
   }
+
+  .card {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+  }
 }
 
 @media (max-width: 364px) {
   #dashboard {
     width: 100%;
-  }
-
-  #contact {
-    min-width: calc(100% - 16px);
   }
 }
