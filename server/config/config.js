@@ -43,11 +43,6 @@ config.portfolioDomains = [
   'localhost',
 ];
 
-config.gamesDomains = [
-  'games.levi.dev',
-  'www.games.levi.dev',
-];
-
 config.snoringCatDomains = [
   'www.snoringcat.games',
   'snoringcat.games',

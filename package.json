@@ -1,6 +1,6 @@
 {
   "name": "levi.dev",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "description": "Levi Lindsey's web portfolio",
   "licenses": [
     {
@@ -20,7 +20,10 @@
     "www.levi.dev",
     "levilindsey.com",
     "www.levilindsey.com",
-    "games.levi.dev"
+    "snoringcat.games",
+    "www.snoringcat.games",
+    "snoringcatgames.com",
+    "www.snoringcatgames.com"
   ],
   "dependencies": {
     "body-parser": "^1.19.0",
