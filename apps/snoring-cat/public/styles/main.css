@@ -4,7 +4,8 @@ html, body, #dashboard {
   margin: 0;
   padding: 0;
   border: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16pt;
   color: #EEEEEE;
 }
 
@@ -74,15 +75,42 @@ body {
 }
 
 #dashboard {
+  width: 500px;
+}
+
+#dashboard,
+#contact,
+#email,
+#address,
+#phone {
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  width: 500px;
 }
 
 p {
-  margin-bottom: 2em;
+  margin: 0 2em 2em;
+}
+
+#contact {
+  font-size: 0.6em;
+
+  background-color: #333333;
+  box-shadow: 2px 2px 2px #000000;
+
+  border-radius: 8px;
+  padding: 2em;
+  margin: 2em;
+}
+
+#contact h2 {
+  font-size: 1.5em;
+  margin: 0 0 0.5em;
+}
+
+#address {
+  margin: 0.6em 0;
 }
 
 @media (max-width: 880px) {
@@ -100,5 +128,9 @@ p {
 @media (max-width: 364px) {
   #dashboard {
     width: 100%;
+  }
+
+  #contact {
+    min-width: calc(100% - 16px);
   }
 }
