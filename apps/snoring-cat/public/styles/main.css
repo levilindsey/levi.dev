@@ -80,7 +80,8 @@ a:active, a:active:visited {
 }
 
 body {
-  background-color: #222222;
+  background: #222222 url("/snoring-cat/images/zzz-tiled.png") repeat;
+  background-size: 217px 192px;
 }
 
 #dashboard {
