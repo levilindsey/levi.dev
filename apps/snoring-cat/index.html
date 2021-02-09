@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <% var baseDir = '/snoring-cat'; %>
-<% var cacheBuster = '.v1.0.1'; %>
+<% var cacheBuster = '.v1.0.2'; %>
 
 <head>
   <meta charset="utf-8">
@@ -16,8 +16,16 @@
 
   <link rel="icon"
         type="image/png"
+        href="<%= baseDir %>/images/icon-16<%= cacheBuster %>.png"
+        sizes="16x16">
+  <link rel="icon"
+        type="image/png"
         href="<%= baseDir %>/images/icon-32<%= cacheBuster %>.png"
         sizes="32x32">
+  <link rel="icon"
+        type="image/png"
+        href="<%= baseDir %>/images/icon-64<%= cacheBuster %>.png"
+        sizes="64x64">
 
   <link rel="stylesheet"
         type="text/css"
