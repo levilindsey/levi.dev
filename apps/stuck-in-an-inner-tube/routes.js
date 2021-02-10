@@ -19,7 +19,7 @@ exports.attachRoutes = (server, appPath, config) => {
     const dirs = req.path.split('/');
 
     if (dirs[2] === '' || dirs.length === 2) {
-      res.redirect(redirectUrl);
+      res.redirect(itchioUrl);
     } else {
       next();
     }
