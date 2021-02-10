@@ -16,15 +16,15 @@
 
   <link rel="icon"
         type="image/png"
-        href="<%= baseDir %>/images/icon-16<%= cacheBuster %>.png"
+        href="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-16.png"
         sizes="16x16">
   <link rel="icon"
         type="image/png"
-        href="<%= baseDir %>/images/icon-32<%= cacheBuster %>.png"
+        href="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-32.png"
         sizes="32x32">
   <link rel="icon"
         type="image/png"
-        href="<%= baseDir %>/images/icon-64<%= cacheBuster %>.png"
+        href="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-64.png"
         sizes="64x64">
 
   <link rel="stylesheet"
@@ -50,7 +50,7 @@
   </p>
 
   <div id="cat">
-    <img src="<%= baseDir %>/images/icon-512<%= cacheBuster %>.png"
+    <img src="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-512.png"
          alt="A pixel-art image of a sleeping cat rolled up around itself.">
   </div>
 
@@ -79,6 +79,11 @@
     </div>
     <div id="phone">(206) 657-7717</div>
   </div>
+
+  <audio autoplay="autoplay"
+         loop>
+    <source src="https://s3-us-west-2.amazonaws.com/snoringcat.games/cat-snores.mp3" />
+  </audio>
 </div>
 
 <script>
