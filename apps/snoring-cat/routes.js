@@ -1,14 +1,18 @@
-const snoringCatDomainRouteRegex = /^.*$/;
-const snoringCatPathRouteRegex = /^\/(snoring-cat|snoringcat|snoring-cat-games|snoringcatgames|snoring-cat-llc|snoring|cat|scg)(?:\/.*)?$/;
+const snoringCatDomainIndexRouteRegex = /^.*$/;
+const snoringCatPathIndexRouteRegex = /^\/(snoring-cat|snoringcat|snoring-cat-games|snoringcatgames|snoring-cat-llc|snoring|cat|scg)(?:\/.*)?$/;
+
+const supportPathRegex = /^.*\/support.*$/;
 
 let indexFilePath = '/public/index.html';
+let supportFilePath = '/public/support.html';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
   indexFilePath = appPath + indexFilePath;
+  supportFilePath = appPath + supportFilePath;
 
-  server.get(snoringCatDomainRouteRegex, handleSnoringCatDomainRequest);
-  server.get(snoringCatPathRouteRegex, handleSnoringCatPathRequest);
+  server.get(snoringCatDomainIndexRouteRegex, handleSnoringCatDomainRequest);
+  server.get(snoringCatPathIndexRouteRegex, handleSnoringCatPathRequest);
 
   // ---  --- //
 
@@ -20,7 +24,11 @@ exports.attachRoutes = (server, appPath, config) => {
       return;
     }
 
-    res.sendFile(indexFilePath);
+    if (supportPathRegex.test(req.path)) {
+      res.sendFile(supportFilePath);
+    } else {
+      res.sendFile(indexFilePath);
+    }
   }
 
   // Handles a request for this app.
@@ -30,6 +38,10 @@ exports.attachRoutes = (server, appPath, config) => {
       next();
     }
 
-    res.sendFile(indexFilePath);
+    if (supportPathRegex.test(req.path)) {
+      res.sendFile(supportFilePath);
+    } else {
+      res.sendFile(indexFilePath);
+    }
   }
 };
