@@ -1,15 +1,46 @@
 const snoringCatDomainIndexRouteRegex = /^.*$/;
-const snoringCatPathIndexRouteRegex = /^\/(snoring-cat|snoringcat|snoring-cat-games|snoringcatgames|snoring-cat-llc|snoring|cat|scg)(?:\/.*)?$/;
+const snoringCatPathIndexRouteRegex =
+    /^\/(snoring-cat|snoringcat|snoring-cat-games|snoringcatgames|snoring-cat-llc|snoring|cat|scg)(?:\/.*)?$/;
 
-const supportPathRegex = /^.*\/support.*$/;
-
-let indexFilePath = '/public/index.html';
-let supportFilePath = '/public/support.html';
+const subroutes = [
+  {
+    // Inner-Tube Climber privacy policy.
+    pathRegex: /^.*\/inner-tube-climber\/(privacy-policy|privacy).*$/,
+    redirectUrl:
+        'https://docs.google.com/document/d/1kH48Xn62wFnZuy8wFmrsr4lKJ-k3wU-MnqFpYdhwBCc/preview',
+  },
+  {
+    // Inner-Tube Climber terms of service.
+    pathRegex: /^.*\/inner-tube-climber\/(terms-of-service|terms-and-conditions|tos).*$/,
+    redirectUrl:
+        'https://docs.google.com/document/d/1g1W4F2nJqJsIPKOwRGlFJi4IGj5q1ae7upYOTnVtfyI/preview',
+  },
+  {
+    // Inner-Tube Climber data-deletion instructions.
+    pathRegex: /^.*\/inner-tube-climber\/(data-deletion-instructions|data-deletion).*$/,
+    redirectUrl:
+        'https://docs.google.com/document/d/1QMl93Ti8aYybPHPmyAFlLnn7U9KyxSzpCI5N50Drqls/preview',
+  },
+  {
+    // Support.
+    pathRegex: /^.*\/support.*$/,
+    filePath: '/public/support.html',
+  },
+  {
+    // Index.
+    pathRegex: /^.*$/,
+    filePath: '/public/index.html',
+  },
+];
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
-  indexFilePath = appPath + indexFilePath;
-  supportFilePath = appPath + supportFilePath;
+  // Prepend the app path to any sub-route file paths.
+  subroutes.forEach(subroute => {
+    if (subroute.filePath) {
+      subroute.filePath = appPath + subroute.filePath;
+    }
+  });
 
   server.get(snoringCatDomainIndexRouteRegex, handleSnoringCatDomainRequest);
   server.get(snoringCatPathIndexRouteRegex, handleSnoringCatPathRequest);
@@ -24,11 +55,7 @@ exports.attachRoutes = (server, appPath, config) => {
       return;
     }
 
-    if (supportPathRegex.test(req.path)) {
-      res.sendFile(supportFilePath);
-    } else {
-      res.sendFile(indexFilePath);
-    }
+    handleSnoringCatPath(req, res, next);
   }
 
   // Handles a request for this app.
@@ -38,10 +65,22 @@ exports.attachRoutes = (server, appPath, config) => {
       next();
     }
 
-    if (supportPathRegex.test(req.path)) {
-      res.sendFile(supportFilePath);
-    } else {
-      res.sendFile(indexFilePath);
+    handleSnoringCatPath(req, res, next);
+  }
+
+  function handleSnoringCatPath(req, res, next) {
+    for (let subroute of subroutes) {
+      if (subroute.pathRegex.test(req.path)) {
+        if (subroute.filePath) {
+          res.sendFile(subroute.filePath);
+        } else if (subroute.redirectUrl) {
+          res.redirect(subroute.redirectUrl);
+        } else {
+          throw new Error('Invalid route config');
+        }
+        return;
+      }
     }
+    throw new Error('Invalid route config');
   }
 };
