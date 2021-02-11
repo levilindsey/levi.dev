@@ -140,6 +140,11 @@ body,
     width: 500px;
   }
 
+  #cat>img {
+    width: 354px;
+    height: 354px;
+  }
+
   .card {
     margin-left: 0.5em;
     margin-right: 0.5em;
@@ -149,5 +154,10 @@ body,
 @media (max-width: 364px) {
   #dashboard {
     width: 100%;
+  }
+
+  #cat>img {
+    width: 256px;
+    height: 256px;
   }
 }
