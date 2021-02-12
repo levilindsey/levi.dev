@@ -1,6 +1,12 @@
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 const snoringCatDomainIndexRouteRegex = /^.*$/;
 const snoringCatPathIndexRouteRegex =
     /^\/(snoring-cat|snoringcat|snoring-cat-games|snoringcatgames|snoring-cat-llc|snoring|cat|scg)(?:\/.*)?$/;
+
+const supportRegex = /^.*\/support.*$/;
 
 const subroutes = [
   {
@@ -23,7 +29,7 @@ const subroutes = [
   },
   {
     // Support.
-    pathRegex: /^.*\/support.*$/,
+    pathRegex: supportRegex,
     filePath: '/public/support.html',
   },
   {
@@ -32,6 +38,8 @@ const subroutes = [
     filePath: '/public/index.html',
   },
 ];
+
+const dataDeletionRequestKey = 'request-data-deletion';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
@@ -68,7 +76,38 @@ exports.attachRoutes = (server, appPath, config) => {
     handleSnoringCatPath(req, res, next);
   }
 
-  function handleSnoringCatPath(req, res, next) {
+  async function handleSnoringCatPath(req, res, next) {
+    if (req.query.hasOwnProperty(dataDeletionRequestKey) && supportRegex.test(req.path)) {
+      // The user is requesting data deletion.
+      // Send an email notification to follow-up.
+
+      const subject =
+          'DATA DELETION REQUEST' +
+          ': client-id=' + req.query['client-id'] +
+          '; source=' + req.query['source'] +
+          '; app=' + req.query['app'];
+
+      const body =
+          'A user has requested that their data be deleted.' +
+          '\n\n-   Now follow-up with Google Analytics to delete all data with the corresponding client ID (' + req.query['client-id'] + ').' +
+          '\n-   If the user sends an additional email from the support page, then send them a confirmation email once Google has deleted their data.' +
+          '\n\nhttps://support.google.com/analytics/answer/9450800?hl=en';
+
+      const message = {
+        from: 'snoringcat@snoringcat.games',
+        to: 'support@snoringcat.games',
+        subject: subject,
+        text: body,
+      };
+
+      try {
+        await sgMail.send(message);
+        console.log('Mail sent');
+      } catch (e) {
+        console.error('Mail failed to send!', e);
+      }
+    }
+
     for (let subroute of subroutes) {
       if (subroute.pathRegex.test(req.path)) {
         if (subroute.filePath) {
