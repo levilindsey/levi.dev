@@ -91,7 +91,6 @@ body {
 
 body,
 #dashboard,
-#contact,
 #email,
 #address,
 #phone {
@@ -105,24 +104,74 @@ body,
   margin: 0 0 2em;
 }
 
+#cat>img {
+  width: 256px;
+  height: 256px;
+}
+
 .card {
   background-color: #333333;
   box-shadow: 2px 2px 2px #000000;
 
   border-radius: 8px;
-  padding: 2em;
-  margin: 0 0 2em;
+  padding: 18px 28px;
+  margin: 0 0 18px;
 
   align-self: stretch;
 }
 
-#contact {
-  font-size: 0.6em;
+.card-header-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: -18px -28px;
+  padding: 18px 28px;
+  cursor: pointer;
+  transition: color 0.1s ease-in-out;
 }
 
-#contact h2 {
-  font-size: 1.5em;
-  margin: 0 0 0.5em;
+.card-header-wrapper>img {
+  display: block;
+  width: 14px;
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease-in-out;
+}
+
+.open .card-header-wrapper>img {
+  transform: rotate(90deg);
+}
+
+.card-header-wrapper:hover h2 {
+  color: #ffdab3;
+}
+
+.card-header-wrapper:active h2 {
+  color: #b38656;
+}
+
+.card-header-wrapper>h2 {
+  margin: 0;
+}
+
+.card-body-wrapper {
+  max-height: 0;
+  margin-top: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  transition-property: margin-top, max-height;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+.open .card-body-wrapper {
+  max-height: 600px;
+  margin-top: 28px;
+  overflow-y: auto;
+}
+
+.open.transitioning .card-body-wrapper {
+  overflow-y: hidden;
 }
 
 #address {
@@ -141,8 +190,8 @@ body,
   }
 
   #cat>img {
-    width: 354px;
-    height: 354px;
+    width: 256px;
+    height: 256px;
   }
 
   .card {
@@ -157,7 +206,7 @@ body,
   }
 
   #cat>img {
-    width: 256px;
-    height: 256px;
+    width: 192px;
+    height: 192px;
   }
 }
