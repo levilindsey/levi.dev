@@ -44,7 +44,7 @@ exports.attachRoutes = (server, appPath, config) => {
         (dirs[2] === '' || dirs[2] === 'invite') && dirs.length === 3 ||
         dirs.length === 2) {
       const content = {
-        analyticsScript: config.app.analyticsScript
+        portfolioAnalyticsScript: config.app.portfolioAnalyticsScript
       };
       res.render(inviteTemplatePath, content);
     } else {
