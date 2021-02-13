@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<% var baseDir = '/snoring-cat'; %>
+<% var cacheBuster = '.v1.0.5'; %>
+
+<head>
+  <meta charset="utf-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
+  <title>Snoring Cat support</title>
+
+  <meta name="description"
+        content="Snoring Cat LLC makes pixel-art platformer games using Godot.">
+
+  <link rel="icon"
+        type="image/png"
+        href="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-16.png"
+        sizes="16x16">
+  <link rel="icon"
+        type="image/png"
+        href="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-32.png"
+        sizes="32x32">
+  <link rel="icon"
+        type="image/png"
+        href="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-64.png"
+        sizes="64x64">
+
+  <link rel="stylesheet"
+        type="text/css"
+        href="<%= baseDir %>/styles/main<%= cacheBuster %>.css">
+  <link href='https://fonts.googleapis.com/css?family=Nunito:400,700'
+        rel='stylesheet'
+        type='text/css'>
+
+  <script>
+    window.appRootPath = '/snoring-cat';
+  </script>
+  <script defer
+          type="text/javascript"
+          src="<%= baseDir %>/scripts/shared<%= cacheBuster %>.js"></script>
+  <script defer
+          type="text/javascript"
+          src="<%= baseDir %>/scripts/support<%= cacheBuster %>.js"></script>
+</head>
+<body>
+<div id="main">
+  <h1>Welcome to Snoring Cat support!</h1>
+
+  <div id="cat">
+    <img src="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-512.png"
+         alt="A pixel-art image of a sleeping cat rolled up around itself.">
+  </div>
+
+  <div id="contact"
+       class="card open">
+    <button class="card-header-wrapper">
+      <h2>Contact</h2>
+      <img class="dropdown-arrow"
+           src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+           alt="A chevron symbol.">
+    </button>
+
+    <div class="card-body-wrapper">
+      <div class="card-body">
+        <div id="standard-support-email">
+          <p>Please let us know if you have any questions, suggestions, comments, or concerns!</p>
+        </div>
+
+        <div id="data-deletion-request-email" style="display:none;">
+          <p>It sounds like you want your data to be deleted.</p>
+
+          <p>In order for us to delete your data, we need you to give us the client ID value that your app has been using to associate data with you. That client ID should be automatically included in the email subject when you use the following link.</p>
+
+          <p>We will send you a confirmation email once your data has been deleted.</p>
+        </div>
+
+        <p>Send us an email at <a href="mailto:support@snoringcat.games"
+                                  id="support-link">support@snoringcat.games</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <audio autoplay="autoplay"
+         loop>
+    <source src="https://s3-us-west-2.amazonaws.com/snoringcat.games/cat-snores-quieter.mp3" />
+  </audio>
+</div>
+
+<script><%= snoringCatAnalyticsScript %></script>
+</body>
+</html>
