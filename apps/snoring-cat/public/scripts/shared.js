@@ -7,6 +7,7 @@
   var CARD_OPEN_DURATION = 200;
 
   var path = location.pathname;
+  var queryParams = location.search;
   while (path.length > 0 && path[path.length - 1] === '/') {
     path = path.substr(0, path.length - 1);
   }
@@ -38,14 +39,14 @@
     if (card.classList.contains('open')) {
       openCard = null;
       card.classList.remove('open');
-      history.pushState({}, document.title, path + '/');
+      history.pushState({}, document.title, path + '/' + queryParams);
     } else {
       if (!!openCard) {
         openCard.classList.remove('open');
       }
       openCard = card;
       card.classList.add('open');
-      history.pushState({}, document.title, path + '#' + card.id);
+      history.pushState({}, document.title, path + '#' + card.id + queryParams);
     }
     setTimeout(function () {
       card.classList.remove('transitioning');
