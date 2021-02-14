@@ -58,6 +58,11 @@
       var matchingCard = document.querySelector('#' + cardId + '.card');
       if (!!matchingCard) {
         matchingCard.classList.add('open');
+
+        matchingCard.scrollIntoView();
+        setTimeout(function () {
+          matchingCard.scrollIntoView();
+        }, CARD_OPEN_DURATION);
       }
     }
   }
