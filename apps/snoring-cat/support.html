@@ -30,9 +30,16 @@
   <link rel="stylesheet"
         type="text/css"
         href="<%= baseDir %>/styles/main<%= cacheBuster %>.css">
-  <link href='https://fonts.googleapis.com/css?family=Nunito:400,700'
-        rel='stylesheet'
-        type='text/css'>
+
+  <!-- Asynchronously load the large font file. -->
+  <link rel="preload"
+        href="https://fonts.googleapis.com/css?family=Nunito:400,700"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:400,700">
+  </noscript>
 
   <script>
     window.appRootPath = '/snoring-cat';
