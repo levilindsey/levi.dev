@@ -58,6 +58,7 @@
       var cardId = location.hash.substr(1);
       var matchingCard = document.querySelector('#' + cardId + '.card');
       if (!!matchingCard) {
+        openCard = matchingCard;
         matchingCard.classList.add('open');
 
         matchingCard.scrollIntoView();
