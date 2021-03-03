@@ -46,6 +46,10 @@ ul {
   align-self: stretch;
 }
 
+ul+p {
+  margin-top: 2em;
+}
+
 li {
   display: flex;
   flex-direction: column;
@@ -70,7 +74,7 @@ li>span {
 
 li>a:hover,
 li>span:hover {
-  background-color: hsla(0, 0%, 30%, 0.15);
+  background-color: hsla(0, 0%, 35%, 1.0);
   box-shadow: 3px 3px 4px hsla(0, 0%, 0%, 0.4);
 }
 
