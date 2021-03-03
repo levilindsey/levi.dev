@@ -102,7 +102,7 @@ a:active, a:active:visited {
 
 body {
   /*background: #222222 url("/snoring-cat/images/zzz-tiled.png") repeat;*/
-  background: #222222 url("https://s3-us-west-2.amazonaws.com/snoringcat.games/zzz-tiled.png") repeat;
+  background: #222222 url("https://s3-us-west-2.amazonaws.com/snoringcat.games/zzz-tiled-colored-faded.png") repeat;
   background-size: 217px 192px;
 }
 
