@@ -148,7 +148,12 @@ exports.attachRoutes = (server, appPath, config) => {
         ': source=' + req.query['source'] +
         '; app=' + req.query['app'];
 
-    const body = req.body;
+    let body;
+    try {
+      body = JSON.stringify(req.body);
+    } catch (e) {
+      throw new Error('Request body is not JSON')
+    }
 
     const message = {
       from: 'snoringcat@snoringcat.games',
