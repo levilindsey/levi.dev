@@ -58,6 +58,8 @@ exports.attachRoutes = (server, appPath, config) => {
 
   server.get(snoringCatDomainIndexRouteRegex, handleSnoringCatDomainRequest);
   server.get(snoringCatPathIndexRouteRegex, handleSnoringCatPathRequest);
+  server.post(snoringCatDomainIndexRouteRegex, handleSnoringCatDomainRequest);
+  server.post(snoringCatPathIndexRouteRegex, handleSnoringCatPathRequest);
 
   // ---  --- //
 
