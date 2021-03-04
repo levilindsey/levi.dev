@@ -7,6 +7,7 @@ const snoringCatPathIndexRouteRegex =
     /^\/(snoring-cat|snoringcat|snoring-cat-games|snoringcatgames|snoring-cat-llc|snoring|cat|scg)(?:\/.*)?$/;
 
 const supportRegex = /^.*\/support.*$/;
+const logGesturesRegex = /^.*\/log\/gestures.*$/;
 
 const subroutes = [
   {
@@ -31,6 +32,11 @@ const subroutes = [
     // Support.
     pathRegex: supportRegex,
     filePath: '/public/support.html',
+  },
+  {
+    // Log gestures.
+    pathRegex: logGesturesRegex,
+    responseText: 'Gestures successfully recorded',
   },
   {
     // Index.
@@ -78,34 +84,9 @@ exports.attachRoutes = (server, appPath, config) => {
 
   async function handleSnoringCatPath(req, res, next) {
     if (req.query.hasOwnProperty(dataDeletionRequestKey) && supportRegex.test(req.path)) {
-      // The user is requesting data deletion.
-      // Send an email notification to follow-up.
-
-      const subject =
-          'DATA DELETION REQUEST' +
-          ': client-id=' + req.query['client-id'] +
-          '; source=' + req.query['source'] +
-          '; app=' + req.query['app'];
-
-      const body =
-          'A user has requested that their data be deleted.' +
-          '\n\n-   Now follow-up with Google Analytics to delete all data with the corresponding client ID (' + req.query['client-id'] + ').' +
-          '\n-   If the user sends an additional email from the support page, then send them a confirmation email once Google has deleted their data.' +
-          '\n\nhttps://support.google.com/analytics/answer/9450800?hl=en';
-
-      const message = {
-        from: 'snoringcat@snoringcat.games',
-        to: 'support@snoringcat.games',
-        subject: subject,
-        text: body,
-      };
-
-      try {
-        await sgMail.send(message);
-        console.log('Mail sent');
-      } catch (e) {
-        console.error('Mail failed to send!', e);
-      }
+      await sendDataDeletionRequestEmail(req);
+    } else if (logGesturesRegex.test(req.path)) {
+      await sendLogGesturesEmail(req);
     }
 
     for (let subroute of subroutes) {
@@ -114,6 +95,8 @@ exports.attachRoutes = (server, appPath, config) => {
           res.sendFile(subroute.filePath);
         } else if (subroute.redirectUrl) {
           res.redirect(subroute.redirectUrl);
+        } else if (subroute.responseText) {
+          res.send(subroute.responseText);
         } else {
           throw new Error('Invalid route config');
         }
@@ -121,5 +104,58 @@ exports.attachRoutes = (server, appPath, config) => {
       }
     }
     throw new Error('Invalid route config');
+  }
+
+  async function sendDataDeletionRequestEmail(req) {
+    // The user is requesting data deletion.
+    // Send an email notification to follow-up.
+
+    const subject =
+        'DATA DELETION REQUEST' +
+        ': client-id=' + req.query['client-id'] +
+        '; source=' + req.query['source'] +
+        '; app=' + req.query['app'];
+
+    const body =
+        'A user has requested that their data be deleted.' +
+        '\n\n-   Now follow-up with Google Analytics to delete all data with the corresponding client ID (' + req.query['client-id'] + ').' +
+        '\n-   If the user sends an additional email from the support page, then send them a confirmation email once Google has deleted their data.' +
+        '\n\nhttps://support.google.com/analytics/answer/9450800?hl=en';
+
+    const message = {
+      from: 'snoringcat@snoringcat.games',
+      to: 'support@snoringcat.games',
+      subject: subject,
+      text: body,
+    };
+
+    try {
+      await sgMail.send(message);
+      console.log('Mail sent');
+    } catch (e) {
+      console.error('Mail failed to send!', e);
+    }
+  }
+
+  async function sendLogGesturesEmail(req) {
+    // The user has sent gesture information for debugging.
+    // Send an email with this information.
+
+    const subject =
+        'GESTURE LOGS FOR DEBUGGING' +
+        ': source=' + req.query['source'] +
+        '; app=' + req.query['app'];
+
+    const body = req.body;
+
+    const message = {
+      from: 'snoringcat@snoringcat.games',
+      to: 'support@snoringcat.games',
+      subject: subject,
+      text: body,
+    };
+
+    await sgMail.send(message);
+    console.log('Mail sent');
   }
 };
