@@ -29,7 +29,7 @@
 
   <link rel="stylesheet"
         type="text/css"
-        href="/snoring-cat/styles/main.v1.0.7.css">
+        href="/snoring-cat/styles/main.v1.0.8.css">
 
   <!-- Asynchronously load the large font file. -->
   <link rel="preload"
@@ -46,13 +46,13 @@
   </script>
   <script defer
           type="text/javascript"
-          src="/snoring-cat/scripts/shared.v1.0.7.js"></script>
+          src="/snoring-cat/scripts/shared.v1.0.8.js"></script>
   <script defer
           type="text/javascript"
-          src="/snoring-cat/scripts/main.v1.0.7.js"></script>
+          src="/snoring-cat/scripts/main.v1.0.8.js"></script>
 </head>
 <body>
-<div id="main">
+<div id="main" style="display: none; visibility: hidden;">
   <h1>Welcome to Snoring Cat!</h1>
 
   <div id="cat">
@@ -60,131 +60,194 @@
          alt="A pixel-art image of a sleeping cat rolled up around itself.">
   </div>
 
-  <div id="inner-tube-climber"
-       class="card">
-    <button class="card-header-wrapper">
-      <h2>
-        <img class="logo"
-             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/inner-tube-climber-logo.png"
-             alt="A pixel-art logo that says 'Inner-Tube Climber'.">
-      </h2>
-      <img class="dropdown-arrow"
-           src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
-           alt="A chevron symbol.">
-    </button>
+  <div id="cards">
+    <div id="inner-tube-climber"
+         class="card">
+      <button class="card-header-wrapper">
+        <h2>
+          <img class="logo"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/inner-tube-climber-logo.png"
+               alt="A pixel-art logo that says 'Inner-Tube Climber'.">
+        </h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
 
-    <div class="card-body-wrapper">
-      <div class="card-body">
-        <img class="screenshot"
-             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/inner-tube-climber-screenshot.png"
-             alt="A screenshot from Inner-Tube Climber, showing the player jumping between platforms.">
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <img class="screenshot"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/inner-tube-climber-screenshot.png"
+               alt="A screenshot from Inner-Tube Climber, showing the player jumping between platforms.">
 
-        <p><em>Oh no! The player is stuck inside their inner-tube from a tragic accident, which also left them trapped in the bottom of an endless crevasse!</em></p>
+          <p><em>Oh no! The player is stuck inside their inner-tube from a tragic accident, which also left them trapped in the bottom of an endless crevasse!</em></p>
 
-        <p>Inner-Tube Climber is a free endless climber mobile game with fun wall bouncing and polished platforming controls!</p>
+          <p>Inner-Tube Climber is a free endless climber mobile game with fun wall bouncing and polished platforming controls!</p>
 
-        <p>Inner-Tube Climber was originally created as a <a href="https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/">"Compo" submission</a> for the <a href="https://ldjam.com/">Ludum Dare</a> 47 game jam.</p>
+          <p>Inner-Tube Climber was originally created as a <a href="https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/">"Compo" submission</a> for the <a href="https://ldjam.com/">Ludum Dare</a> 47 game jam.</p>
 
-        <p>Inner-Tube Climber was created using the <a href="https://godotengine.org/">Godot game engine</a>.</p>
+          <p>Inner-Tube Climber was created using the <a href="https://godotengine.org/">Godot game engine</a>.</p>
 
-        <ul>
-          <li><a href="https://www.youtube.com/watch?v=5ambx7K7Rjg">Trailer</a></li>
-          <li><a href="https://play.google.com/store/apps/details?id=dev.levi.inner_tube_climber">Google Play Store</a></li>
-          <li><a href="https://apps.apple.com/us/app/inner-tube-climber/id1553158659">Apple App Store</a></li>
-          <li><a href="https://github.com/SnoringCatGames/inner-tube-climber">Source Code</a></li>
-          <li><a href="https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube">Original Ludum Dare submission</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div id="dark-time"
-       class="card">
-    <button class="card-header-wrapper">
-      <h2>
-        <img class="logo"
-             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/dark-time-logo.png"
-             alt="A logo of a analog clock.">
-        Dark Time
-      </h2>
-      <img class="dropdown-arrow"
-           src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
-           alt="A chevron symbol.">
-    </button>
-
-    <div class="card-body-wrapper">
-      <div class="card-body">
-        <img class="screenshot"
-             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/dark-time-screenshot.png"
-             alt="A screenshot from of the Dark Time new-tab page.">
-
-        <p>Replaces the new tab page in Chrome. Shows the current time, with configurable background and text colors.</p>
-
-        <p>Dark Time provides a new-tab experience that shows your local time with dark background color and low-contract font. A non-jarring look is especially important for new-tab content, since this is shown every time you open a new tab!</p>
-
-        <p>If you'd instead prefer to customize the colors, Dark Time let's you do that! Just open up extension settings in the usual way through Chrome's UI.</p>
-
-        <ul>
-          <li><a href="https://chrome.google.com/webstore/detail/dark-time/ofmngaeacndglijmheklbcnbjfdcohke">Chrome Web Store</a></li>
-          <li><a href="https://github.com/SnoringCatGames/dark-time">Source Code</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div id="about"
-       class="card">
-    <button class="card-header-wrapper">
-      <h2>About</h2>
-      <img class="dropdown-arrow"
-           src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
-           alt="A chevron symbol.">
-    </button>
-
-    <div class="card-body-wrapper">
-      <div class="card-body">
-        <p>Snoring Cat creates video games! We currently specialize in 2D platformer games, using pixel art, and the <a href="https://godotengine.org/">Godot game engine</a>.</p>
-
-        <p>Snoring Cat is owned and managed by <a href="https://levi.dev/#about-levi">Levi Lindsey</a>.</p>
-
-        <p>Follow us on social media to hear about our latest updates!</p>
-
-        <ul>
-          <li><a href="https://twitter.com/SnoringCatGames">Twitter</a></li>
-          <li><a href="https://www.facebook.com/snoringcatgames">Facebook</a></li>
-        </ul>
-
-        <p>Or if you are instead looking for other things Levi has created, check out the following links:</p>
-
-        <ul>
-          <li><a href="https://blog.levi.dev">Levi's blog</a></li>
-          <li><a href="https://levi.dev">Levi's portfolio</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div id="contact"
-       class="card">
-    <button class="card-header-wrapper">
-      <h2>Contact</h2>
-      <img class="dropdown-arrow"
-           src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
-           alt="A chevron symbol.">
-    </button>
-
-    <div class="card-body-wrapper">
-      <div class="card-body">
-        <div id="email">
-          <a href="mailto:contact@snoringcat.games">contact@snoringcat.games</a>
+          <ul>
+            <li>
+              <a href="https://play.google.com/store/apps/details?id=dev.levi.inner_tube_climber">
+                <img class="badge"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/play-store-badge.png"
+                     alt="The Google Play Store badge.">
+              </a>
+            </li>
+            <li>
+              <a href="https://apps.apple.com/us/app/inner-tube-climber/id1553158659">
+                <img class="badge"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/app-store-badge.png"
+                     alt="The Apple App Store badge.">
+              </a>
+            </li>
+            <li>
+              <a href="https://www.youtube.com/watch?v=5ambx7K7Rjg">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/youtube-icon.png"
+                     alt="The YouTube icon.">
+                Trailer
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/SnoringCatGames/inner-tube-climber">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/github-icon.png"
+                     alt="The Github icon.">
+                Source Code
+              </a>
+            </li>
+            <li>
+              <a href="https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/ludum-dare-icon.png"
+                     alt="The Ludum Dare icon.">
+                Original Ludum Dare submission
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
+    </div>
 
-        <div id="address">
-          <div>4730 University Way NE Suite 104 PMB 2852</div>
-          <div>Seattle, WA 98105</div>
+    <div id="dark-time"
+         class="card">
+      <button class="card-header-wrapper">
+        <h2>
+          <img class="logo"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/dark-time-logo.png"
+               alt="A logo of a analog clock.">
+          Dark Time
+        </h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
+
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <img class="screenshot"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/dark-time-screenshot.png"
+               alt="A screenshot from of the Dark Time new-tab page.">
+
+          <p>Replaces the new tab page in Chrome. Shows the current time, with configurable background and text colors.</p>
+
+          <p>Dark Time provides a new-tab experience that shows your local time with dark background color and low-contract font. A non-jarring look is especially important for new-tab content, since this is shown every time you open a new tab!</p>
+
+          <p>If you'd instead prefer to customize the colors, Dark Time let's you do that! Just open up extension settings in the usual way through Chrome's UI.</p>
+
+          <ul>
+            <li>
+              <a href="https://chrome.google.com/webstore/detail/dark-time/ofmngaeacndglijmheklbcnbjfdcohke">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chrome-web-store-icon.png"
+                     alt="The Chrome Web Store icon.">
+                Chrome Web Store
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/SnoringCatGames/dark-time">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/github-icon.png"
+                     alt="The Github icon.">
+                Source Code
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
+    </div>
 
-        <div id="phone">(206) 657-7717</div>
+    <div id="about"
+         class="card">
+      <button class="card-header-wrapper">
+        <h2>About</h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
+
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <p>Snoring Cat creates video games! We currently specialize in 2D platformer games, using pixel art, and the <a href="https://godotengine.org/">Godot game engine</a>.</p>
+
+          <p>Snoring Cat is owned and managed by <a href="https://levi.dev/#about-levi">Levi Lindsey</a>.</p>
+
+          <p>Follow us on social media to hear about our latest updates!</p>
+
+          <ul>
+            <li>
+              <a href="https://twitter.com/SnoringCatGames">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/twitter-icon.png"
+                     alt="The Twitter icon.">
+                Twitter
+              </a>
+            </li>
+            <li>
+              <a href="https://www.facebook.com/snoringcatgames">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/facebook-icon.png"
+                     alt="The Facebook icon.">
+                Facebook
+              </a>
+            </li>
+          </ul>
+
+          <p>Or if you are instead looking for other things Levi has created, check out the following links:</p>
+
+          <ul>
+            <li><a href="https://blog.levi.dev">Levi's blog</a></li>
+            <li><a href="https://levi.dev">Levi's portfolio</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="contact"
+         class="card">
+      <button class="card-header-wrapper">
+        <h2>Contact</h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
+
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <div id="email">
+            <a href="mailto:contact@snoringcat.games">contact@snoringcat.games</a>
+          </div>
+
+          <div id="address">
+            <div>4730 University Way NE Suite 104 PMB 2852</div>
+            <div>Seattle, WA 98105</div>
+          </div>
+
+          <div id="phone">(206) 657-7717</div>
+        </div>
       </div>
     </div>
   </div>
