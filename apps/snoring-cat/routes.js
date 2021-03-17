@@ -29,6 +29,30 @@ const subroutes = [
         'https://docs.google.com/document/d/1QMl93Ti8aYybPHPmyAFlLnn7U9KyxSzpCI5N50Drqls/preview',
   },
   {
+    // Inner-Tube Climber.
+    pathRegex: /^.*\/inner-tube-climber.*$/,
+    redirectUrl:
+        'https://www.snoringcat.games/#inner-tube-climber',
+  },
+  {
+    // Dark Time.
+    pathRegex: /^.*\/dark-time.*$/,
+    redirectUrl:
+        'https://www.snoringcat.games/#dark-time',
+  },
+  {
+    // About.
+    pathRegex: /^.*\/about.*$/,
+    redirectUrl:
+        'https://www.snoringcat.games/#about',
+  },
+  {
+    // Contact.
+    pathRegex: /^.*\/contact.*$/,
+    redirectUrl:
+        'https://www.snoringcat.games/#contact',
+  },
+  {
     // Support.
     pathRegex: supportRegex,
     filePath: '/public/support.html',

@@ -39,20 +39,20 @@
 
   <link rel="stylesheet"
         type="text/css"
-        href="/snoring-cat/styles/main.v1.0.7.css">
+        href="/snoring-cat/styles/main.v1.0.8.css">
 
   <script>
     window.appRootPath = '/snoring-cat';
   </script>
   <script defer
           type="text/javascript"
-          src="/snoring-cat/scripts/shared.v1.0.7.js"></script>
+          src="/snoring-cat/scripts/shared.v1.0.8.js"></script>
   <script defer
           type="text/javascript"
-          src="/snoring-cat/scripts/support.v1.0.7.js"></script>
+          src="/snoring-cat/scripts/support.v1.0.8.js"></script>
 </head>
 <body>
-<div id="main">
+<div id="main" style="display: none; visibility: hidden;">
   <h1>Welcome to Snoring Cat support!</h1>
 
   <div id="cat">
@@ -60,31 +60,35 @@
          alt="A pixel-art image of a sleeping cat rolled up around itself.">
   </div>
 
-  <div id="contact"
-       class="card open">
-    <button class="card-header-wrapper">
-      <h2>Contact</h2>
-      <img class="dropdown-arrow"
-           src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
-           alt="A chevron symbol.">
-    </button>
+  <div id="cards">
+    <div id="contact"
+         class="card open">
+      <button class="card-header-wrapper">
+        <h2>Contact</h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
 
-    <div class="card-body-wrapper">
-      <div class="card-body">
-        <div id="standard-support-email">
-          <p>Please let us know if you have any questions, suggestions, comments, or concerns!</p>
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <div id="standard-support-email">
+            <p>Please let us know if you have any questions, suggestions, comments, or concerns!</p>
+          </div>
+
+          <div id="data-deletion-request-email" style="display:none;">
+            <p>It sounds like you want your data to be deleted.</p>
+
+            <p>If this is right, <b>use the following link to request your data-deletion</b>.</p>
+
+            <p>In order for us to delete your data, we need you to give us the client ID value that your app has been using to associate data with you. That client ID should be automatically included in the email subject when you use the following link.</p>
+
+            <p>We will send you a confirmation email once your data has been deleted.</p>
+          </div>
+
+          <p>Send us an email at <a href="mailto:support@snoringcat.games"
+                                    id="support-link">support@snoringcat.games</a>.</p>
         </div>
-
-        <div id="data-deletion-request-email" style="display:none;">
-          <p>It sounds like you want your data to be deleted.</p>
-
-          <p>In order for us to delete your data, we need you to give us the client ID value that your app has been using to associate data with you. That client ID should be automatically included in the email subject when you use the following link.</p>
-
-          <p>We will send you a confirmation email once your data has been deleted.</p>
-        </div>
-
-        <p>Send us an email at <a href="mailto:support@snoringcat.games"
-                                  id="support-link">support@snoringcat.games</a>.</p>
       </div>
     </div>
   </div>
