@@ -27,14 +27,14 @@
     catIcon = document.querySelector('#cat');
 
     var cards = document.querySelectorAll('.card');
-    cards.forEach(function (card) {
+    for (var card of cards) {
       var cardHeaders = card.querySelectorAll('.card-header-wrapper');
       var cardBodies = card.querySelectorAll('.card-body-wrapper');
       if (cardHeaders.length !== 1 || cardBodies.length !== 1) {
         console.error('Invalid card structure');
       }
       cardHeaders[0].addEventListener('click', onHeaderClick.bind(null, card));
-    });
+    }
 
     openInitialCardMatchingHash();
 
