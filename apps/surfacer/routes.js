@@ -1,6 +1,6 @@
 const surfacerRouteRegex = /^\/(surfacer|squirrel|squirrels|squirrel-away)(?:\/.*)?$/;
 
-const surfacerRedirectUrl = 'https://levilindsey.github.io/surfacer';
+const surfacerRedirectUrl = 'https://snoringcatgames.github.io/surfacer';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
