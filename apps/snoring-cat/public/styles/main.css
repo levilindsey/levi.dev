@@ -264,7 +264,7 @@ div.card>.card-header-wrapper:active {
 }
 
 .open .card-body-wrapper {
-  max-height: 1200px;
+  max-height: 1400px;
   margin-top: 28px;
   overflow-y: auto;
 }
