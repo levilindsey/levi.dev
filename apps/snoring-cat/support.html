@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <% var baseDir = '/snoring-cat'; %>
-<% var cacheBuster = '.v1.0.8'; %>
+<% var cacheBuster = '.v1.0.9'; %>
 
 <head>
   <meta charset="utf-8">
@@ -27,14 +27,20 @@
         href="https://s3-us-west-2.amazonaws.com/snoringcat.games/icon-64.png"
         sizes="64x64">
 
-  <!-- Asynchronously load the large font file. -->
+  <!-- Asynchronously load the large font files. -->
   <link rel="preload"
         href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload"
+        href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
         as="style"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
   </noscript>
 
   <link rel="stylesheet"

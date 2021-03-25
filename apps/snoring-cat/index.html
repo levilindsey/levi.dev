@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <% var baseDir = '/snoring-cat'; %>
-<% var cacheBuster = '.v1.0.8'; %>
+<% var cacheBuster = '.v1.0.9'; %>
 
 <head>
   <meta charset="utf-8">
@@ -31,14 +31,20 @@
         type="text/css"
         href="<%= baseDir %>/styles/main<%= cacheBuster %>.css">
 
-  <!-- Asynchronously load the large font file. -->
+  <!-- Asynchronously load the large font files. -->
   <link rel="preload"
         href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload"
+        href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap"
         as="style"
         onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
   </noscript>
 
   <script>

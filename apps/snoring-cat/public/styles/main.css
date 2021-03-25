@@ -4,9 +4,13 @@ html, body, #main {
   margin: 0;
   padding: 0;
   border: 0;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 16pt;
   color: #EEEEEE;
+}
+
+h1, h2, h3, h4, h5, button, li>a, li>span {
+  font-family: 'Nunito', sans-serif;
 }
 
 html {
