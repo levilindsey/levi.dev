@@ -35,6 +35,24 @@ const subroutes = [
         'https://www.snoringcat.games/#inner-tube-climber',
   },
   {
+    // Squirrel Away privacy policy.
+    pathRegex: /^.*\/squirrel-away\/(privacy-policy|privacy).*$/,
+    redirectUrl:
+        'https://docs.google.com/document/d/12uDeI0x2osKE9Vev8Bbdgir3if93jXA48C_ayWLtan8/preview',
+  },
+  {
+    // Squirrel Away terms of service.
+    pathRegex: /^.*\/squirrel-away\/(terms-of-service|terms-and-conditions|tos).*$/,
+    redirectUrl:
+        'https://docs.google.com/document/d/1Xe5r5C8kTJUlmwKBaOTM23F6TGodvNdmwHISGfWH_n0/preview',
+  },
+  {
+    // Squirrel Away.
+    pathRegex: /^.*\/squirrel-away.*$/,
+    redirectUrl:
+        'https://www.snoringcat.games/#squirrel-away',
+  },
+  {
     // Dark Time.
     pathRegex: /^.*\/dark-time.*$/,
     redirectUrl:
