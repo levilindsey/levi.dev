@@ -11,6 +11,48 @@ const logGesturesRegex = /^.*\/log\/gestures.*$/;
 
 const subroutes = [
   {
+    // Scaffolder page.
+    pathRegex: /^.*\/(scaffolder|scaffold).*$/,
+    redirectUrl:
+        'https://github.com/SnoringCatGames/scaffolder',
+  },
+  {
+    // Surfacer page.
+    pathRegex: /^.*\/(surfacer|surface).*$/,
+    redirectUrl:
+        'https://github.com/SnoringCatGames/surfacer',
+  },
+  {
+    // Squirrel Away privacy policy.
+    pathRegex: /^.*\/squirrel-away\/(privacy-policy|privacy).*$/,
+    redirectUrl:
+        'https://docs.google.com/document/d/12uDeI0x2osKE9Vev8Bbdgir3if93jXA48C_ayWLtan8/preview',
+  },
+  {
+    // Squirrel Away terms of service.
+    pathRegex: /^.*\/squirrel-away\/(terms-of-service|terms-and-conditions|tos).*$/,
+    redirectUrl:
+        'https://docs.google.com/document/d/1Xe5r5C8kTJUlmwKBaOTM23F6TGodvNdmwHISGfWH_n0/preview',
+  },
+  {
+    // Squirrel Away app alias.
+    pathRegex: /^.*\/squirrel-away\/play.*$/,
+    redirectUrl:
+        'https://www.snoringcat.games/play/squirrel-away',
+  },
+  {
+    // Squirrel Away app.
+    pathRegex: /^.*\/play\/squirrel-away.*$/,
+    redirectUrl:
+        'https://www.levi.dev/squirrel-away',
+  },
+  {
+    // Squirrel Away page.
+    pathRegex: /^.*\/squirrel-away.*$/,
+    redirectUrl:
+        'https://www.snoringcat.games/#squirrel-away',
+  },
+  {
     // Inner-Tube Climber privacy policy.
     pathRegex: /^.*\/inner-tube-climber\/(privacy-policy|privacy).*$/,
     redirectUrl:
@@ -29,49 +71,43 @@ const subroutes = [
         'https://docs.google.com/document/d/1QMl93Ti8aYybPHPmyAFlLnn7U9KyxSzpCI5N50Drqls/preview',
   },
   {
-    // Inner-Tube Climber.
+    // Inner-Tube Climber app alias.
+    pathRegex: /^.*\/inner-tube-climber\/play.*$/,
+    redirectUrl:
+        'https://www.snoringcat.games/play/inner-tube-climber',
+  },
+  {
+    // Inner-Tube Climber app.
+    pathRegex: /^.*\/play\/inner-tube-climber.*$/,
+    redirectUrl:
+        'https://www.levi.dev/inner-tube-climber',
+  },
+  {
+    // Inner-Tube Climber page.
     pathRegex: /^.*\/inner-tube-climber.*$/,
     redirectUrl:
         'https://www.snoringcat.games/#inner-tube-climber',
   },
   {
-    // Squirrel Away privacy policy.
-    pathRegex: /^.*\/squirrel-away\/(privacy-policy|privacy).*$/,
-    redirectUrl:
-        'https://docs.google.com/document/d/12uDeI0x2osKE9Vev8Bbdgir3if93jXA48C_ayWLtan8/preview',
-  },
-  {
-    // Squirrel Away terms of service.
-    pathRegex: /^.*\/squirrel-away\/(terms-of-service|terms-and-conditions|tos).*$/,
-    redirectUrl:
-        'https://docs.google.com/document/d/1Xe5r5C8kTJUlmwKBaOTM23F6TGodvNdmwHISGfWH_n0/preview',
-  },
-  {
-    // Squirrel Away.
-    pathRegex: /^.*\/squirrel-away.*$/,
-    redirectUrl:
-        'https://www.snoringcat.games/#squirrel-away',
-  },
-  {
-    // Dark Time.
+    // Dark Time page.
     pathRegex: /^.*\/dark-time.*$/,
     redirectUrl:
         'https://www.snoringcat.games/#dark-time',
   },
   {
-    // About.
+    // About page.
     pathRegex: /^.*\/about.*$/,
     redirectUrl:
         'https://www.snoringcat.games/#about',
   },
   {
-    // Contact.
+    // Contact page.
     pathRegex: /^.*\/contact.*$/,
     redirectUrl:
         'https://www.snoringcat.games/#contact',
   },
   {
-    // Support.
+    // Support page.
     pathRegex: supportRegex,
     filePath: '/public/support.html',
   },
@@ -81,7 +117,7 @@ const subroutes = [
     responseText: 'Gestures successfully recorded',
   },
   {
-    // Index.
+    // Index page.
     pathRegex: /^.*$/,
     filePath: '/public/index.html',
   },

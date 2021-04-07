@@ -2,31 +2,36 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://www.snoringcat.games</loc>
-        <lastmod>2021-02-18</lastmod>
+        <lastmod>2021-04-07</lastmod>
     </url>
 
     <url>
         <loc>https://www.snoringcat.games/support</loc>
-        <lastmod>2021-02-18</lastmod>
+        <lastmod>2021-04-07</lastmod>
     </url>
 
     <url>
-        <loc>https://www.snoringcat.games#inner-tube-climber</loc>
-        <lastmod>2021-02-18</lastmod>
+        <loc>https://www.snoringcat.games/squirrel-away</loc>
+        <lastmod>2021-04-07</lastmod>
     </url>
 
     <url>
-        <loc>https://www.snoringcat.games#dark-time</loc>
-        <lastmod>2021-02-18</lastmod>
+        <loc>https://www.snoringcat.games/inner-tube-climber</loc>
+        <lastmod>2021-04-07</lastmod>
     </url>
 
     <url>
-        <loc>https://www.snoringcat.games#about</loc>
-        <lastmod>2021-02-18</lastmod>
+        <loc>https://www.snoringcat.games/dark-time</loc>
+        <lastmod>2021-04-07</lastmod>
     </url>
 
     <url>
-        <loc>https://www.snoringcat.games#contact</loc>
-        <lastmod>2021-02-18</lastmod>
+        <loc>https://www.snoringcat.games/about</loc>
+        <lastmod>2021-04-07</lastmod>
+    </url>
+
+    <url>
+        <loc>https://www.snoringcat.games/contact</loc>
+        <lastmod>2021-04-07</lastmod>
     </url>
 </urlset>
