@@ -268,7 +268,7 @@ div.card>.card-header-wrapper:active {
 }
 
 .open .card-body-wrapper {
-  max-height: 1400px;
+  max-height: 1800px;
   margin-top: 28px;
   overflow-y: auto;
 }
@@ -295,6 +295,14 @@ div.card>.card-header-wrapper:active {
 
 #address {
   margin: 0.6em 0;
+}
+
+.reviews, .reviews li {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 90%;
+  text-align: left;
+  margin: 12px 0;
 }
 
 @media (max-width: 880px) {
