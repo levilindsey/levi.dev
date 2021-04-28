@@ -3,7 +3,7 @@
   "titleShort": "Sabbatical:\nGame dev\nexploration",
   "titleLong": "Sabbatical: Adventures in game development",
   "urls": {
-    "blog": "https://blog.levi.dev",
+    "devlog": "https://devlog.levi.dev",
     "snoring-cat": "https://snoringcat.games"
   },
   "jobTitle": "",
@@ -29,5 +29,5 @@
     }
   ],
   "videos": [],
-  "content": "Levi's tinkering with [Godot](https:\/\/godotengine.org\/) and 2D platformers, while on sabbatical from his job at Google.\r\n\r\nFollow along by subscribing to Levi's [blog](https:\/\/blog.levi.dev)!\r\n\r\nIn particular, if you're curious about Levi's motivations and goals for his sabbatical, check out [his first post](https:\/\/blog.levi.dev\/2021\/01\/wait-what-am-i-doing.html).\r\n\r\nLevi also formed Snoring Cat LLC to publish some of his more substantial games and software projects under. Check out Snoring Cat LLC's site at [snoringcat.games](https:\/\/snoringcat.games)."
+  "content": "Levi's tinkering with [Godot](https:\/\/godotengine.org\/) and 2D platformers, while on sabbatical from his job at Google.\r\n\r\nFollow along by subscribing to Levi's [devlog](https:\/\/devlog.levi.dev)!\r\n\r\nIn particular, if you're curious about Levi's motivations and goals for his sabbatical, check out [his first post](https:\/\/devlog.levi.dev\/2021\/01\/wait-what-am-i-doing.html).\r\n\r\nLevi also formed Snoring Cat LLC to publish some of his more substantial games and software projects under. Check out Snoring Cat LLC's site at [snoringcat.games](https:\/\/snoringcat.games)."
 }
