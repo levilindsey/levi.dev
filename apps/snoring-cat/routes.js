@@ -117,6 +117,11 @@ const subroutes = [
     responseText: 'Gestures successfully recorded',
   },
   {
+    // Levi redirect.
+    pathRegex: /^.*\/levi.*$/,
+    redirectUrl: 'https://levi.dev/resume',
+  },
+  {
     // Index page.
     pathRegex: /^.*$/,
     filePath: '/public/index.html',
