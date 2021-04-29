@@ -1,4 +1,4 @@
-const routeRegex = /^\/(inner-tube-climber)(?:\/.*)?$/;
+const routeRegex = /^\/(inner-tube-climber)(?:\/.*)?$/i;
 
 const androidRegex = /(\bandroid\b)/i;
 const iosRegex = /(\bmac os\b|\bios\b|\biphone\b|\bipad\b|\bipod\b)/i;

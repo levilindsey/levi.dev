@@ -1,4 +1,4 @@
-const routeRegex = /^\/(dandelions|dandelion|baby)(?:\/.*)?$/;
+const routeRegex = /^\/(dandelions|dandelion|baby)(?:\/.*)?$/i;
 
 const itchioUrl = 'https://levilindsey.github.io/dandelions';
 
