@@ -32,7 +32,12 @@ const redirects = [
   // Ludum Dare
   {
     routeRegex: /^\/(ludum-dare|ludumdare|ld|ldjam|game-jam)(?:\/.*)?$/i,
-    redirectUrl: 'https://https://ldjam.com/users/ukulelefury/games',
+    redirectUrl: 'https://ldjam.com/users/ukulelefury/games',
+  },
+  // Blog
+  {
+    routeRegex: /^\/(blog|devlog)(?:\/.*)?$/i,
+    redirectUrl: 'https://devlog.levi.dev',
   },
   // Resume
   {
