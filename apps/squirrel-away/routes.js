@@ -1,4 +1,4 @@
-const surfacerRouteRegex = /^\/(surfacer|surface|scaffolder|scaffold|squirrel|squirrels|squirrel-away)(?:\/.*)?$/;
+const surfacerRouteRegex = /^\/(surfacer|surface|scaffolder|scaffold|squirrel|squirrels|squirrel-away)(?:\/.*)?$/i;
 
 const surfacerRedirectUrl = 'https://snoringcatgames.github.io/squirrel-away';
 

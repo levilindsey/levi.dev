@@ -2,107 +2,107 @@ const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const snoringCatDomainIndexRouteRegex = /^.*$/;
+const snoringCatDomainIndexRouteRegex = /^.*$/i;
 const snoringCatPathIndexRouteRegex =
-    /^\/(snoring-cat|snoringcat|snoring-cat-games|snoringcatgames|snoring-cat-llc|snoring|cat|scg)(?:\/.*)?$/;
+    /^\/(snoring-cat|snoringcat|snoring-cat-games|snoringcatgames|snoring-cat-llc|snoring|cat|scg)(?:\/.*)?$/i;
 
-const supportRegex = /^.*\/support.*$/;
-const logGesturesRegex = /^.*\/log\/gestures.*$/;
+const supportRegex = /^.*\/support.*$/i;
+const logGesturesRegex = /^.*\/log\/gestures.*$/i;
 
 const subroutes = [
   {
     // Scaffolder page.
-    pathRegex: /^.*\/(scaffolder|scaffold).*$/,
+    pathRegex: /^.*\/(scaffolder|scaffold).*$/i,
     redirectUrl:
         'https://github.com/SnoringCatGames/scaffolder',
   },
   {
     // Surfacer page.
-    pathRegex: /^.*\/(surfacer|surface).*$/,
+    pathRegex: /^.*\/(surfacer|surface).*$/i,
     redirectUrl:
         'https://github.com/SnoringCatGames/surfacer',
   },
   {
     // Squirrel Away privacy policy.
-    pathRegex: /^.*\/squirrel-away\/(privacy-policy|privacy).*$/,
+    pathRegex: /^.*\/squirrel-away\/(privacy-policy|privacy).*$/i,
     redirectUrl:
         'https://docs.google.com/document/d/12uDeI0x2osKE9Vev8Bbdgir3if93jXA48C_ayWLtan8/preview',
   },
   {
     // Squirrel Away terms of service.
-    pathRegex: /^.*\/squirrel-away\/(terms-of-service|terms-and-conditions|tos).*$/,
+    pathRegex: /^.*\/squirrel-away\/(terms-of-service|terms-and-conditions|tos).*$/i,
     redirectUrl:
         'https://docs.google.com/document/d/1Xe5r5C8kTJUlmwKBaOTM23F6TGodvNdmwHISGfWH_n0/preview',
   },
   {
     // Squirrel Away app alias.
-    pathRegex: /^.*\/squirrel-away\/play.*$/,
+    pathRegex: /^.*\/squirrel-away\/play.*$/i,
     redirectUrl:
         'https://www.snoringcat.games/play/squirrel-away',
   },
   {
     // Squirrel Away app.
-    pathRegex: /^.*\/play\/squirrel-away.*$/,
+    pathRegex: /^.*\/play\/squirrel-away.*$/i,
     redirectUrl:
         'https://www.levi.dev/squirrel-away',
   },
   {
     // Squirrel Away page.
-    pathRegex: /^.*\/squirrel-away.*$/,
+    pathRegex: /^.*\/squirrel-away.*$/i,
     redirectUrl:
         'https://www.snoringcat.games/#squirrel-away',
   },
   {
     // Inner-Tube Climber privacy policy.
-    pathRegex: /^.*\/inner-tube-climber\/(privacy-policy|privacy).*$/,
+    pathRegex: /^.*\/inner-tube-climber\/(privacy-policy|privacy).*$/i,
     redirectUrl:
         'https://docs.google.com/document/d/1kH48Xn62wFnZuy8wFmrsr4lKJ-k3wU-MnqFpYdhwBCc/preview',
   },
   {
     // Inner-Tube Climber terms of service.
-    pathRegex: /^.*\/inner-tube-climber\/(terms-of-service|terms-and-conditions|tos).*$/,
+    pathRegex: /^.*\/inner-tube-climber\/(terms-of-service|terms-and-conditions|tos).*$/i,
     redirectUrl:
         'https://docs.google.com/document/d/1g1W4F2nJqJsIPKOwRGlFJi4IGj5q1ae7upYOTnVtfyI/preview',
   },
   {
     // Inner-Tube Climber data-deletion instructions.
-    pathRegex: /^.*\/inner-tube-climber\/(data-deletion-instructions|data-deletion).*$/,
+    pathRegex: /^.*\/inner-tube-climber\/(data-deletion-instructions|data-deletion).*$/i,
     redirectUrl:
         'https://docs.google.com/document/d/1QMl93Ti8aYybPHPmyAFlLnn7U9KyxSzpCI5N50Drqls/preview',
   },
   {
     // Inner-Tube Climber app alias.
-    pathRegex: /^.*\/inner-tube-climber\/play.*$/,
+    pathRegex: /^.*\/inner-tube-climber\/play.*$/i,
     redirectUrl:
         'https://www.snoringcat.games/play/inner-tube-climber',
   },
   {
     // Inner-Tube Climber app.
-    pathRegex: /^.*\/play\/inner-tube-climber.*$/,
+    pathRegex: /^.*\/play\/inner-tube-climber.*$/i,
     redirectUrl:
         'https://www.levi.dev/inner-tube-climber',
   },
   {
     // Inner-Tube Climber page.
-    pathRegex: /^.*\/inner-tube-climber.*$/,
+    pathRegex: /^.*\/inner-tube-climber.*$/i,
     redirectUrl:
         'https://www.snoringcat.games/#inner-tube-climber',
   },
   {
     // Dark Time page.
-    pathRegex: /^.*\/dark-time.*$/,
+    pathRegex: /^.*\/dark-time.*$/i,
     redirectUrl:
         'https://www.snoringcat.games/#dark-time',
   },
   {
     // About page.
-    pathRegex: /^.*\/about.*$/,
+    pathRegex: /^.*\/about.*$/i,
     redirectUrl:
         'https://www.snoringcat.games/#about',
   },
   {
     // Contact page.
-    pathRegex: /^.*\/contact.*$/,
+    pathRegex: /^.*\/contact.*$/i,
     redirectUrl:
         'https://www.snoringcat.games/#contact',
   },
@@ -118,12 +118,12 @@ const subroutes = [
   },
   {
     // Levi redirect.
-    pathRegex: /^.*\/levi.*$/,
+    pathRegex: /^.*\/levi.*$/i,
     redirectUrl: 'https://levi.dev/resume',
   },
   {
     // Index page.
-    pathRegex: /^.*$/,
+    pathRegex: /^.*$/i,
     filePath: '/public/index.html',
   },
 ];

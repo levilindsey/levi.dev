@@ -1,4 +1,4 @@
-const routeRegex = /^\/(before-times|the-before-times|ld48|ludum-dare-48|ludumdare48)(?:\/.*)?$/;
+const routeRegex = /^\/(before-times|the-before-times|beforetimes|thebeforetimes|ld48|ludum-dare-48|ludumdare48)(?:\/.*)?$/i;
 
 const itchioUrl = 'https://levilindsey.itch.io/the-before-times';
 

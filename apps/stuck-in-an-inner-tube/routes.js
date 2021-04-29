@@ -1,4 +1,4 @@
-const routeRegex = /^\/(stuck-in-an-inner-tube|tube-climber|ld47|ludum-dare-47)(?:\/.*)?$/;
+const routeRegex = /^\/(stuck-in-an-inner-tube|tube-climber|ld47|ludum-dare-47)(?:\/.*)?$/i;
 
 const itchioUrl = 'https://levilindsey.itch.io/stuck-in-an-inner-tube';
 
