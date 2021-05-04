@@ -18,11 +18,14 @@ html {
 }
 
 body {
+  background: #222222 url("https://s3-us-west-2.amazonaws.com/snoringcat.games/zzz-tiled-colored-faded.png") repeat;
+  background-size: 217px 192px;
   overflow-y: scroll;
 }
 
 #main {
   height: auto;
+  width: 800px;
   max-width: 100%;
 }
 
@@ -59,6 +62,12 @@ ul {
 
 ul+p {
   margin-top: 2em;
+}
+
+.buttons {
+  align-self: center;
+  max-width: 440px;
+  min-width: 440px;
 }
 
 li {
@@ -130,16 +139,6 @@ a:hover, a:hover:visited {
 
 a:active, a:active:visited {
   color: #10adb3;
-}
-
-body {
-  /*background: #222222 url("/snoring-cat/images/zzz-tiled.png") repeat;*/
-  background: #222222 url("https://s3-us-west-2.amazonaws.com/snoringcat.games/zzz-tiled-colored-faded.png") repeat;
-  background-size: 217px 192px;
-}
-
-#main {
-  width: 500px;
 }
 
 body,
@@ -281,7 +280,12 @@ div.card>.card-header-wrapper:active {
   display: flex;
   flex-direction: column;
   justify-content: stretch;
-  align-items: center;
+  align-items: stretch;
+}
+
+.card-body>img {
+  display: block;
+  align-self: center;
 }
 
 .logo {
@@ -290,7 +294,7 @@ div.card>.card-header-wrapper:active {
 }
 
 .screenshot {
-  width: 360px;
+  width: 720px;
 }
 
 #address {
@@ -309,12 +313,26 @@ div.card>.card-header-wrapper:active {
   #main {
     width: 500px;
   }
+
+  .screenshot {
+    width: 440px;
+  }
+
+  .buttons {
+    align-self: stretch;
+    max-width: initial;
+    min-width: initial;
+  }
 }
 
 @media (max-width: 540px) {
   #main {
     width: 500px;
     font-size: 14pt;
+  }
+
+  .screenshot {
+    width: 264px;
   }
 
   #cat>img {
@@ -340,6 +358,10 @@ div.card>.card-header-wrapper:active {
   #main {
     width: 100%;
     font-size: 12pt;
+  }
+
+  .screenshot {
+    width: 240px;
   }
 
   #cat>img {
