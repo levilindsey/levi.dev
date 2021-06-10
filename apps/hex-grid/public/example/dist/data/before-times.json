@@ -1,0 +1,48 @@
+{
+  "id": "before-times",
+  "titleShort": "Atmospheric\nfirst-person\ngame",
+  "titleLong": "The Before Times: An atmospheric first-person game",
+  "urls": {
+    "demo": "https://levi.dev/before-times",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/48/the-before-times",
+    "github": "https://github.com/MarjieVolk/InfiniteBasement"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "4/2021",
+  "categories": [
+    "side-project",
+    "app",
+    "unity",
+    "game",
+    "3D",
+    "game-jam",
+    "teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "screenshot-1-min.png",
+      "description": "The Before Times's menu screen"
+    },
+    {
+      "fileName": "screenshot-2-min.png",
+      "description": "The first thing you see."
+    },
+    {
+      "fileName": "screenshot-3-min.png",
+      "description": "You get to let some light into the room."
+    },
+    {
+      "fileName": "screenshot-4-min.png",
+      "description": "Things brighten up as you progress. Don't worry, it isn't actually a psychological horror game!"
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "CggXbs2_YqQ",
+      "description": "A playthrough video for The Before Times."
+    }
+  ],
+  "content": "_Descend out of the darkness in our first-person atmospheric game._\r\n\r\n> _**[Play the game!](https:\/\/levilindsey.itch.io\/the-before-times)**_\r\n\r\nThis is a game about exploring an infinitely looping room and getting out of a dark place.\r\nIt's short, very atmospheric, with great art, a really great music progression, and great voice overs!\r\nGive it a click!\r\n\r\n## Ludum Dare 48\r\n\r\nThis game was made for the [Ludum Dare 48 game jam](https:\/\/ldjam.com\/events\/ludum-dare\/48\/the-before-times).\r\n\r\nThe theme for this jam was \"deeper and deeper\".\r\n\r\n## The team\r\n\r\n-   **Levi Lindsey** - Developer - [levi.dev](https:\/\/levi.dev)\r\n-   **Audrey Meyer** - Art\/VFX - [artstation.com\/ochopika](https:\/\/artstation.com\/ochopika)\r\n-   **Wesley Meyer** - Music - [soundcloud.app.goo.gl\/2JUNKojfec3rW3LM7](https:\/\/soundcloud.app.goo.gl\/2JUNKojfec3rW3LM7)\r\n-   **Ross Sauby** - Designer - [rosssauby.com](http:\/\/rosssauby.com)\r\n-   **Marjie Volk** - Developer\r\n-   **Steven Weiss** - Developer\r\n"
+}

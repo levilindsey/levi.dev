@@ -1,0 +1,42 @@
+{
+  "id": "dandelions",
+  "titleShort": "Simple 3D\nhumanoid\nanimation",
+  "titleLong": "Dandelions: Simple 3D humanoid animation",
+  "urls": {
+    "demo": "https://levi.dev/dandelions",
+    "github": "https://github.com/levilindsey/dandelions"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "4/2021",
+  "categories": [
+    "side-project",
+    "art",
+    "animation",
+    "unity",
+    "game",
+    "3D"
+  ],
+  "images": [
+    {
+      "fileName": "dandelion-model-min.png",
+      "description": "A quick and simple dandelion modeled in Blender."
+    },
+    {
+      "fileName": "baby-animation-blender-min.png",
+      "description": "The rigging and dope sheet for one of the baby animation clips."
+    },
+    {
+      "fileName": "baby_blocking-min.png",
+      "description": "An early stage of the baby model creation. You can sorta see how this shape was carved out of a cube."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "-kkJxhFO5W4",
+      "description": "A demonstration of Dandelions."
+    }
+  ],
+  "content": "_Just a baby in a meadow collecting dandelions._\r\n\r\nThis was just a very simple exploration of using character rigs in Unity.\r\n\r\nThe model, rig, and animations were made from scratch in Blender.\r\n\r\n## Software used\r\n\r\n-   [Blender](https:\/\/www.blender.org): 3D modeling tool.\r\n-   [Unity](https:\/\/unity.com): Game engine.\r\n"
+}

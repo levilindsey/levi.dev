@@ -9547,6 +9547,7 @@ if (typeof define === 'function' && define.amd) {
     'chrome-web-store': 'Chrome Web Store',
     'play-store': 'Google Play Store',
     'app-store': 'Apple App Store',
+    'godot-asset-library': 'Godot Asset Library',
   };
 
   config.monthLabels = {
@@ -11565,7 +11566,7 @@ if (typeof define === 'function' && define.amd) {
   config.inactiveScreenSaturation = 1;
   config.inactiveScreenLightness = 4;
 
-  config.fontSize = 18;
+  config.fontSize = document.documentElement.clientWidth > 812 ? 18 : 14;
 
   //  --- Dependent parameters --- //
 
