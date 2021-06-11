@@ -4,7 +4,7 @@ const routeRegex = /^\/(gmtk-2021|gmtk-21|gmtk2021|gmtk21)(?:\/.*)?$/i;
 // TODO: Add more route matches.
 // TODO: Add itch URL, and switch to use it.
 
-const githubUrl = 'https://github.com/levilindsey/gmtk-2021';
+const githubUrl = 'https://levilindsey.github.io/gmtk-2021';
 const itchioUrl = 'https://levilindsey.itch.io/TODO';
 const demoUrl = githubUrl;
 
