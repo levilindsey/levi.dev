@@ -1,12 +1,12 @@
-const routeRegex = /^\/(gmtk-2021|gmtk-21|gmtk2021|gmtk21)(?:\/.*)?$/i;
+const routeRegex = /^\/(momma-duck|mama-duck|mamma-duck|duck|duckling|ducks|ducklings|gmtk-2021|gmtk-21|gmtk2021|gmtk21)(?:\/.*)?$/i;
 
 // TODO: Rename this directory.
 // TODO: Add more route matches.
 // TODO: Add itch URL, and switch to use it.
 
 const githubUrl = 'https://levilindsey.github.io/gmtk-2021';
-const itchioUrl = 'https://levilindsey.itch.io/TODO';
-const demoUrl = githubUrl;
+const itchioUrl = 'https://levilindsey.itch.io/momma-duck';
+const demoUrl = itchioUrl;
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
