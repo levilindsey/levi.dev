@@ -1,4 +1,4 @@
-const routeRegex = /^\/(momma-duck|mama-duck|mamma-duck|duck|duckling|ducks|ducklings|gmtk-2021|gmtk-21|gmtk2021|gmtk21)(?:\/.*)?$/i;
+const routeRegex = /^\/(momma-duck|mama-duck|mamma-duck|mama|momma|mamma|duck|duckling|ducks|ducklings|gmtk-2021|gmtk-21|gmtk2021|gmtk21)(?:\/.*)?$/i;
 
 // TODO: Rename this directory.
 // TODO: Add more route matches.
