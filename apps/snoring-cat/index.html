@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <% var baseDir = '/snoring-cat'; %>
-<% var cacheBuster = '.v1.0.12'; %>
+<% var cacheBuster = '.v1.0.13'; %>
 
 <head>
   <meta charset="utf-8">
@@ -66,13 +66,135 @@
          alt="A pixel-art image of a sleeping cat rolled up around itself.">
   </div>
 
+  <!-- TODO: Update Squirrel Away and Momma Duck screenshots, videos, logos; move squirrel-away to itch.io. -->
+
   <div id="cards">
-    <!-- TODO: Add a card for Squirrel Away. -->
+    <div id="squirrel-away"
+         class="card">
+      <button class="card-header-wrapper">
+        <h2>
+          <img class="logo"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/squirrel-away-icon.png"
+               alt="The Squirrel Away icon.">
+          Squirrel Away
+        </h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
+
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <img class="screenshot"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/squirrel-away-screenshot.png"
+               alt="A screenshot from Squirrel Away.">
+
+          <p>This <b>point-and-click platformer</b> game showcases procedural pathfinding using the <a href="https://snoringcat.games/surfacer">Surfacer</a> framework.</p>
+
+          <p>In this game, the user can click anywhere in the level, and the cat character will then jump, walk, and climb across platforms in order to reach that target destination.</p>
+
+          <ul class="buttons">
+            <li>
+              <a href="https://levi.dev/squirrel-away">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/itchio-icon.png"
+                     alt="The itch.io icon.">
+                Play the game!
+              </a>
+            </li>
+            <!--TODO-->
+            <!--<li>-->
+              <!--<a href="https://www.youtube.com/watch?v=">-->
+                <!--<img class="icon"-->
+                     <!--src="https://s3-us-west-2.amazonaws.com/snoringcat.games/youtube-icon.png"-->
+                     <!--alt="The YouTube icon.">-->
+                <!--Gameplay video-->
+              <!--</a>-->
+            <!--</li>-->
+            <li>
+              <a href="https://github.com/SnoringCatGames/squirrel-away">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/github-icon.png"
+                     alt="The GitHub icon.">
+                Source Code
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="momma-duck"
+         class="card">
+      <button class="card-header-wrapper">
+        <h2>
+          <img class="logo"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/momma-duck-icon.png"
+               alt="The Momma Duck icon.">
+          Momma Duck
+        </h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
+
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <img class="screenshot"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/momma-duck-screenshot.png"
+               alt="A screenshot from Momma Duck.">
+
+          <p><em>Collect your ducklings and lead them to safety!</em></p>
+
+          <p>This <b>point-and-click platformer</b> game showcases procedural pathfinding using the <a href="https://snoringcat.games/surfacer/">Surfacer</a> framework.</p>
+
+          <p>Momma Duck was originally created as a <a href="https://itch.io/jam/gmtk-2021/rate/1085910">submission</a> for the <a href="https://gmtkgamejam.com/">GMTK</a> 2021 game jam.</p>
+
+          <ul class="buttons">
+            <li>
+              <a href="https://levi.dev/momma-duck">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/itchio-icon.png"
+                     alt="The itch.io icon.">
+                Play the game!
+              </a>
+            </li>
+            <li>
+              <a href="https://www.youtube.com/watch?v=QYv0xNa0bO8">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/youtube-icon.png"
+                     alt="The YouTube icon.">
+                Gameplay video
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/SnoringCatGames/inner-tube-climber">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/github-icon.png"
+                     alt="The GitHub icon.">
+                Source Code
+              </a>
+            </li>
+            <li>
+              <a href="https://levi.dev/gmtk21">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/gmtk-icon.png"
+                     alt="The GMTK icon.">
+                Original game-jam version
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
     <div id="inner-tube-climber"
          class="card">
       <button class="card-header-wrapper">
         <h2>
+          <img class="logo"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/inner-tube-climber-icon.png"
+               alt="The Inner-Tube Climber icon.">
           <img class="logo"
                src="https://s3-us-west-2.amazonaws.com/snoringcat.games/inner-tube-climber-logo.png"
                alt="A pixel-art logo that says 'Inner-Tube Climber'.">
@@ -93,8 +215,6 @@
           <p>Inner-Tube Climber is a free endless climber mobile game with fun wall bouncing and polished platforming controls!</p>
 
           <p>Inner-Tube Climber was originally created as a <a href="https://ldjam.com/events/ludum-dare/47/stuck-in-an-inner-tube/">"Compo" submission</a> for the <a href="https://ldjam.com/">Ludum Dare</a> 47 game jam.</p>
-
-          <p>Inner-Tube Climber was created using the <a href="https://godotengine.org/">Godot game engine</a>.</p>
 
           <ul class="buttons">
             <li>
@@ -153,6 +273,125 @@
           <ul class="buttons">
             <li>
               <a href="https://gameskeys.net/amazing-android-games-to-tryout-in-2021/#InnerTubeClimber">GameKeys: "Amazing Android Games to Tryout in 2021"</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="surfacer"
+         class="card">
+      <button class="card-header-wrapper">
+        <h2>
+          <img class="logo"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/surfacer-icon.png"
+               alt="The Surfacer icon.">
+          Surfacer
+        </h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
+
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <img class="screenshot"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/surfacer-screenshot.png"
+               alt="A screenshot from Squirrel Away illustrating an annotated platform graph.">
+
+          <p>A procedural pathfinding 2D-platformer framework for <a href="https://godotengine.org/">Godot</a>.</p>
+
+          <p>Aka, <b>point-and-click platformers</b>!</p>
+
+          <p><b>tl;dr</b>: Surfacer works by pre-parsing a level into a "platform graph". The nodes
+            are represented by points along the different surfaces in the level (floors, walls, and ceilings).
+            The edges are represented by possible movement trajectories between points along surfaces.
+            There are different types of edges for different types of movement (e.g., jumping from a floor to a floor, falling from a wall, walking along a floor).
+            At run time, A* search is used to calculate a path to a given destination.</p>
+
+          <p>Some features include:</p>
+
+          <ul class="bulleted-list">
+            <li>Walking on floors, climbing on walls, climbing on ceilings, jumping and falling from anywhere.</li>
+            <li>Variable-height jump and fast-fall.</li>
+            <li>Adjusting movement trajectories around intermediate surfaces (such as jumping over a wall or around a floor).</li>
+            <li>Configurable movement parameters on a per-player basis (e.g., horizontal acceleration, jump power, gravity, collision boundary shape and size, which types of edge movement are allowed).</li>
+            <li>Level creation using Godot's standard pattern with a TileMap in the 2D scene editor.</li>
+            <li>Preparsing the level into a platform graph, and using A* search for efficient path-finding at runtime.</li>
+            <li>A powerful inspector for analyzing the platform graph, in order to debug and better understand how edges were calculated.</li>
+          </ul>
+
+          <p>See <a href="https://github.com/SnoringCatGames/surfacer">more details in the library's README</a>.</p>
+
+          <ul class="buttons">
+            <li>
+              <a href="https://godotengine.org/asset-library/asset/968">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/godot-icon.png"
+                     alt="The Godot icon.">
+                Godot Asset Library package
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/SnoringCatGames/surfacer">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/github-icon.png"
+                     alt="The GitHub icon.">
+                Source Code
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="scaffolder"
+         class="card">
+      <button class="card-header-wrapper">
+        <h2>
+          <img class="logo"
+               src="https://s3-us-west-2.amazonaws.com/snoringcat.games/scaffolder-icon.png"
+               alt="The Scaffolder icon.">
+          Scaffolder
+        </h2>
+        <img class="dropdown-arrow"
+             src="https://s3-us-west-2.amazonaws.com/snoringcat.games/chevron.png"
+             alt="A chevron symbol.">
+      </button>
+
+      <div class="card-body-wrapper">
+        <div class="card-body">
+          <p>This is an opinionated framework that provides a bunch of general-purpose application scaffolding and utility functionality for games in Godot.</p>
+
+          <p>Some features include:</p>
+
+          <ul class="bulleted-list">
+            <li>Configurable UI and camera scaling to adapt to the current viewport.</li>
+            <li>Optional analytics based on the proprietary third-party Google Analytics service.</li>
+            <li>Optional automatic crash log reporting based on the proprietary third-party Google Cloud Storage service.</li>
+            <li>Screen layout and navigation.</li>
+            <li>Lots of useful utility functions (e.g., Time, Geometry, DrawUtils, Audio).</li>
+            <li>A widget library (e.g., AccordionPanel, LabeledControlList)</li>
+          </ul>
+
+          <p>See <a href="https://github.com/SnoringCatGames/scaffolder">more details in the library's README</a>.</p>
+
+          <ul class="buttons">
+            <li>
+              <a href="https://godotengine.org/asset-library/asset/969">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/godot-icon.png"
+                     alt="The Godot icon.">
+                Godot Asset Library package
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/SnoringCatGames/scaffolder">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/github-icon.png"
+                     alt="The GitHub icon.">
+                Source Code
+              </a>
             </li>
           </ul>
         </div>
@@ -254,10 +493,38 @@
           <p>Or if you are instead looking for other things Levi has created, check out the following links:</p>
 
           <ul class="buttons">
-            <li><a href="https://devlog.levi.dev">Levi's devlog</a></li>
-            <li><a href="https://levi.dev">Levi's portfolio</a></li>
-            <li><a href="https://twitter.com/levisl">Levi's Twitter</a></li>
-            <li><a href="https://facebook.com/levislindsey">Levi's Facebook</a></li>
+            <li>
+              <a href="https://devlog.levi.dev">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/dev-icon.png"
+                     alt="A game-dev icon.">
+                Levi's devlog
+              </a>
+            </li>
+            <li>
+              <a href="https://levi.dev">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/levi-icon.png"
+                     alt="A pixel-art image of Levi.">
+                Levi's portfolio
+              </a>
+            </li>
+            <li>
+              <a href="https://twitter.com/levisl">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/twitter-icon.png"
+                     alt="The Twitter icon.">
+                Levi's Twitter
+              </a>
+            </li>
+            <li>
+              <a href="https://www.facebook.com/levislindsey">
+                <img class="icon"
+                     src="https://s3-us-west-2.amazonaws.com/snoringcat.games/facebook-icon.png"
+                     alt="The Facebook icon.">
+                Levi's Facebook
+              </a>
+            </li>
           </ul>
         </div>
       </div>

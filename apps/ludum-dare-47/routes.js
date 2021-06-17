@@ -1,6 +1,6 @@
-const routeRegex = /^\/(momma-duck|mama-duck|mamma-duck|mama|momma|mamma|duck|duckling|ducks|ducklings)(?:\/.*)?$/i;
+const routeRegex = /^\/(stuck-in-an-inner-tube|tube-climber|ld47|ludum-dare-47|ludumdare47)(?:\/.*)?$/i;
 
-const itchioUrl = 'https://levilindsey.itch.io/momma-duck';
+const itchioUrl = 'https://levilindsey.itch.io/stuck-in-an-inner-tube';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {

@@ -1,6 +1,6 @@
-const routeRegex = /^\/(stuck-in-an-inner-tube|tube-climber|ld47|ludum-dare-47)(?:\/.*)?$/i;
+const routeRegex = /^\/(gmtk-2021|gmtk-21|gmtk2021|gmtk21)(?:\/.*)?$/i;
 
-const itchioUrl = 'https://levilindsey.itch.io/stuck-in-an-inner-tube';
+const githubUrl = 'https://levilindsey.github.io/gmtk-2021';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
@@ -19,7 +19,7 @@ exports.attachRoutes = (server, appPath, config) => {
     const dirs = req.path.split('/');
 
     if (dirs[2] === '' || dirs.length === 2) {
-      res.redirect(itchioUrl);
+      res.redirect(githubUrl);
     } else {
       next();
     }
