@@ -60,6 +60,24 @@ ul {
   align-self: stretch;
 }
 
+ul.bulleted-list {
+  display: block;
+  list-style-type: disc;
+  justify-content: left;
+  padding-left: 40px;
+  margin: 0;
+}
+
+ul.bulleted-list>li{
+  display: list-item;
+  text-align: left;
+  font-weight: normal;
+}
+
+ul.bulleted-list+p {
+  margin-top: 1em;
+}
+
 ul+p {
   margin-top: 2em;
 }

@@ -89,6 +89,36 @@ const subroutes = [
         'https://www.snoringcat.games/#inner-tube-climber',
   },
   {
+    // Momma Duck privacy policy.
+    pathRegex: /^.*\/momma-duck\/(privacy-policy|privacy).*$/i,
+    redirectUrl:
+        'https://docs.google.com/document/d/1G90Hna_3ZlXYie3CDPne8vjdP7b3mq1Vqj8agbDsKJ8/preview',
+  },
+  {
+    // Momma Duck terms of service.
+    pathRegex: /^.*\/momma-duck\/(terms-of-service|terms-and-conditions|tos).*$/i,
+    redirectUrl:
+        'https://docs.google.com/document/d/1qHZQiJnVJGHMWR0FzwBMCV_9NlMYWRhJKL-7I3hWlGk/preview',
+  },
+  {
+    // Momma Duck app alias.
+    pathRegex: /^.*\/momma-duck\/play.*$/i,
+    redirectUrl:
+        'https://www.snoringcat.games/play/momma-duck',
+  },
+  {
+    // Momma Duck app.
+    pathRegex: /^.*\/play\/momma-duck.*$/i,
+    redirectUrl:
+        'https://www.levi.dev/momma-duck',
+  },
+  {
+    // Momma Duck page.
+    pathRegex: /^.*\/momma-duck.*$/i,
+    redirectUrl:
+        'https://www.snoringcat.games/#momma-duck',
+  },
+  {
     // Dark Time page.
     pathRegex: /^.*\/dark-time.*$/i,
     redirectUrl:
