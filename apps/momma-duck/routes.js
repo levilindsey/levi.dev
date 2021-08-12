@@ -1,6 +1,7 @@
-const routeRegex = /^\/(momma-duck|mama-duck|mamma-duck|mama|momma|mamma|duck|duckling|ducks|ducklings)(?:\/.*)?$/i;
+const routeRegex = /^\/(momma-duck|momma_duck|mama-duck|mamma-duck|mama|momma|mamma|duck|duckling|ducks|ducklings)(?:\/.*)?$/i;
 
 const itchioUrl = 'https://levilindsey.itch.io/momma-duck';
+const githubUrl = 'https://snoringcatgames.github.io/momma_duck';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
@@ -19,7 +20,7 @@ exports.attachRoutes = (server, appPath, config) => {
     const dirs = req.path.split('/');
 
     if (dirs[2] === '' || dirs.length === 2) {
-      res.redirect(itchioUrl);
+      res.redirect(githubUrl);
     } else {
       next();
     }

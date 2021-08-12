@@ -1,0 +1,55 @@
+{
+  "id": "momma-duck",
+  "titleShort": "Point-and-click\nplatformer",
+  "titleLong": "Momma Duck: A point-and-click platformer",
+  "urls": {
+    "demo": "https://levi.dev/momma-duck",
+    "gmtk": "https://itch.io/jam/gmtk-2021/rate/1085910",
+    "github": "https://github.com/levilindsey/gmtk-2021"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "6/2021",
+  "categories": [
+    "side-project",
+    "app",
+    "godot",
+    "game",
+    "2D",
+    "game-jam"
+  ],
+  "images": [
+    {
+      "fileName": "cover-art.png",
+      "description": "Cover art for Momma Duck."
+    },
+    {
+      "fileName": "recording-avoiding-enemies.gif",
+      "description": "As Momma navigates through the level, she must be careful to keep her ducklings away from any enemies!"
+    },
+    {
+      "fileName": "recording-finding-duckling.gif",
+      "description": "Momma first has to find her lost ducklings."
+    },
+    {
+      "fileName": "recording-lots-of-trailing-ducklings.gif",
+      "description": "Momma can end up with quite a few ducklings trailing behind her."
+    },
+    {
+      "fileName": "rope-simulation.gif",
+      "description": "An early version of the game included a rope simulation to show the connect between Momma and her followers. The rope would stretch, change color, then snap if the duckling fell too far behind!"
+    },
+    {
+      "fileName": "screenshot-pond.png",
+      "description": "The goal of each level is for Momma to lead all her ducklings to a safe pond."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "QYv0xNa0bO8",
+      "description": "A gameplay video for Momma Duck."
+    }
+  ],
+  "content": "> _Collect your ducklings and lead them to safety!_\r\n\r\n> This is a **point-and-click platformer**!\r\n\r\nThis game was originally created in 48-hours as a [submission](https:\/\/itch.io\/jam\/gmtk-2021\/rate\/1085910) for the [GMTK 2021 game jam](https:\/\/itch.io\/jam\/gmtk-2021). All design, code, images, sound effects, and music were created by Levi.\r\n\r\n## The theme: \"Joined together\"\r\n\r\nYou are a momma duck. Your precious ducklings follow closely behind you as you lead them to a safe pond.\r\n\r\n## Software used\r\n\r\n-   **[Godot](https:\/\/godotengine.org\/)**: Game engine.\r\n-   **[Aseprite](https:\/\/www.aseprite.org\/)**: Pixel-art image editor.\r\n-   **[Bfxr](https:\/\/www.bfxr.net\/)**: Sound effects editor.\r\n-   **[DefleMask](https:\/\/deflemask.com\/)**: Chiptune music tracker.\r\n-   **[Scaffolder](https:\/\/godotengine.org\/asset-library\/asset\/969)**: My framework on the Godot Asset Library that provides some general app infrastructure (like GUI layout and screen navigation).\r\n-   **[Surfacer](https:\/\/godotengine.org\/asset-library\/asset\/968)**: My framework on the Godot Asset Library that provides procedural path-finding across 2D platforms.\r\n\r\n> _The latest version of Momma Duck is owned by [Snoring Cat LLC](https:\/\/snoringcat.games), but the original version was published by Levi Lindsey in the GMTK 2021 game jam._\r\n\r\n![A momma duck and her ducklings](https:\/\/s3-us-west-2.amazonaws.com\/levi-portfolio-media\/momma-duck\/loading.gif)\r\n"
+}

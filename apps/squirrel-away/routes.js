@@ -1,6 +1,6 @@
-const surfacerRouteRegex = /^\/(surfacer|surface|scaffolder|scaffold|squirrel|squirrels|squirrel-away)(?:\/.*)?$/i;
+const surfacerRouteRegex = /^\/(surfacer|surface|scaffolder|scaffold|squirrel|squirrels|squirrel-away|squirrel_away|exampler)(?:\/.*)?$/i;
 
-const surfacerRedirectUrl = 'https://snoringcatgames.github.io/squirrel-away';
+const githubUrl = 'https://snoringcatgames.github.io/exampler';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
@@ -19,7 +19,7 @@ exports.attachRoutes = (server, appPath, config) => {
     const dirs = req.path.split('/');
 
     if (dirs[2] === '' || dirs.length === 2) {
-      res.redirect(surfacerRedirectUrl);
+      res.redirect(githubUrl);
     } else {
       next();
     }
