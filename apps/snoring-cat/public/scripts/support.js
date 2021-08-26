@@ -9,7 +9,7 @@
   window.addEventListener('load', init, false);
 
   function init() {
-    console.log('onDocumentLoad');
+    // console.log('onDocumentLoad');
 
     window.removeEventListener('load', init);
 
@@ -62,5 +62,5 @@
     }
   }
 
-  console.log('support module loaded');
+  // console.log('support module loaded');
 })();
