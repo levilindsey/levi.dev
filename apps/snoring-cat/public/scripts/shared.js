@@ -19,7 +19,7 @@
   window.addEventListener('load', init);
 
   function init() {
-    console.log('onDocumentLoad');
+    // console.log('onDocumentLoad');
 
     window.removeEventListener('load', init);
 
@@ -94,5 +94,5 @@
     }
   }
 
-  console.log('shared module loaded');
+  // console.log('shared module loaded');
 })();
