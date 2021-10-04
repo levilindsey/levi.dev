@@ -1,13 +1,11 @@
 // TODO: Add paths based on the game name.
-const routeRegex = /^\/(ld49|ludum-dare-49|ludumdare49)(?:\/.*)?$/i;
+const routeRegex = /^\/(ld49|ludum-dare-49|ludumdare49|eye-of-glower-on|the-eye-of-glower-on|eyeofgloweron|theeyeofgloweron|mountohno|eye)(?:\/.*)?$/i;
 
 const githubPagesUrl = 'https://levilindsey.github.io/ludum-dare-49/';
 
-const itchioUrl = 'https://levilindsey.itch.io/TODO';
+const itchioUrl = 'https://levilindsey.itch.io/the-eye-of-glower-on';
 
-// TODO: Use the itch.io URL.
-const demoUrl = githubPagesUrl;
-// const demoUrl = itchioUrl;
+const demoUrl = itchioUrl;
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
