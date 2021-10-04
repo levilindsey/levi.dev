@@ -302,29 +302,38 @@
                src="https://s3-us-west-2.amazonaws.com/snoringcat.games/surfacer-screenshot.png"
                alt="A screenshot from Squirrel Away illustrating an annotated platform graph.">
 
-          <p>A procedural pathfinding 2D-platformer framework for <a href="https://godotengine.org/">Godot</a>.</p>
+          <p><b>Point-and-click platformers</b>!</p>
 
-          <p>Aka, <b>point-and-click platformers</b>!</p>
+          <p>An <b>AI and pathfinding</b> 2D-platformer framework for <a href="https://godotengine.org/">Godot</a>.</p>
 
-          <p><b>tl;dr</b>: Surfacer works by pre-parsing a level into a "platform graph". The nodes
-            are represented by points along the different surfaces in the level (floors, walls, and ceilings).
-            The edges are represented by possible movement trajectories between points along surfaces.
-            There are different types of edges for different types of movement (e.g., jumping from a floor to a floor, falling from a wall, walking along a floor).
-            At run time, A* search is used to calculate a path to a given destination.</p>
+          <p>
+            <b>tl;dr:</b> Surfacer works by <b>pre-parsing</b> a level into a<b>"platform graph"</b>.
+            The <b>nodes</b> are represented by points along the different surfaces in the level
+            (floors, walls, and ceilings). The <b>edges</b> are represented by possible movement
+            trajectories between points along surfaces. There are different types of edges for
+            different types of movement (e.g., jumping from a floor to a floor, falling from a wall,
+            walking along a floor). At run time,
+            <b><a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A* search</a></b>
+            is used to calculate a path to a given destination.
+          </p>
 
           <p>Some features include:</p>
 
           <ul class="bulleted-list">
-            <li>Walking on floors, climbing on walls, climbing on ceilings, jumping and falling from anywhere.</li>
-            <li>Variable-height jump and fast-fall.</li>
-            <li>Adjusting movement trajectories around intermediate surfaces (such as jumping over a wall or around a floor).</li>
-            <li>Configurable movement parameters on a per-player basis (e.g., horizontal acceleration, jump power, gravity, collision boundary shape and size, which types of edge movement are allowed).</li>
-            <li>Level creation using Godot's standard pattern with a TileMap in the 2D scene editor.</li>
+            <li>Surfacer includes a powerful **character-behavior system** for easily creating a character AI with high-level behaviors like "wander", "follow", "run-away", "return".</li>
+            <li>Easy-to-use point-and-click navigation for player-controlled characters.</li>
+            <li><a href="https://github.com/SnoringCatGames/surfacer/blob/master/src/platform_graph/edge/models/movement_params.gd">Configurable movement parameters</a> on a per-character basis (e.g., horizontal acceleration, jump power, gravity, collision boundary shape and size, which types of edge movement are allowed).</li>
+            <li>Level creation using Godot's standard pattern with a <a href="https://docs.godotengine.org/en/3.2/tutorials/2d/using_tilemaps.html">TileMap in the 2D scene editor</a>.</li>
             <li>Preparsing the level into a platform graph, and using A* search for efficient path-finding at runtime.</li>
             <li>A powerful inspector for analyzing the platform graph, in order to debug and better understand how edges were calculated.</li>
+            <li>Walking on floors, climbing on walls, climbing on ceilings, jumping and falling from anywhere.</li>
+            <li><a href="https://kotaku.com/the-mechanics-behind-satisfying-2d-jumping-1761940693">Variable-height jump and fast-fall</a>.</li>
+            <li>Adjusting movement trajectories to move around intermediate surfaces (such as jumping over a wall or around a floor).</li>
           </ul>
 
           <p>See <a href="https://github.com/SnoringCatGames/surfacer">more details in the library's README</a>.</p>
+
+          <p>You can also read more about how Surfacer's AI and movement works in <a href="https://devlog.levi.dev/2021/09/building-platformer-ai-from-low-level.html">this series of devlog posts on devlog.levi.dev</a>.</p>
 
           <ul class="buttons">
             <li>
