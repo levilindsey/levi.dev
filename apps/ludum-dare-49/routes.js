@@ -1,4 +1,3 @@
-// TODO: Add paths based on the game name.
 const routeRegex = /^\/(ld49|ludum-dare-49|ludumdare49|eye-of-glower-on|the-eye-of-glower-on|eyeofgloweron|theeyeofgloweron|mountohno|eye)(?:\/.*)?$/i;
 
 const githubPagesUrl = 'https://levilindsey.github.io/ludum-dare-49/';
