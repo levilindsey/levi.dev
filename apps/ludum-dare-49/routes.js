@@ -1,10 +1,10 @@
-const routeRegex = /^\/(ld49|ludum-dare-49|ludumdare49|eye-of-glower-on|the-eye-of-glower-on|eyeofgloweron|theeyeofgloweron|mountohno|eye)(?:\/.*)?$/i;
+const routeRegex = /^\/(ld49|ludum-?dare-?49|(the-?)?eye-?of-?glower-?on|mount-?oh-?no|eye)(?:\/.*)?$/i;
 
-const githubPagesUrl = 'https://levilindsey.github.io/ludum-dare-49/';
+const githubPagesUrl = 'https://snoringcatgames.github.io/eye_of_glower_on/';
 
 const itchioUrl = 'https://levilindsey.itch.io/the-eye-of-glower-on';
 
-const demoUrl = itchioUrl;
+const demoUrl = githubPagesUrl;
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
