@@ -1,4 +1,4 @@
-const rootRouteRegex = /^\/(octobit(-?2021)?|art|pixel-?art|pixels?)(?:\/.*)?$/i;
+const rootRouteRegex = /^\/(octobit(-?(20)?21)?|art|pixel-?art|pixels?)(?:\/.*)?$/i;
 const twitterRouteRegex = /^\/(octobit(-?2021)?-?twitter)(?:\/.*)?$/i;
 const timelapseRouteRegex = /^\/(octobit(-?2021)?-?time-?lapses?)(?:\/.*)?$/i;
 const videoRouteRegex = /^\/(octobit(-?2021)?-?video)(?:\/.*)?$/i;
