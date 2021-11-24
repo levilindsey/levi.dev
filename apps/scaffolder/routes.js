@@ -1,15 +1,15 @@
-const routeRegex = /^\/(squirrel|squirrels|squirrel-away|squirrel_away|exampler)(?:\/.*)?$/i;
+const routeRegex = /^\/(scaff?old(er)?)(?:\/.*)?$/i;
 
-const githubUrl = 'https://snoringcatgames.github.io/exampler';
+const githubUrl = 'https://github.com/SnoringCatGames/scaffolder';
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
-  server.get(routeRegex, handleSurfacerRequest);
+  server.get(routeRegex, handleRequest);
 
   // ---  --- //
 
   // Handles a request for this app.
-  function handleSurfacerRequest(req, res, next) {
+  function handleRequest(req, res, next) {
     // Check whether this request was directed to the portfolio.
     if (config.portfolioDomains.indexOf(req.hostname) < 0) {
       next();
