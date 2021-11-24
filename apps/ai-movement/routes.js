@@ -1,4 +1,4 @@
-const routeRegex = /^\/(ai|ai-?movement|ai-series|platformer-ai|platformer-ai-series|pathfinding|platformer-pathfinding)(?:\/.*)?$/i;
+const routeRegex = /^\/((platform(er)?|(platform(er)?-?)?ai)-?(movement|series|pathfinding|tutorial)?)(?:\/.*)?$/i;
 
 const mainPostUrl = 'https://devlog.levi.dev/2021/09/building-platformer-ai-from-low-level.html';
 
