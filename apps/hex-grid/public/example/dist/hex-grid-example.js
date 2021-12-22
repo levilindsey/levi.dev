@@ -10178,6 +10178,7 @@ if (typeof define === 'function' && define.amd) {
     'reverbNation': 'Reverb Nation',
     'resume': 'Resume',
     'youtube': 'YouTube',
+    'soundcloud': 'SoundCloud',
     'itchio': 'itch.io',
     'ludum-dare': 'Ludum Dare',
     'global-game-jam': 'Global Game Jam',
