@@ -1,4 +1,4 @@
-const routeRegex = /^\/(ooboloo|(ggj|global-?game-?jam)-?(2022|22)?)(?:\/.*)?$/i;
+const routeRegex = /^\/(ooboloo|(ggj|global-?game-?jam)-?(2021|21))(?:\/.*)?$/i;
 
 const itchioUrl = 'https://levilindsey.itch.io/ooboloo';
 
