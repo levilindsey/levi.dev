@@ -1,0 +1,80 @@
+{
+  "id": "tale-of-two-sides",
+  "titleShort": "2D platformer",
+  "titleLong": "Tale of Two Sides: A 2D platformer",
+  "urls": {
+    "demo": "https://voithos.itch.io/tale-of-two-sides",
+    "global-game-jam": "https://globalgamejam.org/2022/games/tale-two-sides-2",
+    "github": "https://github.com/voithos/global-game-jam-2022"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "1/2022",
+  "categories": [
+    "side-project",
+    "app",
+    "godot",
+    "game",
+    "2D",
+    "game-jam",
+    "teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "phasing.gif",
+      "description": "The phasing mechanic is a lot of fun to control!"
+    },
+    {
+      "fileName": "phase-basics.gif",
+      "description": "This game includes lots of narrative elements!"
+    },
+    {
+      "fileName": "screenshot1.png",
+      "description": "The main menu."
+    },
+    {
+      "fileName": "screenshot2.png",
+      "description": "An intro storyboard screen illustrating how the protagonist broke the world by breaking a crystal."
+    },
+    {
+      "fileName": "screenshot3.png",
+      "description": "An intro storyboard screen illustrating how the protagonist broke the world by breaking a crystal."
+    },
+    {
+      "fileName": "screenshot5.png",
+      "description": "Our credits screen."
+    },
+    {
+      "fileName": "screenshot6.png",
+      "description": "The protagonist caused the terrible split in the world by breaking a crystal."
+    },
+    {
+      "fileName": "screenshot7.png",
+      "description": "You collect a fragment of the broken crystal at the end of each level."
+    },
+    {
+      "fileName": "screenshot8.png",
+      "description": "Along the way, you meet NPCs who have become separated from their friends and family during the divide."
+    },
+    {
+      "fileName": "screenshot10.png",
+      "description": "The final crystal that you reach at the end of the game."
+    },
+    {
+      "fileName": "screenshot11.png",
+      "description": "The game-completed art."
+    },
+    {
+      "fileName": "icon_128.gif",
+      "description": "."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "Ro5a_ssqQZM",
+      "description": "A gameplay video for Tale of Two Sides."
+    }
+  ],
+  "content": "_This is a 2D platformer with a unique mechanic for travelling through the platforms then traversing from the opposite orientation._\r\n\r\n> Through a terrible accident, you've split-apart the world into two sides! But you've also gained the unique ability to phase between them! Use your newfound power to undo your mess and re-unite the two sides!\r\n\r\nAll design, code, images, sound effects, and music were created by out team:\r\n-   [Diego Gonzalez](https:\/\/drgvdg.itch.io\/)\r\n-   [Daisy Muradyan](https:\/\/ladychamomile.ink\/)\r\n-   [Levi Lindsey](https:\/\/levi.dev)\r\n-   [Zaven Muradyan](https:\/\/voithos.io\/)\r\n\r\n## The jam\r\n\r\nThis game was originally created in 48-hours as a [submission](https:\/\/globalgamejam.org\/2022\/games\/tale-two-sides-2) for the [2022 Global Game Jam](https:\/\/globalgamejam.org\/).\r\n\r\n**Theme: \"Duality\"**\r\n\r\n## Music\r\n\r\nHere is the music I made for this game:\r\n- https:\/\/soundcloud.com\/levilindsey\/phase-up\r\n- https:\/\/soundcloud.com\/levilindsey\/phase-menu\r\n\r\n![The broken crystal](https:\/\/s3-us-west-2.amazonaws.com\/levi-portfolio-media\/tale-of-two-sides\/icon_128.gif)\r\n"
+}
