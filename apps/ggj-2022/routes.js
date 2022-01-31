@@ -1,9 +1,8 @@
-const routeRegex = /^\/(todo-ggj-game-name-here|(ggj|global-?game-?jam)-?(2022|22)?)(?:\/.*)?$/i;
+const routeRegex = /^\/((tale-?of-?)?two-?sides|(ggj|global-?game-?jam)-?(2022|22)?)(?:\/.*)?$/i;
 
 const githubPagesUrl = 'https://voithos.github.io/global-game-jam-2022';
-// TODO:
-const itchioUrl = '';
-const redirectUrl = githubPagesUrl;
+const itchioUrl = 'https://voithos.itch.io/tale-of-two-sides';
+const redirectUrl = itchioUrl;
 
 // Attaches the route handlers for this app.
 exports.attachRoutes = (server, appPath, config) => {
