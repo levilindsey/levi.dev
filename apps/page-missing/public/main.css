@@ -8,9 +8,12 @@
   font-style: normal;
 }
 
+html, body {
+  background: #111;
+}
+
 body {
-  background: #fff;
-  color: #303030;
+  color: #f8f8f8;
   font-family: 'SassoonSansStd', sans-serif;
   width: 100%;
 }
@@ -42,7 +45,7 @@ body div a:active {
 }
 
 a:link {
-  color: #aaa;
+  color: #888;
 /*#be56ea*/
   text-decoration: none;
 }
@@ -52,6 +55,6 @@ body a:hover {
 }
 
 a:visited {
-  color: #999;
+  color: #666;
   text-decoration: none;
 }
