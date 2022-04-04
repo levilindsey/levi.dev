@@ -1,10 +1,9 @@
 // TODO: Add the app name.
-const routeRegex = /^\/(ld50|ludum-?dare-?50)(?:\/.*)?$/i;
+const routeRegex = /^\/(ld50|ludum-?dare-?50|meteor(-?power)?(?:\/.*)?$/i;
 
 const githubPagesUrl = 'https://levilindsey.github.io/ludum-dare-50/';
 
-// TODO: Add the app name.
-const itchioUrl = 'https://levilindsey.itch.io/';
+const itchioUrl = 'https://levilindsey.itch.io/meteor-power';
 
 const demoUrl = githubPagesUrl;
 
