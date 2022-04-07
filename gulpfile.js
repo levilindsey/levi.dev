@@ -60,6 +60,5 @@ gulp.task('server', () => {
   require(config.serverMainPath);
 });
 
-gulp.task('default', () => {
-  gulp.start('server', 'templates');
+gulp.task('default', gulp.series('templates', 'server'), (done) => {
 });

@@ -40,12 +40,12 @@
   },
   "devDependencies": {
     "bower": "^1.8.12",
-    "gulp": "^3.9.1",
-    "gulp-bump": "^0.1.13",
-    "gulp-load-plugins": "^0.7.1",
-    "gulp-plumber": "^0.6.6",
-    "gulp-rename": "^1.4.0",
-    "gulp-template": "^1.1.1",
+    "gulp": "^4.0.2",
+    "gulp-bump": "^3.2.0",
+    "gulp-load-plugins": "^2.0.7",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^2.0.0",
+    "gulp-template": "^5.0.0",
     "natives": "^1.1.6"
   },
   "engines": {
