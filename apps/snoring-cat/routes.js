@@ -95,6 +95,36 @@ const subroutes = [
         'https://www.snoringcat.games/#inner-tube-climber',
   },
   {
+    // Meteor Power privacy policy.
+    pathRegex: /^.*\/meteor-power\/(privacy-policy|privacy)(?:\/.*)?$/i,
+    redirectUrl:
+        'https://docs.google.com/document/d/1WYzGSfv1Xywpk9rYWDr0yf78o1Th_5m-4009Q_XEKlk/preview',
+  },
+  {
+    // Meteor Power terms of service.
+    pathRegex: /^.*\/meteor-power\/(terms-of-service|terms-and-conditions|tos)(?:\/.*)?$/i,
+    redirectUrl:
+        'https://docs.google.com/document/d/1aegg8nErqIRX0rMwzv1pfe_y6ralXeLPpTXM4TMwQUg/preview',
+  },
+  {
+    // Meteor Power app alias.
+    pathRegex: /^.*\/meteor-power\/play(?:\/.*)?$/i,
+    redirectUrl:
+        'https://www.snoringcat.games/play/meteor-power',
+  },
+  {
+    // Meteor Power app.
+    pathRegex: /^.*\/play\/meteor-power(?:\/.*)?$/i,
+    redirectUrl:
+        'https://www.levi.dev/meteor-power',
+  },
+  {
+    // Meteor Power page.
+    pathRegex: /^.*\/meteor-power(?:\/.*)?$/i,
+    redirectUrl:
+        'https://www.snoringcat.games/#meteor-power',
+  },
+  {
     // Momma Duck privacy policy.
     pathRegex: /^.*\/momma-duck\/(privacy-policy|privacy)(?:\/.*)?$/i,
     redirectUrl:
