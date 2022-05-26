@@ -1,3 +1,1599 @@
+'use strict';
+
+/**
+ * This module defines a singleton that fetches and parses data for the app.
+ *
+ * @module data
+ */
+(function () {
+
+  var config = {};
+
+  config.youtubeVideoBaseUrl = '//www.youtube.com/embed';
+  config.youtubeThumbnailBaseUrl = 'http://img.youtube.com/vi';
+
+  config.vimeoVideoBaseUrl = '//player.vimeo.com/video';
+
+  config.appRootPath = window.appRootPath || 'example';
+  config.metadataUrl = config.appRootPath + '/dist/data.min.json';
+
+  var data = {};
+
+  data.config = config;
+  data.dataRequestState = 'request-not-sent';
+  data.combinedMetadata = {};
+  data.collectionMetadata = {};
+  data.postData = [];
+
+  data.fetchData = fetchData;
+
+  window.app = window.app || {};
+  app.data = data;
+
+  // ---  --- //
+
+  function fetchData(callback) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.addEventListener('load', onLoad, false);
+    xhr.addEventListener('error', onError, false);
+    xhr.addEventListener('abort', onAbort, false);
+
+    console.log('Sending request to ' + config.metadataUrl);
+
+    xhr.open('GET', config.metadataUrl, true);
+    xhr.send();
+
+    data.dataRequestState = 'waiting-for-response';
+
+    // ---  --- //
+
+    function onLoad() {
+      console.log('Response status=' + xhr.status + ' (' + xhr.statusText + ')');
+      //console.log('Response body=' + xhr.response);
+
+      data.dataRequestState = 'received-response';
+
+      try {
+        data.combinedMetadata = JSON.parse(xhr.response);
+      } catch (error) {
+        data.combinedMetadata = {};
+        data.collectionMetadata = {};
+        data.postData = [];
+        console.error('Unable to parse response body as JSON: ' + xhr.response);
+        return;
+      }
+
+      data.collectionMetadata = data.combinedMetadata.collectionMetadata;
+      data.postData = data.combinedMetadata.posts;
+
+      updatePostsSrcUrls();
+
+      callback();
+    }
+
+    function onError() {
+      console.error('An error occurred while transferring the data');
+
+      data.dataRequestState = 'error-with-request';
+    }
+
+    function onAbort() {
+      console.error('The transfer has been cancelled by the user');
+
+      data.dataRequestState = 'error-with-request';
+    }
+  }
+
+  function updatePostsSrcUrls() {
+    data.postData.forEach(updatePostSrcUrls);
+
+    // ---  --- //
+
+    function updatePostSrcUrls(postDatum) {
+      var postBaseUrl = data.collectionMetadata.baseUrl + '/' + postDatum.id + '/';
+
+      postDatum.images.forEach(updateSrcImageMetadata);
+      postDatum.videos.forEach(updateSrcVideoMetadata);
+
+      postDatum.thumbnailSrc = postBaseUrl + data.collectionMetadata.thumbnailName;
+      postDatum.logoSrc = postBaseUrl + data.collectionMetadata.logoName;
+
+      // ---  --- //
+
+      function updateSrcImageMetadata(imageMetadatum) {
+        imageMetadatum.src = postBaseUrl + imageMetadatum.fileName;
+      }
+
+      function updateSrcVideoMetadata(videoMetadatum) {
+        switch (videoMetadatum.videoHost) {
+          case 'youtube':
+            videoMetadatum.videoSrc = config.youtubeVideoBaseUrl + '/' + videoMetadatum.id + '?enablejsapi=1';
+            videoMetadatum.thumbnailSrc = config.youtubeThumbnailBaseUrl + '/' + videoMetadatum.id + '/default.jpg';
+            break;
+          case 'vimeo':
+            videoMetadatum.videoSrc = config.vimeoVideoBaseUrl + '/' + videoMetadatum.id;
+            videoMetadatum.thumbnailSrc = null;
+            break;
+          default:
+            throw new Error('Invalid video host: ' + videoMetadatum.videoHost);
+        }
+      }
+    }
+  }
+
+  console.log('data module loaded');
+})();
+
+'use strict';
+
+/**
+ * This module defines a singleton that drives the app.
+ *
+ * @module main
+ */
+(function () {
+
+  var main = {};
+
+  main.grid = null;
+
+  window.app = window.app || {};
+  app.main = main;
+
+  window.addEventListener('load', initHexGrid, false);
+
+  // ---  --- //
+
+  /**
+   * This is the event handler for the completion of the DOM loading. This creates the Grid
+   * within the body element.
+   */
+  function initHexGrid() {
+    console.log('onDocumentLoad');
+
+    window.removeEventListener('load', initHexGrid);
+
+    var hexGridContainer = document.getElementById('hex-grid-area');
+
+    main.grid = window.hg.controller.createNewHexGrid(hexGridContainer, app.data.postData, false);
+
+    app.parameters.initDatGui(main.grid);
+
+    app.data.fetchData(updateTileData);
+  }
+
+  function updateTileData() {
+    window.hg.controller.setGridPostData(main.grid, app.data.postData);
+
+    app.parameters.updateForNewPostData(app.data.postData);
+  }
+
+  console.log('main module loaded');
+})();
+
+'use strict';
+
+/**
+ * This module defines a singleton that renders a menu panel across the top of the window.
+ *
+ * @module menu-panel
+ */
+(function () {
+
+  var config = {};
+
+  var menuPanel = {};
+
+  menuPanel.config = config;
+
+  window.app = window.app || {};
+  app.menuPanel = menuPanel;
+
+  // ---  --- //
+
+  console.log('menu-panel module loaded');
+})();
+
+'use strict';
+
+/**
+ * This module defines a singleton that handles the contents of folders within the dat.GUI menu that represent
+ * miscellaneous parameters.
+ *
+ * @module miscellaneous-parameters
+ */
+(function () {
+
+  var config = {};
+
+  config.folders = [
+    {
+      name: 'Main',
+      isOpen: true,
+      createItems: createMainItems,
+      children: [
+        {
+          name: 'Pre-Set Configurations',
+          isOpen: true,
+          createItems: createPreSetConfigurationsItems,
+          children: [
+          ]
+        },
+        {
+          name: 'Filter Posts',
+          isOpen: true,
+          createItems: createFilterPostsItems,
+          children: [
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Grid',
+      isOpen: false,
+      createItems: createGridItems
+    },
+    {
+      name: 'Annotations',
+      isOpen: false,
+      createItems: createAnnotationsItems
+    },
+    {
+      name: 'Particle System',
+      isOpen: false,
+      createItems: createParticleSystemItems
+    },
+    {
+      name: 'Input',
+      isOpen: false,
+      createItems: createInputItems
+    }
+  ];
+
+  config.defaultPreSet = 'gold-scale';
+
+  config.preSetConfigs = {};
+
+  config.preSetConfigs['gold-scale'] = {
+    Grid: {
+      tileGap: 4,
+      backgroundHue: 40,
+      backgroundSaturation: 15,
+      backgroundLightness: 3,
+      tileHue: 45,
+      tileSaturation: 10,
+      tileLightness: 7
+    },
+    TilePost: {
+      inactiveScreenOpacity: 0.84,
+      inactiveScreenHue: 40,
+      inactiveScreenSaturation: 1,
+      inactiveScreenLightness: 1
+    },
+    LineJob: {
+      lineWidth: 4,
+      startSaturation: 100,
+      startLightness: 80,
+      startOpacity: 0.3,
+      endSaturation: 100,
+      endLightness: 60,
+      endOpacity: 0,
+      sameDirectionProb: 0.6
+    },
+    HighlightRadiateJob: {
+      deltaSaturation: 50,
+      deltaLightness: 20,
+    },
+    HighlightHoverJob: {
+      deltaSaturation: 10,
+      deltaLightness: 20,
+    },
+    ColorWaveJob: {
+      deltaSaturation: 20,
+      deltaLightness: 14,
+      wavelength: 4000,
+      period: 4500,
+      originY: 2000
+    },
+    ColorShiftJob: {
+      hueDeltaMin: 0,
+      hueDeltaMax: 0,
+      saturationDeltaMin: -10,
+      saturationDeltaMax: 8,
+      lightnessDeltaMin: -5,
+      lightnessDeltaMax: 5,
+
+      imageBackgroundScreenOpacityDeltaMin: -0.05,
+      imageBackgroundScreenOpacityDeltaMax: 0.05,
+
+      transitionDurationMin: 800,
+      transitionDurationMax: 2000
+    },
+    DisplacementWaveJob: {
+      period: 1000000,
+      tileDeltaX: 0,
+      tileDeltaY: 0
+    },
+    OpenPostJob: {
+      fadePostDurationOffset: 300
+    },
+    ClosePostJob: {
+      duration: 200
+    }
+  };
+  config.preSetConfigs['stormy-sea'] = {
+    LineJob: {
+      isRecurring: true
+    }
+  };
+  config.preSetConfigs['color-worms'] = {
+    Grid: {
+      tileOuterRadius: 50,
+      tileHue: 39,
+      tileSaturation: 49,
+      tileLightness: 12
+    },
+    Tile: {
+      dragCoeff: 0.02,
+      neighborSpringCoeff: 0.000004,
+      innerAnchorSpringCoeff: 0.00002,
+      borderAnchorSpringCoeff: 0.00002
+    },
+    LineJob: {
+      isRecurring: true,
+      lineWidth: 12,
+      lineLength: 400,
+      duration: 70000,
+      lineSidePeriod: 1000,
+      startSaturation: 100,
+      startLightness: 60,
+      startOpacity: 0.8,
+      endSaturation: 100,
+      endLightness: 60,
+      endOpacity: 0,
+      sameDirectionProb: 0.75,
+      avgDelay: 2000,
+      delayDeviationRange: 200
+    },
+    LinesRadiateJob: {
+      lineWidth: 7,
+      lineLength: 250,
+      duration: 30000,
+      lineSidePeriod: 120,
+      startSaturation: 100,
+      startLightness: 60,
+      startOpacity: 0.8,
+      endSaturation: 100,
+      endLightness: 60,
+      endOpacity: 0,
+      sameDirectionProb: 0.75
+    },
+    DisplacementWaveJob: {
+      period: 1000000,
+      tileDeltaX: 0,
+      tileDeltaY: 0
+    },
+    ColorWaveJob: {
+      period: 1000000,
+      deltaLightness: 0
+    },
+    Input: {
+      contentTileClickAnimation: 'None',
+      emptyTileClickAnimation: 'Radiate Lines'
+    },
+    OpenPostJob: {
+      expandedDisplacementTileCount: 4
+    }
+  };
+  config.preSetConfigs['crazy-flux'] = {
+    Grid: {
+      tileOuterRadius: 60,
+      tileGap: 40,
+      tileHue: 24,
+      tileSaturation: 75,
+      tileLightness: 50
+    },
+    LineJob: {
+      isRecurring: true,
+      lineWidth: 100,
+      duration: 3000,
+      startSaturation: 100,
+      startLightness: 60,
+      startOpacity: 0.7,
+      endSaturation: 100,
+      endLightness: 60,
+      endOpacity: 0,
+      sameDirectionProb: 0.25,
+      avgDelay: 20,
+      delayDeviationRange: 10
+    },
+    Input: {
+      contentTileClickAnimation: 'None',
+      emptyTileClickAnimation: 'Radiate Lines'
+    },
+    DisplacementWaveJob: {
+      period: 1400,
+      tileDeltaX: 140,
+      tileDeltaY: -120,
+      originX: 2000,
+      originY: 1800
+    },
+    ColorShiftJob: {
+      hueDeltaMin: -180,
+      hueDeltaMax: 180,
+    }
+  };
+  config.preSetConfigs['wire-frame'] = {
+    LineJob: {
+      isRecurring: true
+    },
+    Annotations: {
+      annotations: {
+        tileNeighborConnections: {
+          enabled: true
+        },
+        tileAnchorCenters: {
+          enabled: true
+        },
+        transparentTiles: {
+          enabled: true
+        },
+        lineAnimationGapPoints: {
+          enabled: true
+        },
+        lineAnimationCornerData: {
+          enabled: true
+        },
+        sectorAnchorCenters: {
+          enabled: true
+        }
+      }
+    },
+    Input: {
+      contentTileClickAnimation: 'None',
+      emptyTileClickAnimation: 'Radiate Lines'
+    },
+    DisplacementWaveJob: {
+      originX: 1600,
+      originY: 1800
+    },
+    Tile: {
+      dragCoeff: 0.013,
+      neighborSpringCoeff: 0.000002,
+      innerAnchorSpringCoeff: 0.00001,
+      borderAnchorSpringCoeff: 0.00002
+    }
+  };
+
+  // ---  --- //
+
+  var miscParams = {};
+
+  miscParams.init = init;
+  miscParams.config = config;
+
+  window.app = window.app || {};
+  app.miscParams = miscParams;
+
+  // ---  --- //
+
+  function init(grid) {
+    miscParams.grid = grid;
+  }
+
+  function createMainItems(folder) {
+    var data = {
+      'Go Home': window.app.parameters.goHome,
+      'Hide Menu': window.app.parameters.hideMenu
+    };
+
+    folder.add(data, 'Go Home');
+    folder.add(data, 'Hide Menu');
+  }
+
+  function createPreSetConfigurationsItems(parentFolder) {
+    var data = {};
+
+    Object.keys(config.preSetConfigs).forEach(addPreSetConfig);
+
+    // ---  --- //
+
+    function addPreSetConfig(preSetName) {
+      data[preSetName] = window.app.parameters.updateToPreSetConfigs.bind(window.app.parameters,
+        config.preSetConfigs[preSetName]);
+      parentFolder.add(data, preSetName);
+    }
+  }
+
+  function createFilterPostsItems(parentFolder) {
+    var data = {
+      'all': filterPosts.bind(window.app.parameters, 'all'),
+      'work': filterPosts.bind(window.app.parameters, 'work'),
+      'research': filterPosts.bind(window.app.parameters, 'research'),
+      'side-projects': filterPosts.bind(window.app.parameters, 'side-project')
+    };
+
+    parentFolder.add(data, 'all');
+    parentFolder.add(data, 'work');
+    parentFolder.add(data, 'research');
+    parentFolder.add(data, 'side-projects');
+    window.app.parameters.categoriesFolder = parentFolder.addFolder('All Categories');
+
+    // ---  --- //
+
+    function filterPosts(category) {
+      window.app.parameters.categoryData[category].menuItem.setValue(true);
+    }
+  }
+
+  function createGridItems(folder) {
+    var colors = {};
+    colors.backgroundColor = window.hg.util.hslToHsv({
+      h: window.hg.Grid.config.backgroundHue,
+      s: window.hg.Grid.config.backgroundSaturation * 0.01,
+      l: window.hg.Grid.config.backgroundLightness * 0.01
+    });
+    colors.tileColor = window.hg.util.hslToHsv({
+      h: window.hg.Grid.config.tileHue,
+      s: window.hg.Grid.config.tileSaturation * 0.01,
+      l: window.hg.Grid.config.tileLightness * 0.01
+    });
+
+    folder.add(miscParams.grid, 'isVertical')
+        .onChange(function () {
+          window.hg.controller.resetGrid(miscParams.grid);
+        });
+    folder.add(window.hg.Grid.config, 'tileOuterRadius', 10, 400)
+        .onChange(function () {
+          window.hg.Grid.config.computeDependentValues();
+          window.hg.controller.resetGrid(miscParams.grid);
+        });
+    folder.add(window.hg.Grid.config, 'tileGap', -50, 100)
+        .onChange(function () {
+          window.hg.Grid.config.computeDependentValues();
+          window.hg.controller.resetGrid(miscParams.grid);
+        });
+    folder.addColor(colors, 'backgroundColor')
+        .onChange(function () {
+          var color = window.hg.util.hsvToHsl(colors.backgroundColor);
+
+          window.hg.Grid.config.backgroundHue = color.h;
+          window.hg.Grid.config.backgroundSaturation = color.s * 100;
+          window.hg.Grid.config.backgroundLightness = color.l * 100;
+
+          miscParams.grid.setBackgroundColor();
+        });
+    folder.addColor(colors, 'tileColor')
+        .onChange(function () {
+          var color = window.hg.util.hsvToHsl(colors.tileColor);
+
+          window.hg.Grid.config.tileHue = color.h;
+          window.hg.Grid.config.tileSaturation = color.s * 100;
+          window.hg.Grid.config.tileLightness = color.l * 100;
+
+          miscParams.grid.updateTileColor();
+          if (window.hg.Annotations.config.annotations['contentTiles'].enabled) {
+            miscParams.grid.annotations.toggleAnnotationEnabled('contentTiles', true);
+          }
+        });
+    folder.add(window.hg.Grid.config, 'firstRowYOffset', -100, 100)
+        .onChange(function () {
+          window.hg.Grid.config.computeDependentValues();
+          window.hg.controller.resetGrid(miscParams.grid);
+        });
+    folder.add(window.hg.Grid.config, 'contentStartingRowIndex', 0, 4).step(1)
+        .onChange(function () {
+          window.hg.Grid.config.computeDependentValues();
+          miscParams.grid.computeContentIndices();
+          window.hg.controller.resetGrid(miscParams.grid);
+        });
+    folder.add(window.hg.Grid.config, 'targetContentAreaWidth', 500, 1500)
+        .onChange(function () {
+          window.hg.Grid.config.computeDependentValues();
+          miscParams.grid.computeContentIndices();
+          window.hg.controller.resetGrid(miscParams.grid);
+        });
+    folder.add(window.hg.Grid.config, 'contentDensity', 0.1, 1.0)
+        .onChange(function () {
+          window.hg.Grid.config.computeDependentValues();
+          miscParams.grid.computeContentIndices();
+          window.hg.controller.resetGrid(miscParams.grid);
+        });
+  }
+
+  function createAnnotationsItems(folder) {
+    var key, data;
+
+    for (key in window.hg.Annotations.config.annotations) {
+      data = {};
+      data[key] = window.hg.Annotations.config.annotations[key].enabled;
+
+      folder.add(data, key).onChange(function (value) {
+        miscParams.grid.annotations.toggleAnnotationEnabled(this.property, value);
+      });
+    }
+  }
+
+  function createInputItems(folder) {
+    folder.add(window.hg.Input.config, 'contentTileClickAnimation',
+        Object.keys(window.hg.Input.config.possibleClickAnimations));
+    folder.add(window.hg.Input.config, 'emptyTileClickAnimation',
+        Object.keys(window.hg.Input.config.possibleClickAnimations));
+  }
+
+  function createParticleSystemItems(folder) {
+    folder.add(window.hg.Tile.config, 'dragCoeff', 0.000001, 0.1);
+    folder.add(window.hg.Tile.config, 'neighborSpringCoeff', 0.000001, 0.0001);
+    folder.add(window.hg.Tile.config, 'neighborDampingCoeff', 0.000001, 0.009999);
+    folder.add(window.hg.Tile.config, 'innerAnchorSpringCoeff', 0.000001, 0.0001);
+    folder.add(window.hg.Tile.config, 'innerAnchorDampingCoeff', 0.000001, 0.009999);
+    folder.add(window.hg.Tile.config, 'borderAnchorSpringCoeff', 0.000001, 0.0001);
+    folder.add(window.hg.Tile.config, 'borderAnchorDampingCoeff', 0.000001, 0.009999);
+    folder.add(window.hg.Tile.config, 'forceSuppressionLowerThreshold', 0.000001, 0.009999);
+    folder.add(window.hg.Tile.config, 'velocitySuppressionLowerThreshold', 0.000001, 0.009999);
+    folder.add(window.hg.Grid.config, 'tileMass', 0.1, 10)
+        .onChange(function (value) {
+          miscParams.grid.updateTileMass(value);
+        });
+  }
+
+  console.log('miscellaneous-parameters module loaded');
+})();
+
+'use strict';
+
+/**
+ * This module defines a singleton that handles the communication between the dat.GUI controller
+ * and the hex-grid parameters.
+ *
+ * @module parameters
+ */
+(function () {
+
+  var parameters = {},
+      config = {},
+      originalHgConfigs = {};
+
+  config.datGuiWidth = 300;
+
+  config.folders = [
+    createMiscellaneousFolders,
+    {
+      name: 'Animations',
+      isOpen: false,
+      createItems: null,
+      children: [
+        createTransientAnimationsFolder,
+        createPersistentAnimationsFolder
+      ]
+    }
+  ];
+
+  // ---  --- //
+
+  parameters.config = config;
+  parameters.initDatGui = initDatGui;
+  parameters.updateForNewPostData = updateForNewPostData;
+  parameters.goHome = goHome;
+  parameters.hideMenu = hideMenu;
+  parameters.updateToPreSetConfigs = updateToPreSetConfigs;
+  parameters.filterPosts = filterPosts;
+  parameters.recordOpenChildFolders = recordOpenChildFolders;
+  parameters.grid = null;
+  parameters.gui = null;
+  parameters.categoriesFolder = null;
+  parameters.allCategories = [];
+  parameters.categoryData = {};
+
+  window.app = window.app || {};
+  app.parameters = parameters;
+
+  // ---  --- //
+
+  /**
+   * Sets up the dat.GUI controller.
+   *
+   * @param {Grid} grid
+   */
+  function initDatGui(grid) {
+    parameters.grid = grid;
+
+    storeOriginalConfigValues();
+
+    window.app.miscParams.init(grid);
+    window.app.persistentParams.init(grid);
+    window.app.transientParams.init(grid);
+
+    createDatGui();
+
+    window.app.parameters.updateToPreSetConfigs.call(window.app.parameters,
+        window.app.miscParams.config.preSetConfigs[window.app.miscParams.config.defaultPreSet]);
+
+    var debouncedResize = window.hg.util.debounce(resize, 300);
+    window.addEventListener('resize', debouncedResize, false);
+    debouncedResize();
+  }
+
+  function resize() {
+    setTimeout(function () {
+      // Don't show the menu on smaller screens.
+      if (window.hg.controller.isSmallScreen) {
+        hideMenu();
+      } else {
+        showMenu();
+      }
+    }, 10);
+  }
+
+  function createDatGui() {
+    parameters.gui = new dat.GUI();
+    parameters.gui.close();
+    parameters.gui.width = config.datGuiWidth;
+
+    window.gui = parameters.gui;
+
+    // Don't show the menu on smaller screens.
+    if (window.hg.controller.isSmallScreen) {
+      hideMenu();
+    } else {
+      showMenu();
+    }
+
+    createFolders();
+  }
+
+  function createFolders() {
+    createChildFolders(config.folders, parameters.gui);
+  }
+
+  function createChildFolders(childFolderConfigs, parentFolder) {
+    childFolderConfigs.forEach(function (folderConfig) {
+      if (typeof folderConfig === 'function') {
+        folderConfig(parentFolder);
+      } else {
+        var folder = parentFolder.addFolder(folderConfig.name);
+
+        folderConfig.folder = folder;
+
+        if (folderConfig.isOpen) {
+          folder.open();
+        }
+
+        if (folderConfig.createItems) {
+          folderConfig.createItems(folder);
+        }
+
+        // Recursively create descendent folders
+        if (folderConfig.children) {
+          createChildFolders(folderConfig.children, folder);
+        }
+      }
+    });
+  }
+
+  function createMiscellaneousFolders(parentFolder) {
+    createChildFolders(window.app.miscParams.config.folders, parentFolder);
+  }
+
+  function createTransientAnimationsFolder(parentFolder) {
+    createChildFolders(window.app.transientParams.config.folders, parentFolder);
+  }
+
+  function createPersistentAnimationsFolder(parentFolder) {
+    createChildFolders(window.app.persistentParams.config.folders, parentFolder);
+  }
+
+  function recordOpenFolders() {
+    recordOpenChildFolders(config.folders);
+    window.app.parameters.recordOpenChildFolders(window.app.miscParams.config.folders);
+    window.app.parameters.recordOpenChildFolders(window.app.transientParams.config.folders);
+    window.app.parameters.recordOpenChildFolders(window.app.persistentParams.config.folders);
+  }
+
+  function recordOpenChildFolders(childFolderConfigs) {
+    childFolderConfigs.forEach(function (folderConfig) {
+      if (typeof folderConfig !== 'function') {
+        folderConfig.isOpen = !folderConfig.folder.closed;
+
+        // Recurse
+        if (folderConfig.children) {
+          recordOpenChildFolders(folderConfig.children);
+        }
+      }
+    });
+  }
+
+  /**
+   * @param {Array.<PostData>} postData
+   */
+  function updateForNewPostData(postData) {
+    parameters.allCategories = getAllCategories(postData);
+    addCategoryMenuItems();
+
+    // ---  --- //
+
+    function getAllCategories(postData) {
+      // Collect a mapping from each category to its number of occurrences
+      var categoryMap = postData.reduce(function (map, datum) {
+        return datum.categories.reduce(function (map, category) {
+          map[category] = map[category] ? map[category] + 1 : 1;
+          return map;
+        }, map);
+      }, {});
+
+      // Collect an array containing each category, sorted by the number of occurrences of each category (in
+      // DESCENDING order)
+      var categoryArray = Object.keys(categoryMap)
+          .sort(function (category1, category2) {
+            return categoryMap[category2] - categoryMap[category1];
+          });
+
+      return categoryArray;
+    }
+
+    function addCategoryMenuItems() {
+      parameters.categoryData = {};
+
+      // Add an item for showing all categories
+      addCategoryItem(parameters.categoryData, 'all', parameters.categoriesFolder);
+      parameters.categoryData['all']['all'] = true;
+
+      // Add an item for showing each individual category
+      parameters.allCategories.forEach(function (category) {
+        addCategoryItem(parameters.categoryData, category, parameters.categoriesFolder);
+      });
+
+      // ---  --- //
+
+      function addCategoryItem(categoryData, label, folder) {
+        categoryData[label] = {};
+        categoryData[label][label] = false;
+        categoryData[label].menuItem = folder.add(categoryData[label], label)
+            .onChange(function () {
+              filterPosts(label);
+            });
+      }
+    }
+  }
+
+  function storeOriginalConfigValues() {
+    // Each module/file in the hex-grid project stores a reference to its constructor or singleton in the global hg
+    // namespace
+    originalHgConfigs = Object.keys(window.hg).reduce(function (configs, key) {
+      if (window.hg[key].config) {
+        configs[key] = window.hg.util.deepCopy(window.hg[key].config);
+      }
+      return configs;
+    }, {});
+  }
+
+  var categoryStackSize = 0;
+
+  function filterPosts(category) {
+    categoryStackSize++;
+
+    // Only filter when the checkbox is checked
+    if (parameters.categoryData[category][category]) {
+      // Make sure all other category filters are off (manual radio button logic)
+      Object.keys(parameters.categoryData).forEach(function (key) {
+        // Only turn off the other filters that are turned on
+        if (parameters.categoryData[key][key] && key !== category) {
+          parameters.categoryData[key].menuItem.setValue(false);
+        }
+      });
+
+      window.hg.controller.filterGridPostDataByCategory(parameters.grid, category);
+    } else if (categoryStackSize === 1) {
+      // If unchecking a textbox, turn on the 'all' filter
+      parameters.categoryData['all'].menuItem.setValue(true);
+    }
+
+    categoryStackSize--;
+  }
+
+  function goHome() {
+    console.log('Go Home clicked');
+    window.location.href = '/';
+  }
+
+  function hideMenu() {
+    // console.log('Hide Menu clicked');
+    document.querySelector('body > .dg').style.display = 'none';
+  }
+
+  function showMenu() {
+    document.querySelector('body > .dg').style.display = 'block';
+  }
+
+  function updateToPreSetConfigs(preSetConfig) {
+    console.log('Updating to pre-set configuration', preSetConfig);
+
+    recordOpenFolders();
+    resetAllConfigValues();
+    setPreSetConfigValues(preSetConfig);
+
+    parameters.grid.annotations.refresh();
+    window.hg.Grid.config.computeDependentValues();
+    window.hg.controller.resetGrid(parameters.grid);
+    parameters.grid.setBackgroundColor();
+    parameters.grid.resize();
+
+    refreshDatGui();
+  }
+
+  function resetAllConfigValues() {
+    // Reset each module's configuration parameters back to their default values
+    Object.keys(window.hg).forEach(function (moduleName) {
+      if (window.hg[moduleName].config) {
+        Object.keys(originalHgConfigs[moduleName]).forEach(function (parameterName) {
+          window.hg[moduleName].config[parameterName] =
+            window.hg.util.deepCopy(originalHgConfigs[moduleName][parameterName]);
+        });
+      }
+    });
+  }
+
+  function setPreSetConfigValues(preSetConfig) {
+    Object.keys(preSetConfig).forEach(function (moduleName) {
+      // Set all of the special parameters for this new pre-set configuration
+      Object.keys(preSetConfig[moduleName]).forEach(function (key) {
+        setModuleToMatchPreSet(window.hg[moduleName].config, preSetConfig[moduleName], key);
+      });
+
+      // Update the recurrence of any transient job
+      if (window.hg.controller.transientJobs[moduleName] &&
+          window.hg.controller.transientJobs[moduleName].toggleRecurrence) {
+        window.hg.controller.transientJobs[moduleName].toggleRecurrence(
+          parameters.grid,
+          window.hg[moduleName].config.isRecurring,
+          window.hg[moduleName].config.avgDelay,
+          window.hg[moduleName].config.delayDeviationRange);
+      }
+    });
+
+    // ---  --- //
+
+    function setModuleToMatchPreSet(moduleConfig, preSetConfig, key) {
+      // Recurse on nested objects in the configuration
+      if (typeof preSetConfig[key] === 'object') {
+        Object.keys(preSetConfig[key]).forEach(function (childKey) {
+          setModuleToMatchPreSet(moduleConfig[key], preSetConfig[key], childKey);
+        });
+      } else {
+        moduleConfig[key] = preSetConfig[key];
+      }
+    }
+  }
+
+  function refreshDatGui() {
+    parameters.gui.destroy();
+    createDatGui();
+  }
+
+  console.log('parameters module loaded');
+})();
+
+'use strict';
+
+/**
+ * This module defines a singleton that handles the contents of folders within the dat.GUI menu that represent
+ * persistent animation parameters.
+ *
+ * @module persistent-animation-parameters
+ */
+(function () {
+
+  var config = {};
+
+  config.folders = [
+    {
+      name: 'Persistent',
+      isOpen: false,
+      createItems: null,
+      children: [
+        {
+          name: 'Color Shift',
+          isOpen: false,
+          createItems: createColorShiftItems
+        },
+        {
+          name: 'Color Wave',
+          isOpen: false,
+          createItems: createColorWaveItems
+        },
+        {
+          name: 'Displacement Wave',
+          isOpen: false,
+          createItems: createDisplacementWaveItems
+        }
+      ]
+    }
+  ];
+
+  // ---  --- //
+
+  var persistentParams = {};
+
+  persistentParams.init = init;
+  persistentParams.config = config;
+
+  window.app = window.app || {};
+  app.persistentParams = persistentParams;
+
+  // ---  --- //
+
+  function init(grid) {
+    persistentParams.grid = grid;
+  }
+
+  function createColorShiftItems(folder) {
+    folder.add(window.hg.ColorShiftJob.config, 'transitionDurationMin', 1, 10000)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.transitionDurationMax = Math.max(
+              window.hg.ColorShiftJob.config.transitionDurationMin,
+              window.hg.ColorShiftJob.config.transitionDurationMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'transitionDurationMax', 1, 10000)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.transitionDurationMin = Math.min(
+              window.hg.ColorShiftJob.config.transitionDurationMin,
+              window.hg.ColorShiftJob.config.transitionDurationMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'hueDeltaMin', -360, 360)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.hueDeltaMax = Math.max(
+              window.hg.ColorShiftJob.config.hueDeltaMin,
+              window.hg.ColorShiftJob.config.hueDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'hueDeltaMax', -360, 360)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.hueDeltaMin = Math.min(
+              window.hg.ColorShiftJob.config.hueDeltaMin,
+              window.hg.ColorShiftJob.config.hueDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'saturationDeltaMin', -100, 100)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.saturationDeltaMax = Math.max(
+              window.hg.ColorShiftJob.config.saturationDeltaMin,
+              window.hg.ColorShiftJob.config.saturationDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'saturationDeltaMax', -100, 100)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.saturationDeltaMin = Math.min(
+              window.hg.ColorShiftJob.config.saturationDeltaMin,
+              window.hg.ColorShiftJob.config.saturationDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'lightnessDeltaMin', -100, 100)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.lightnessDeltaMax = Math.max(
+              window.hg.ColorShiftJob.config.lightnessDeltaMin,
+              window.hg.ColorShiftJob.config.lightnessDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'lightnessDeltaMax', -100, 100)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.lightnessDeltaMin = Math.min(
+              window.hg.ColorShiftJob.config.lightnessDeltaMin,
+              window.hg.ColorShiftJob.config.lightnessDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'imageBackgroundScreenOpacityDeltaMin', -1.0, 1.0)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax = Math.max(
+              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin,
+              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax
+          );
+        });
+    folder.add(window.hg.ColorShiftJob.config, 'imageBackgroundScreenOpacityDeltaMax', -1.0, 1.0)
+        .onChange(function (value) {
+          window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin = Math.min(
+              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin,
+              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax
+          );
+        });
+  }
+
+  function createColorWaveItems(folder) {
+    folder.add(window.hg.ColorWaveJob.config, 'period', 1, 10000)
+        .onChange(function (value) {
+          window.hg.ColorWaveJob.config.halfPeriod = value / 2;
+        });
+    folder.add(window.hg.ColorWaveJob.config, 'wavelength', 1, 4000)
+        .onChange(function () {
+          window.hg.controller.persistentJobs.ColorWaveJob.start(persistentParams.grid);
+        });
+    folder.add(window.hg.ColorWaveJob.config, 'originX', -500, 3000)
+        .onChange(function () {
+          window.hg.controller.persistentJobs.ColorWaveJob.start(persistentParams.grid);
+        });
+    folder.add(window.hg.ColorWaveJob.config, 'originY', -500, 3000)
+        .onChange(function () {
+          window.hg.controller.persistentJobs.ColorWaveJob.start(persistentParams.grid);
+        });
+    folder.add(window.hg.ColorWaveJob.config, 'deltaHue', 0, 360);
+    folder.add(window.hg.ColorWaveJob.config, 'deltaSaturation', 0, 100);
+    folder.add(window.hg.ColorWaveJob.config, 'deltaLightness', 0, 100);
+    folder.add(window.hg.ColorWaveJob.config, 'opacity', 0, 1);
+  }
+
+  function createDisplacementWaveItems(folder) {
+    folder.add(window.hg.DisplacementWaveJob.config, 'period', 1, 10000)
+        .onChange(function (value) {
+          window.hg.DisplacementWaveJob.config.halfPeriod = value / 2;
+        });
+    folder.add(window.hg.DisplacementWaveJob.config, 'wavelength', 1, 4000)
+        .onChange(function () {
+          window.hg.controller.persistentJobs.DisplacementWaveJob.start(persistentParams.grid);
+        });
+    folder.add(window.hg.DisplacementWaveJob.config, 'originX', -500, 3000)
+        .onChange(function () {
+          window.hg.controller.persistentJobs.DisplacementWaveJob.start(persistentParams.grid);
+        });
+    folder.add(window.hg.DisplacementWaveJob.config, 'originY', -500, 3000)
+        .onChange(function () {
+          window.hg.controller.persistentJobs.DisplacementWaveJob.start(persistentParams.grid);
+        });
+    folder.add(window.hg.DisplacementWaveJob.config, 'tileDeltaX', -300, 300);
+    folder.add(window.hg.DisplacementWaveJob.config, 'tileDeltaY', -300, 300);
+  }
+
+  console.log('persistent-animation-parameters module loaded');
+})();
+
+'use strict';
+
+/**
+ * This module defines a singleton that handles the contents of folders within the dat.GUI menu that represent
+ * transient animation parameters.
+ *
+ * @module transient-animation-parameters
+ */
+(function () {
+
+  var config = {};
+
+  config.folders = [
+    {
+      name: 'Transient',
+      isOpen: false,
+      createItems: null,
+      children: [
+        {
+          name: 'Open/Close Post',
+          isOpen: false,
+          createItems: createOpenClosePostItems
+        },
+        {
+          name: 'Displacement Radiate',
+          isOpen: false,
+          createItems: createDisplacementRadiateItems
+        },
+        {
+          name: 'Hover Highlight',
+          isOpen: false,
+          createItems: createHoverHighlightItems
+        },
+        {
+          name: 'Radiating Highlight',
+          isOpen: false,
+          createItems: createRadiatingHighlightItems
+        },
+        {
+          name: 'Intra-Tile Radiate',
+          isOpen: false,
+          createItems: createIntraTileRadiateItems
+        },
+        {
+          name: 'Random Lines',
+          isOpen: false,
+          createItems: createRandomLinesItems
+        },
+        {
+          name: 'Radiating Lines',
+          isOpen: false,
+          createItems: createRadiatingLinesItems
+        },
+        {
+          name: 'Pan',
+          isOpen: false,
+          createItems: createPanItems
+        },
+        {
+          name: 'Spread',
+          isOpen: false,
+          createItems: createSpreadItems
+        },
+        {
+          name: 'Tile Border',
+          isOpen: false,
+          createItems: createTileBorderItems
+        }
+      ]
+    }
+  ];
+
+  // ---  --- //
+
+  var transientParams = {};
+
+  transientParams.init = init;
+  transientParams.config = config;
+
+  window.app = window.app || {};
+  app.transientParams = transientParams;
+
+  // ---  --- //
+
+  function init(grid) {
+    transientParams.grid = grid;
+  }
+
+  function createOpenClosePostItems(folder) {
+    var data = {
+      'triggerOpenPost': window.hg.controller.transientJobs.OpenPostJob.createRandom.bind(
+          window.hg.controller, transientParams.grid),
+      'triggerClosePost': window.hg.controller.transientJobs.ClosePostJob.createRandom.bind(
+              window.hg.controller, transientParams.grid, false),
+      'triggerTogglePost': function () {
+        if (transientParams.grid.isPostOpen) {
+          data.triggerClosePost();
+        } else {
+          data.triggerOpenPost();
+        }
+      }
+    };
+
+    folder.add(data, 'triggerTogglePost');
+
+    folder.add(window.hg.OpenPostJob.config, 'duration', 10, 10000)
+        .name('Open Duration');
+    folder.add(window.hg.ClosePostJob.config, 'duration', 10, 10000)
+        .name('Close Duration');
+    folder.add(window.hg.OpenPostJob.config, 'expandedDisplacementTileCount', 0, 5)
+        .step(1);
+  }
+
+  function createDisplacementRadiateItems(folder) {
+    var data = {
+      'triggerDisplacement':
+          window.hg.controller.transientJobs.DisplacementRadiateJob.createRandom.bind(
+              window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerDisplacement');
+
+    folder.add(window.hg.DisplacementRadiateJob.config, 'duration', 10, 10000);
+
+    // TODO:
+
+    folder.add(window.hg.DisplacementRadiateJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.DisplacementRadiateJob.config, 'avgDelay', 10, 10000)
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.DisplacementRadiateJob.config, 'delayDeviationRange', 0, 10000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.DisplacementRadiateJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.DisplacementRadiateJob.config.isRecurring,
+          window.hg.DisplacementRadiateJob.config.avgDelay,
+          window.hg.DisplacementRadiateJob.config.delayDeviationRange);
+    }
+  }
+
+  function createHoverHighlightItems(folder) {
+    var data, colors;
+
+    colors = [];
+    colors.deltaColor = window.hg.util.hslToHsv({
+      h: window.hg.HighlightHoverJob.config.deltaHue,
+      s: window.hg.HighlightHoverJob.config.deltaSaturation * 0.01,
+      l: window.hg.HighlightHoverJob.config.deltaLightness * 0.01
+    });
+
+    data = {
+      'triggerHighlightHover': window.hg.controller.transientJobs.HighlightHoverJob.createRandom.bind(
+          window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerHighlightHover');
+
+    folder.add(window.hg.HighlightHoverJob.config, 'duration', 10, 10000);
+    folder.addColor(colors, 'deltaColor')
+        .onChange(function () {
+          var color = window.hg.util.hsvToHsl(colors.deltaColor);
+
+          window.hg.HighlightHoverJob.config.deltaHue = color.h;
+          window.hg.HighlightHoverJob.config.deltaSaturation = color.s * 100;
+          window.hg.HighlightHoverJob.config.deltaLightness = color.l * 100;
+        });
+    folder.add(window.hg.HighlightHoverJob.config, 'opacity', 0, 1);
+
+    folder.add(window.hg.HighlightHoverJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.HighlightHoverJob.config, 'avgDelay', 10, 2000)
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.HighlightHoverJob.config, 'delayDeviationRange', 0, 2000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.HighlightHoverJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.HighlightHoverJob.config.isRecurring,
+          window.hg.HighlightHoverJob.config.avgDelay,
+          window.hg.HighlightHoverJob.config.delayDeviationRange);
+    }
+  }
+
+  function createRadiatingHighlightItems(folder) {
+    var data, colors;
+
+    colors = [];
+    colors.deltaColor = window.hg.util.hslToHsv({
+      h: window.hg.HighlightRadiateJob.config.deltaHue,
+      s: window.hg.HighlightRadiateJob.config.deltaSaturation * 0.01,
+      l: window.hg.HighlightRadiateJob.config.deltaLightness * 0.01
+    });
+
+    data = {
+      'triggerHighlightRadiate':
+          window.hg.controller.transientJobs.HighlightRadiateJob.createRandom.bind(
+              window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerHighlightRadiate');
+
+    folder.add(window.hg.HighlightRadiateJob.config, 'shimmerSpeed', 0.1, 10);
+    folder.add(window.hg.HighlightRadiateJob.config, 'shimmerWaveWidth', 1, 2000);
+    folder.add(window.hg.HighlightRadiateJob.config, 'duration', 10, 10000);
+    folder.addColor(colors, 'deltaColor')
+        .onChange(function () {
+          var color = window.hg.util.hsvToHsl(colors.deltaColor);
+
+          window.hg.HighlightRadiateJob.config.deltaHue = color.h;
+          window.hg.HighlightRadiateJob.config.deltaSaturation = color.s * 100;
+          window.hg.HighlightRadiateJob.config.deltaLightness = color.l * 100;
+        });
+    folder.add(window.hg.HighlightRadiateJob.config, 'opacity', 0, 1);
+
+    folder.add(window.hg.HighlightRadiateJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.HighlightRadiateJob.config, 'avgDelay', 10, 10000)
+        .onChange(toggleRecurrence);
+    folder
+        .add(window.hg.HighlightRadiateJob.config, 'delayDeviationRange', 0, 10000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.HighlightRadiateJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.HighlightRadiateJob.config.isRecurring,
+          window.hg.HighlightRadiateJob.config.avgDelay,
+          window.hg.HighlightRadiateJob.config.delayDeviationRange);
+    }
+  }
+
+  function createIntraTileRadiateItems(folder) {
+    var data = {
+      'triggerIntraTileRadiate':
+          window.hg.controller.transientJobs.IntraTileRadiateJob.createRandom.bind(
+              window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerIntraTileRadiate');
+
+    folder.add(window.hg.IntraTileRadiateJob.config, 'duration', 10, 10000);
+
+    // TODO:
+
+    folder.add(window.hg.IntraTileRadiateJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.IntraTileRadiateJob.config, 'avgDelay', 10, 10000)
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.IntraTileRadiateJob.config, 'delayDeviationRange',
+        0, 10000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.IntraTileRadiateJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.IntraTileRadiateJob.config.isRecurring,
+          window.hg.IntraTileRadiateJob.config.avgDelay,
+          window.hg.IntraTileRadiateJob.config.delayDeviationRange);
+    }
+  }
+
+  function createRandomLinesItems(folder) {
+    var data = {
+      'triggerLine': window.hg.controller.transientJobs.LineJob.createRandom.bind(
+          window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerLine');
+
+    folder.add(window.hg.LineJob.config, 'duration', 100, 20000);
+    folder.add(window.hg.LineJob.config, 'lineWidth', 1, 100);
+    folder.add(window.hg.LineJob.config, 'lineLength', 10, 60000);
+    folder.add(window.hg.LineJob.config, 'lineSidePeriod', 5, 500);
+    folder.add(window.hg.LineJob.config, 'startSaturation', 0, 100);
+    folder.add(window.hg.LineJob.config, 'startLightness', 0, 100);
+    folder.add(window.hg.LineJob.config, 'startOpacity', 0, 1);
+    folder.add(window.hg.LineJob.config, 'endSaturation', 0, 100);
+    folder.add(window.hg.LineJob.config, 'endLightness', 0, 100);
+    folder.add(window.hg.LineJob.config, 'endOpacity', 0, 1);
+    folder.add(window.hg.LineJob.config, 'sameDirectionProb', 0, 1);
+
+    folder.add(window.hg.LineJob.config, 'isBlurOn');
+    folder.add(window.hg.LineJob.config, 'blurStdDeviation', 0, 80);
+
+    folder.add(window.hg.LineJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.LineJob.config, 'avgDelay', 10, 10000)
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.LineJob.config, 'delayDeviationRange', 0, 10000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.LineJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.LineJob.config.isRecurring,
+          window.hg.LineJob.config.avgDelay,
+          window.hg.LineJob.config.delayDeviationRange);
+    }
+  }
+
+  function createRadiatingLinesItems(folder) {
+    var data = {
+      'triggerLinesRadiate': window.hg.controller.transientJobs.LinesRadiateJob.createRandom.bind(
+          window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerLinesRadiate');
+
+    folder.add(window.hg.LinesRadiateJob.config, 'duration', 100, 20000);
+    folder.add(window.hg.LinesRadiateJob.config, 'lineWidth', 1, 100);
+    folder.add(window.hg.LinesRadiateJob.config, 'lineLength', 10, 60000);
+    folder.add(window.hg.LinesRadiateJob.config, 'lineSidePeriod', 5, 500);
+    folder.add(window.hg.LinesRadiateJob.config, 'startSaturation', 0, 100);
+    folder.add(window.hg.LinesRadiateJob.config, 'startLightness', 0, 100);
+    folder.add(window.hg.LinesRadiateJob.config, 'startOpacity', 0, 1);
+    folder.add(window.hg.LinesRadiateJob.config, 'endSaturation', 0, 100);
+    folder.add(window.hg.LinesRadiateJob.config, 'endLightness', 0, 100);
+    folder.add(window.hg.LinesRadiateJob.config, 'endOpacity', 0, 1);
+    folder.add(window.hg.LinesRadiateJob.config, 'sameDirectionProb', 0, 1);
+
+    folder.add(window.hg.LinesRadiateJob.config, 'isBlurOn');
+    folder.add(window.hg.LinesRadiateJob.config, 'blurStdDeviation', 0, 80);
+
+    folder.add(window.hg.LinesRadiateJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.LinesRadiateJob.config, 'avgDelay', 10, 10000)
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.LinesRadiateJob.config, 'delayDeviationRange', 0, 10000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.LinesRadiateJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.LinesRadiateJob.config.isRecurring,
+          window.hg.LinesRadiateJob.config.avgDelay,
+          window.hg.LinesRadiateJob.config.delayDeviationRange);
+    }
+  }
+
+  function createPanItems(folder) {
+    var data = {
+      'triggerPan':
+          window.hg.controller.transientJobs.PanJob.createRandom.bind(
+              window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerPan');
+
+    folder.add(window.hg.PanJob.config, 'duration', 10, 10000);
+
+    folder.add(window.hg.PanJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.PanJob.config, 'avgDelay', 10, 10000)
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.PanJob.config, 'delayDeviationRange', 0, 10000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.PanJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.PanJob.config.isRecurring,
+          window.hg.PanJob.config.avgDelay,
+          window.hg.PanJob.config.delayDeviationRange);
+    }
+  }
+
+  function createSpreadItems(folder) {
+    var data = {
+      'triggerSpread':
+          window.hg.controller.transientJobs.SpreadJob.createRandom.bind(
+              window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerSpread');
+
+    folder.add(window.hg.SpreadJob.config, 'duration', 10, 10000);
+
+    folder.add(window.hg.SpreadJob.config, 'displacementRatio', 0.01, 1);
+
+    folder.add(window.hg.SpreadJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.SpreadJob.config, 'avgDelay', 10, 10000)
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.SpreadJob.config, 'delayDeviationRange', 0, 10000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.SpreadJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.SpreadJob.config.isRecurring,
+          window.hg.SpreadJob.config.avgDelay,
+          window.hg.SpreadJob.config.delayDeviationRange);
+    }
+  }
+
+  function createTileBorderItems(folder) {
+    var data = {
+      'triggerTileBorder': window.hg.controller.transientJobs.TileBorderJob.createRandom.bind(
+              window.hg.controller, transientParams.grid)
+    };
+
+    folder.add(data, 'triggerTileBorder');
+
+    folder.add(window.hg.TileBorderJob.config, 'duration', 10, 10000);
+
+    // TODO:
+
+    folder.add(window.hg.TileBorderJob.config, 'isRecurring')
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.TileBorderJob.config, 'avgDelay', 10, 10000)
+        .onChange(toggleRecurrence);
+    folder.add(window.hg.TileBorderJob.config, 'delayDeviationRange', 0, 10000)
+        .onChange(toggleRecurrence);
+
+    // ---  --- //
+
+    function toggleRecurrence() {
+      window.hg.controller.transientJobs.TileBorderJob.toggleRecurrence(
+          transientParams.grid,
+          window.hg.TileBorderJob.config.isRecurring,
+          window.hg.TileBorderJob.config.avgDelay,
+          window.hg.TileBorderJob.config.delayDeviationRange);
+    }
+  }
+
+  console.log('transient-animation-parameters module loaded');
+})();
+
 /**
  * dat-gui JavaScript Controller Library
  * http://code.google.com/p/dat-gui
@@ -6979,210 +8575,6 @@ if (typeof define === 'function' && define.amd) {
 })();
 
 /**
- * This module defines a singleton for animating things.
- *
- * The animator singleton handles the animation loop for the application and updates all
- * registered AnimationJobs during each animation frame.
- *
- * @module animator
- */
-(function () {
-  /**
-   * @typedef {{start: Function, update: Function(Number, Number), draw: Function, cancel: Function, init: Function, isComplete: Boolean}} AnimationJob
-   */
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private static variables
-
-  var animator = {};
-  var config = {};
-
-  config.deltaTimeUpperThreshold = 160;
-
-  // ------------------------------------------------------------------------------------------- //
-  // Expose this singleton
-
-  animator.jobs = [];
-  animator.previousTime = window.performance && window.performance.now() || 0;
-  animator.isLooping = false;
-  animator.isPaused = true;
-  animator.startJob = startJob;
-  animator.cancelJob = cancelJob;
-  animator.cancelAll = cancelAll;
-
-  animator.config = config;
-
-  // Expose this module
-  window.hg = window.hg || {};
-  window.hg.animator = animator;
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private static functions
-
-  /**
-   * This is the animation loop that drives all of the animation.
-   *
-   * @param {Number} currentTime
-   */
-  function animationLoop(currentTime) {
-    var deltaTime = currentTime - animator.previousTime;
-    deltaTime = deltaTime > config.deltaTimeUpperThreshold ?
-        config.deltaTimeUpperThreshold : deltaTime;
-    animator.isLooping = true;
-
-    if (!animator.isPaused) {
-      updateJobs(currentTime, deltaTime);
-      drawJobs();
-      window.hg.util.requestAnimationFrame(animationLoop);
-    } else {
-      animator.isLooping = false;
-    }
-
-    animator.previousTime = currentTime;
-  }
-
-  /**
-   * Updates all of the active AnimationJobs.
-   *
-   * @param {Number} currentTime
-   * @param {Number} deltaTime
-   */
-  function updateJobs(currentTime, deltaTime) {
-    var i, count;
-
-    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
-      animator.jobs[i].update(currentTime, deltaTime);
-
-      // Remove jobs from the list after they are complete
-      if (animator.jobs[i].isComplete) {
-        removeJob(animator.jobs[i], i);
-        i--;
-        count--;
-      }
-    }
-  }
-
-  /**
-   * Removes the given job from the collection of active, animating jobs.
-   *
-   * @param {AnimationJob} job
-   * @param {Number} [index]
-   */
-  function removeJob(job, index) {
-    var count;
-
-    if (typeof index === 'number') {
-      animator.jobs.splice(index, 1);
-    } else {
-      for (index = 0, count = animator.jobs.length; index < count; index += 1) {
-        if (animator.jobs[index] === job) {
-          animator.jobs.splice(index, 1);
-          break;
-        }
-      }
-    }
-
-    // Stop the animation loop when there are no more jobs to animate
-    if (animator.jobs.length === 0) {
-      animator.isPaused = true;
-    }
-  }
-
-  /**
-   * Draws all of the active AnimationJobs.
-   */
-  function drawJobs() {
-    var i, count;
-
-    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
-      animator.jobs[i].draw();
-    }
-  }
-
-  /**
-   * Starts the animation loop if it is not already running
-   */
-  function startAnimationLoop() {
-    animator.isPaused = false;
-
-    if (!animator.isLooping) {
-      animator.isLooping = true;
-      window.hg.util.requestAnimationFrame(firstAnimationLoop);
-    }
-
-    // ---  --- //
-
-    /**
-     * The time value provided by requestAnimationFrame appears to be the number of milliseconds since the page loaded.
-     * However, the rest of the application logic expects time values relative to the Unix epoch. This bootstrapping
-     * function helps in translating from the one time frame to the other.
-     *
-     * @param {Number} currentTime
-     */
-    function firstAnimationLoop(currentTime) {
-      animator.previousTime = currentTime;
-
-      window.hg.util.requestAnimationFrame(animationLoop);
-    }
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Public static functions
-
-  /**
-   * Starts the given AnimationJob.
-   *
-   * @param {AnimationJob} job
-   */
-  function startJob(job) {
-    // Is this a restart?
-    if (!job.isComplete) {
-      console.log('Job restarting: ' + job.constructor.name);
-
-      if (job.refresh) {
-        job.refresh();
-      } else {
-        job.cancel();
-
-        job.init();// TODO: get rid of this init function
-        job.start(animator.previousTime);
-      }
-    } else {
-      console.log('Job starting: ' + job.constructor.name);
-
-      job.init();// TODO: get rid of this init function
-      job.start(animator.previousTime);
-      animator.jobs.push(job);
-    }
-
-    startAnimationLoop();
-  }
-
-  /**
-   * Cancels the given AnimationJob.
-   *
-   * @param {AnimationJob} job
-   */
-  function cancelJob(job) {
-    console.log('Job cancelling: ' + job.constructor.name);
-
-    job.cancel();
-    removeJob(job);
-  }
-
-  /**
-   * Cancels all running AnimationJobs.
-   */
-  function cancelAll() {
-    while (animator.jobs.length) {
-      cancelJob(animator.jobs[0]);
-    }
-  }
-
-  console.log('animator module loaded');
-})();
-
-/**
  * @typedef {AnimationJob} Annotations
  */
 
@@ -12558,1100 +13950,207 @@ if (typeof define === 'function' && define.amd) {
 })();
 
 /**
- * @typedef {AnimationJob} ColorResetJob
- */
-
-/**
- * This module defines a constructor for ColorResetJob objects.
+ * This module defines a singleton for animating things.
  *
- * ColorResetJob objects reset tile color values during each animation frame.
+ * The animator singleton handles the animation loop for the application and updates all
+ * registered AnimationJobs during each animation frame.
  *
- * @module ColorResetJob
+ * @module animator
  */
 (function () {
+  /**
+   * @typedef {{start: Function, update: Function(Number, Number), draw: Function, cancel: Function, init: Function, isComplete: Boolean}} AnimationJob
+   */
+
   // ------------------------------------------------------------------------------------------- //
   // Private static variables
 
+  var animator = {};
   var config = {};
 
-  //  --- Dependent parameters --- //
-
-  config.computeDependentValues = function () {
-  };
-
-  config.computeDependentValues();
+  config.deltaTimeUpperThreshold = 160;
 
   // ------------------------------------------------------------------------------------------- //
-  // Private dynamic functions
+  // Expose this singleton
 
-  // ------------------------------------------------------------------------------------------- //
-  // Private static functions
+  animator.jobs = [];
+  animator.previousTime = window.performance && window.performance.now() || 0;
+  animator.isLooping = false;
+  animator.isPaused = true;
+  animator.startJob = startJob;
+  animator.cancelJob = cancelJob;
+  animator.cancelAll = cancelAll;
 
-  // ------------------------------------------------------------------------------------------- //
-  // Public dynamic functions
-
-  /**
-   * Sets this ColorResetJob as started.
-   *
-   * @this ColorResetJob
-   * @param {Number} startTime
-   */
-  function start(startTime) {
-    var job = this;
-
-    job.startTime = startTime;
-    job.isComplete = false;
-  }
-
-  /**
-   * Updates the animation progress of this ColorResetJob to match the given time.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this ColorResetJob
-   * @param {Number} currentTime
-   * @param {Number} deltaTime
-   */
-  function update(currentTime, deltaTime) {
-    var job, i, count;
-
-    job = this;
-
-    for (i = 0, count = job.grid.allTiles.length; i < count; i += 1) {
-      job.grid.allTiles[i].currentColor.h = job.grid.allTiles[i].originalColor.h;
-      job.grid.allTiles[i].currentColor.s = job.grid.allTiles[i].originalColor.s;
-      job.grid.allTiles[i].currentColor.l = job.grid.allTiles[i].originalColor.l;
-      job.grid.allTiles[i].imageScreenOpacity = window.hg.TilePost.config.inactiveScreenOpacity;
-    }
-  }
-
-  /**
-   * Draws the current state of this ColorResetJob.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this ColorResetJob
-   */
-  function draw() {
-    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
-  }
-
-  /**
-   * Stops this ColorResetJob, and returns the element its original form.
-   *
-   * @this ColorResetJob
-   */
-  function cancel() {
-    var job = this;
-
-    job.isComplete = true;
-  }
-
-  /**
-   * @this ColorResetJob
-   */
-  function refresh() {
-    var job = this;
-
-    init.call(job);
-  }
-
-  /**
-   * @this ColorResetJob
-   */
-  function init() {
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Expose this module's constructor
-
-  /**
-   * @constructor
-   * @global
-   * @param {Grid} grid
-   */
-  function ColorResetJob(grid) {
-    var job = this;
-
-    job.grid = grid;
-    job.startTime = 0;
-    job.isComplete = true;
-
-    job.start = start;
-    job.update = update;
-    job.draw = draw;
-    job.cancel = cancel;
-    job.refresh = refresh;
-    job.init = init;
-
-    job.init();
-
-    console.log('ColorResetJob created');
-  }
-
-  ColorResetJob.config = config;
+  animator.config = config;
 
   // Expose this module
   window.hg = window.hg || {};
-  window.hg.ColorResetJob = ColorResetJob;
-
-  console.log('ColorResetJob module loaded');
-})();
-
-/**
- * @typedef {AnimationJob} ColorShiftJob
- */
-
-/**
- * @typedef {Object} ShiftStatus
- * @property {Number} timeStart
- * @property {Number} timeEnd
- */
-
-/**
- * @typedef {ShiftStatus} NonContentTileShiftStatus
- * @property {Number} hueDeltaStart
- * @property {Number} hueDeltaEnd
- * @property {Number} saturationDeltaStart
- * @property {Number} saturationDeltaEnd
- * @property {Number} lightnessDeltaStart
- * @property {Number} lightnessDeltaEnd
- */
-
-/**
- * @typedef {ShiftStatus} ContentTileShiftStatus
- * @property {Number} opacityDeltaStart
- * @property {Number} opacityDeltaEnd
- */
-
-/**
- * This module defines a constructor for ColorShiftJob objects.
- *
- * ColorShiftJob objects animate the colors of the tiles in a random fashion.
- *
- * @module ColorShiftJob
- */
-(function () {
-  // ------------------------------------------------------------------------------------------- //
-  // Private static variables
-
-  var config = {};
-
-  config.hueDeltaMin = -20;
-  config.hueDeltaMax = 20;
-  config.saturationDeltaMin = 0;
-  config.saturationDeltaMax = 0;
-  config.lightnessDeltaMin = 0;
-  config.lightnessDeltaMax = 0;
-
-  config.imageBackgroundScreenOpacityDeltaMin = -0.05;
-  config.imageBackgroundScreenOpacityDeltaMax = 0.05;
-
-  config.transitionDurationMin = 200;
-  config.transitionDurationMax = 2000;
-
-  //  --- Dependent parameters --- //
-
-  config.computeDependentValues = function () {
-  };
-
-  config.computeDependentValues();
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private dynamic functions
-
-  /**
-   * Creates a shift status object for each tile to keep track of their individual animation
-   * progress.
-   *
-   * @this ColorShiftJob
-   */
-  function initTileShiftStatuses() {
-    var job, i, count;
-
-    job = this;
-
-    job.shiftStatusesNonContentTiles = [];
-    job.shiftStatusesContentTiles = [];
-
-    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
-      job.shiftStatusesNonContentTiles[i] = {
-        timeStart: 0,
-        timeEnd: 0,
-        hueDeltaStart: 0,
-        hueDeltaEnd: 0,
-        saturationDeltaStart: 0,
-        saturationDeltaEnd: 0,
-        lightnessDeltaStart: 0,
-        lightnessDeltaEnd: 0,
-      };
-    }
-
-    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
-      job.shiftStatusesContentTiles[i] = {
-        timeStart: 0,
-        timeEnd: 0,
-        opacityDeltaStart: 0,
-        opacityDeltaEnd: 0,
-      };
-    }
-  }
+  window.hg.animator = animator;
 
   // ------------------------------------------------------------------------------------------- //
   // Private static functions
 
   /**
-   * Updates the animation progress of the given non-content tile.
+   * This is the animation loop that drives all of the animation.
    *
    * @param {Number} currentTime
-   * @param {Tile} tile
-   * @param {NonContentTileShiftStatus} shiftStatus
    */
-  function updateNonContentTile(currentTime, tile, shiftStatus) {
-    if (currentTime > shiftStatus.timeEnd) {
-      assignNewNonContentTileTransition(currentTime, shiftStatus);
+  function animationLoop(currentTime) {
+    var deltaTime = currentTime - animator.previousTime;
+    deltaTime = deltaTime > config.deltaTimeUpperThreshold ?
+        config.deltaTimeUpperThreshold : deltaTime;
+    animator.isLooping = true;
+
+    if (!animator.isPaused) {
+      updateJobs(currentTime, deltaTime);
+      drawJobs();
+      window.hg.util.requestAnimationFrame(animationLoop);
+    } else {
+      animator.isLooping = false;
     }
 
-    var progress = (currentTime - shiftStatus.timeStart) /
-        (shiftStatus.timeEnd - shiftStatus.timeStart);
-
-    tile.currentColor.h += progress *
-        (shiftStatus.hueDeltaEnd - shiftStatus.hueDeltaStart) +
-        shiftStatus.hueDeltaStart;
-    tile.currentColor.s += progress *
-        (shiftStatus.saturationDeltaEnd - shiftStatus.saturationDeltaStart) +
-        shiftStatus.saturationDeltaStart;
-    tile.currentColor.l += progress *
-        (shiftStatus.lightnessDeltaEnd - shiftStatus.lightnessDeltaStart) +
-        shiftStatus.lightnessDeltaStart;
-
-    // Also add a gradual hue shift across all tiles.
-    tile.currentColor.h += currentTime / 300;
-    tile.currentColor.h %= 360;
+    animator.previousTime = currentTime;
   }
 
   /**
-   * Updates the animation progress of the given content tile.
+   * Updates all of the active AnimationJobs.
    *
-   * @param {Number} currentTime
-   * @param {Tile} tile
-   * @param {ContentTileShiftStatus} shiftStatus
-   */
-  function updateContentTile(currentTime, tile, shiftStatus) {
-    if (currentTime > shiftStatus.timeEnd) {
-      assignNewContentTileTransition(currentTime, shiftStatus);
-    }
-
-    var progress = (currentTime - shiftStatus.timeStart) /
-        (shiftStatus.timeEnd - shiftStatus.timeStart);
-
-    tile.imageScreenOpacity += progress *
-        (shiftStatus.opacityDeltaEnd - shiftStatus.opacityDeltaStart) +
-        shiftStatus.opacityDeltaStart;
-    // tile.imageScreenOpacity += -tileProgress * config.opacity *
-    //     config.deltaOpacityImageBackgroundScreen;
-  }
-
-  /**
-   * @param {Number} currentTime
-   * @param {NonContentTileShiftStatus} shiftStatus
-   */
-  function assignNewNonContentTileTransition(currentTime, shiftStatus) {
-    assignNewTransitionDuration(currentTime, shiftStatus);
-
-    shiftStatus.hueDeltaStart = shiftStatus.hueDeltaEnd;
-    shiftStatus.hueDeltaEnd = getNewHueDelta();
-
-    shiftStatus.saturationDeltaStart = shiftStatus.saturationDeltaEnd;
-    shiftStatus.saturationDeltaEnd = getNewSaturationDelta();
-
-    shiftStatus.lightnessDeltaStart = shiftStatus.lightnessDeltaEnd;
-    shiftStatus.lightnessDeltaEnd = getNewLightnessDelta();
-  }
-
-  /**
-   * @param {Number} currentTime
-   * @param {ContentTileShiftStatus} shiftStatus
-   */
-  function assignNewContentTileTransition(currentTime, shiftStatus) {
-    assignNewTransitionDuration(currentTime, shiftStatus);
-
-    shiftStatus.opacityDeltaStart = shiftStatus.opacityDeltaEnd;
-    shiftStatus.opacityDeltaEnd = getNewOpacityDelta();
-  }
-
-  /**
-   * Create a new duration value, and set up the start and end time to account for any time gap
-   * between the end of the last transition and the current time.
-   *
-   * @param {Number} currentTime
-   * @param {ShiftStatus} shiftStatus
-   */
-  function assignNewTransitionDuration(currentTime, shiftStatus) {
-    var elapsedTimeSinceEnd = currentTime - shiftStatus.timeEnd;
-    var newDuration = getNewTransitionDuration();
-    while (newDuration <= elapsedTimeSinceEnd) {
-      elapsedTimeSinceEnd -= newDuration;
-      newDuration = getNewTransitionDuration();
-    }
-
-    shiftStatus.timeStart = currentTime - elapsedTimeSinceEnd;
-    shiftStatus.timeEnd = shiftStatus.timeStart + newDuration;
-  }
-
-  /**
-   * @returns {Number} A random shift transition duration value between the configured min and max.
-   */
-  function getNewTransitionDuration() {
-    return Math.random() * (config.transitionDurationMax - config.transitionDurationMin) +
-        config.transitionDurationMin;
-  }
-
-  /**
-   * @returns {Number} A random hue delta value between the configured min and max.
-   */
-  function getNewHueDelta() {
-    return Math.random() * (config.hueDeltaMax - config.hueDeltaMin) + config.hueDeltaMin;
-  }
-
-  /**
-   * @returns {Number} A random saturation delta value between the configured min and max.
-   */
-  function getNewSaturationDelta() {
-    return Math.random() * (config.saturationDeltaMax - config.saturationDeltaMin) +
-        config.saturationDeltaMin;
-  }
-
-  /**
-   * @returns {Number} A random lightness delta value between the configured min and max.
-   */
-  function getNewLightnessDelta() {
-    return Math.random() * (config.lightnessDeltaMax - config.lightnessDeltaMin) +
-        config.lightnessDeltaMin;
-  }
-
-  /**
-   * @returns {Number} A random opacity delta value between the configured min and max.
-   */
-  function getNewOpacityDelta() {
-    return Math.random() * (config.imageBackgroundScreenOpacityDeltaMax -
-        config.imageBackgroundScreenOpacityDeltaMin) +
-        config.imageBackgroundScreenOpacityDeltaMin;
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Public dynamic functions
-
-  /**
-   * Sets this ColorShiftJob as started.
-   *
-   * @this ColorShiftJob
-   * @param {Number} startTime
-   */
-  function start(startTime) {
-    var job, i, count;
-
-    job = this;
-
-    job.startTime = startTime;
-    job.isComplete = false;
-
-    for (i = 0, count = job.shiftStatusesNonContentTiles.length; i < count; i += 1) {
-      job.shiftStatusesNonContentTiles[i].timeStart = startTime;
-      job.shiftStatusesNonContentTiles[i].timeEnd = startTime;
-    }
-
-    for (i = 0, count = job.shiftStatusesContentTiles.length; i < count; i += 1) {
-      job.shiftStatusesContentTiles[i].timeStart = startTime;
-      job.shiftStatusesContentTiles[i].timeEnd = startTime;
-    }
-  }
-
-  /**
-   * Updates the animation progress of this ColorShiftJob to match the given time.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this ColorShiftJob
    * @param {Number} currentTime
    * @param {Number} deltaTime
    */
-  function update(currentTime, deltaTime) {
-    var job, i, count;
+  function updateJobs(currentTime, deltaTime) {
+    var i, count;
 
-    job = this;
+    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
+      animator.jobs[i].update(currentTime, deltaTime);
 
-    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
-      updateNonContentTile(currentTime, job.grid.allNonContentTiles[i],
-          job.shiftStatusesNonContentTiles[i]);
-    }
-
-    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
-      updateContentTile(currentTime, job.grid.contentTiles[i],
-          job.shiftStatusesContentTiles[i]);
-    }
-  }
-
-  /**
-   * Draws the current state of this ColorShiftJob.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this ColorShiftJob
-   */
-  function draw() {
-    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
-  }
-
-  /**
-   * Stops this ColorShiftJob.
-   *
-   * @this ColorShiftJob
-   */
-  function cancel() {
-    var job = this;
-
-    job.isComplete = true;
-  }
-
-  /**
-   * @this ColorShiftJob
-   */
-  function refresh() {
-    var job = this;
-
-    init.call(job);
-  }
-
-  /**
-   * @this ColorShiftJob
-   */
-  function init() {
-    var job = this;
-
-    config.computeDependentValues();
-    initTileShiftStatuses.call(job);
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Expose this module's constructor
-
-  /**
-   * @constructor
-   * @global
-   * @param {Grid} grid
-   */
-  function ColorShiftJob(grid) {
-    var job = this;
-
-    job.grid = grid;
-    job.shiftStatusesNonContentTiles = null;
-    job.shiftStatusesContentTiles = null;
-    job.startTime = 0;
-    job.isComplete = true;
-
-    job.start = start;
-    job.update = update;
-    job.draw = draw;
-    job.cancel = cancel;
-    job.refresh = refresh;
-    job.init = init;
-
-    job.init();
-
-    console.log('ColorShiftJob created');
-  }
-
-  ColorShiftJob.config = config;
-
-  // Expose this module
-  window.hg = window.hg || {};
-  window.hg.ColorShiftJob = ColorShiftJob;
-
-  console.log('ColorShiftJob module loaded');
-})();
-
-/**
- * @typedef {AnimationJob} ColorWaveJob
- */
-
-/**
- * This module defines a constructor for ColorWaveJob objects.
- *
- * ColorWaveJob objects animate the tiles of a Grid in order to create waves of color.
- *
- * @module ColorWaveJob
- */
-(function () {
-  // ------------------------------------------------------------------------------------------- //
-  // Private static variables
-
-  var config = {};
-
-  config.period = 1000;
-  config.wavelength = 600;
-  config.originX = -100;
-  config.originY = 1400;
-
-  // Amplitude (will range from negative to positive)
-  config.deltaHue = 0;
-  config.deltaSaturation = 0;
-  config.deltaLightness = 5;
-
-  config.deltaOpacityImageBackgroundScreen = 0.18;
-
-  config.opacity = 0.5;
-
-  //  --- Dependent parameters --- //
-
-  config.computeDependentValues = function () {
-    config.halfPeriod = config.period / 2;
-  };
-
-  config.computeDependentValues();
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private dynamic functions
-
-  /**
-   * Calculates a wave offset value for each tile according to their positions in the grid.
-   *
-   * @this ColorWaveJob
-   */
-  function initTileProgressOffsets() {
-    var job, i, count, tile, length, deltaX, deltaY, halfWaveProgressWavelength;
-
-    job = this;
-
-    halfWaveProgressWavelength = config.wavelength / 2;
-    job.waveProgressOffsetsNonContentTiles = [];
-    job.waveProgressOffsetsContentTiles = [];
-
-    // Calculate offsets for the non-content tiles
-    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
-      tile = job.grid.allNonContentTiles[i];
-
-      deltaX = tile.originalAnchor.x - config.originX;
-      deltaY = tile.originalAnchor.y - config.originY;
-      length = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + config.wavelength;
-
-      job.waveProgressOffsetsNonContentTiles[i] =
-          -(length % config.wavelength - halfWaveProgressWavelength) / halfWaveProgressWavelength;
-    }
-
-    // Calculate offsets for the content tiles
-    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
-      tile = job.grid.contentTiles[i];
-
-      deltaX = tile.originalAnchor.x - config.originX;
-      deltaY = tile.originalAnchor.y - config.originY;
-      length = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + config.wavelength;
-
-      job.waveProgressOffsetsContentTiles[i] =
-          -(length % config.wavelength - halfWaveProgressWavelength) / halfWaveProgressWavelength;
-    }
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private static functions
-
-  /**
-   * Updates the animation progress of the given non-content tile.
-   *
-   * @param {Number} progress From -1 to 1
-   * @param {Tile} tile
-   * @param {Number} waveProgressOffset From -1 to 1
-   */
-  function updateNonContentTile(progress, tile, waveProgressOffset) {
-    var tileProgress =
-        Math.sin(((((progress + 1 + waveProgressOffset) % 2) + 2) % 2 - 1) * Math.PI);
-
-    tile.currentColor.h += config.deltaHue * tileProgress * config.opacity;
-    tile.currentColor.s += config.deltaSaturation * tileProgress * config.opacity;
-    tile.currentColor.l += config.deltaLightness * tileProgress * config.opacity;
-  }
-
-  /**
-   * Updates the animation progress of the given content tile.
-   *
-   * @param {Number} progress From -1 to 1
-   * @param {Tile} tile
-   * @param {Number} waveProgressOffset From -1 to 1
-   */
-  function updateContentTile(progress, tile, waveProgressOffset) {
-    var tileProgress =
-        Math.sin(((((progress + 1 + waveProgressOffset) % 2) + 2) % 2 - 1) * Math.PI) * 0.5 + 0.5;
-
-    tile.imageScreenOpacity += -tileProgress * config.opacity *
-        config.deltaOpacityImageBackgroundScreen;
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Public dynamic functions
-
-  /**
-   * Sets this ColorWaveJob as started.
-   *
-   * @this ColorWaveJob
-   * @param {Number} startTime
-   */
-  function start(startTime) {
-    var job = this;
-
-    job.startTime = startTime;
-    job.isComplete = false;
-  }
-
-  /**
-   * Updates the animation progress of this ColorWaveJob to match the given time.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this ColorWaveJob
-   * @param {Number} currentTime
-   * @param {Number} deltaTime
-   */
-  function update(currentTime, deltaTime) {
-    var job, progress, i, count;
-
-    job = this;
-
-    progress = (currentTime + config.halfPeriod) / config.period % 2 - 1;
-
-    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
-      updateNonContentTile(progress, job.grid.allNonContentTiles[i],
-          job.waveProgressOffsetsNonContentTiles[i]);
-    }
-
-    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
-      updateContentTile(progress, job.grid.contentTiles[i],
-          job.waveProgressOffsetsContentTiles[i]);
+      // Remove jobs from the list after they are complete
+      if (animator.jobs[i].isComplete) {
+        removeJob(animator.jobs[i], i);
+        i--;
+        count--;
+      }
     }
   }
 
   /**
-   * Draws the current state of this ColorWaveJob.
+   * Removes the given job from the collection of active, animating jobs.
    *
-   * This should be called from the overall animation loop.
-   *
-   * @this ColorWaveJob
+   * @param {AnimationJob} job
+   * @param {Number} [index]
    */
-  function draw() {
-    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
-  }
+  function removeJob(job, index) {
+    var count;
 
-  /**
-   * Stops this ColorWaveJob, and returns the element its original form.
-   *
-   * @this ColorWaveJob
-   */
-  function cancel() {
-    var job = this;
-
-    job.isComplete = true;
-  }
-
-  /**
-   * @this ColorWaveJob
-   */
-  function refresh() {
-    var job = this;
-
-    init.call(job);
-  }
-
-  /**
-   * @this ColorWaveJob
-   */
-  function init() {
-    var job = this;
-
-    config.computeDependentValues();
-    initTileProgressOffsets.call(job);
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Expose this module's constructor
-
-  /**
-   * @constructor
-   * @global
-   * @param {Grid} grid
-   */
-  function ColorWaveJob(grid) {
-    var job = this;
-
-    job.grid = grid;
-    job.waveProgressOffsetsNonContentTiles = null;
-    job.waveProgressOffsetsContentTiles = null;
-    job.startTime = 0;
-    job.isComplete = true;
-
-    job.start = start;
-    job.update = update;
-    job.draw = draw;
-    job.cancel = cancel;
-    job.refresh = refresh;
-    job.init = init;
-
-    job.init();
-
-    console.log('ColorWaveJob created');
-  }
-
-  ColorWaveJob.config = config;
-
-  // Expose this module
-  window.hg = window.hg || {};
-  window.hg.ColorWaveJob = ColorWaveJob;
-
-  console.log('ColorWaveJob module loaded');
-})();
-
-/**
- * @typedef {AnimationJob} DisplacementResetJob
- */
-
-/**
- * This module defines a constructor for DisplacementResetJob objects.
- *
- * DisplacementResetJob objects reset tile displacement values during each animation frame.
- *
- * @module DisplacementResetJob
- */
-(function () {
-  // ------------------------------------------------------------------------------------------- //
-  // Private static variables
-
-  var config = {};
-
-  //  --- Dependent parameters --- //
-
-  config.computeDependentValues = function () {
-  };
-
-  config.computeDependentValues();
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private dynamic functions
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private static functions
-
-  // ------------------------------------------------------------------------------------------- //
-  // Public dynamic functions
-
-  /**
-   * Sets this DisplacementResetJob as started.
-   *
-   * @this DisplacementResetJob
-   * @param {Number} startTime
-   */
-  function start(startTime) {
-    var job = this;
-
-    job.startTime = startTime;
-    job.isComplete = false;
-  }
-
-  /**
-   * Updates the animation progress of this DisplacementResetJob to match the given time.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this DisplacementResetJob
-   * @param {Number} currentTime
-   * @param {Number} deltaTime
-   */
-  function update(currentTime, deltaTime) {
-    var job, i, count;
-
-    job = this;
-
-    // Update the Tiles
-    for (i = 0, count = job.grid.allTiles.length; i < count; i += 1) {
-      job.grid.allTiles[i].currentAnchor.x = job.grid.allTiles[i].originalAnchor.x;
-      job.grid.allTiles[i].currentAnchor.y = job.grid.allTiles[i].originalAnchor.y;
+    if (typeof index === 'number') {
+      animator.jobs.splice(index, 1);
+    } else {
+      for (index = 0, count = animator.jobs.length; index < count; index += 1) {
+        if (animator.jobs[index] === job) {
+          animator.jobs.splice(index, 1);
+          break;
+        }
+      }
     }
 
-    if (job.grid.isPostOpen) {
-      // Update the Carousel
-      job.grid.pagePost.carousel.currentIndexPositionRatio =
-        job.grid.pagePost.carousel.currentIndex;
+    // Stop the animation loop when there are no more jobs to animate
+    if (animator.jobs.length === 0) {
+      animator.isPaused = true;
     }
   }
 
   /**
-   * Draws the current state of this DisplacementResetJob.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this DisplacementResetJob
+   * Draws all of the active AnimationJobs.
    */
-  function draw() {
-    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
-  }
+  function drawJobs() {
+    var i, count;
 
-  /**
-   * Stops this DisplacementResetJob, and returns the element its original form.
-   *
-   * @this DisplacementResetJob
-   */
-  function cancel() {
-    var job = this;
-
-    job.isComplete = true;
-  }
-
-  /**
-   * @this DisplacementResetJob
-   */
-  function refresh() {
-    var job = this;
-
-    init.call(job);
-  }
-
-  /**
-   * @this DisplacementResetJob
-   */
-  function init() {
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Expose this module's constructor
-
-  /**
-   * @constructor
-   * @global
-   * @param {Grid} grid
-   */
-  function DisplacementResetJob(grid) {
-    var job = this;
-
-    job.grid = grid;
-    job.startTime = 0;
-    job.isComplete = true;
-
-    job.start = start;
-    job.update = update;
-    job.draw = draw;
-    job.cancel = cancel;
-    job.refresh = refresh;
-    job.init = init;
-
-    job.init();
-
-    console.log('DisplacementResetJob created');
-  }
-
-  DisplacementResetJob.config = config;
-
-  // Expose this module
-  window.hg = window.hg || {};
-  window.hg.DisplacementResetJob = DisplacementResetJob;
-
-  console.log('DisplacementResetJob module loaded');
-})();
-
-/**
- * @typedef {AnimationJob} DisplacementWaveJob
- */
-
-/**
- * This module defines a constructor for DisplacementWaveJob objects.
- *
- * DisplacementWaveJob objects animate the tiles of a Grid in order to create waves of
- * motion.
- *
- * @module DisplacementWaveJob
- */
-(function () {
-  // ------------------------------------------------------------------------------------------- //
-  // Private static variables
-
-  var config = {};
-
-  config.period = 3200;
-  config.wavelength = 1800;
-  config.originX = 0;
-  config.originY = 0;
-
-  // Amplitude (will range from negative to positive)
-  config.tileDeltaX = -15;
-  config.tileDeltaY = -config.tileDeltaX * Math.sqrt(3);
-
-  //  --- Dependent parameters --- //
-
-  config.computeDependentValues = function () {
-    config.halfPeriod = config.period / 2;
-
-    config.displacementAmplitude =
-        Math.sqrt(config.tileDeltaX * config.tileDeltaX +
-            config.tileDeltaY * config.tileDeltaY);
-  };
-
-  config.computeDependentValues();
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private dynamic functions
-
-  /**
-   * Calculates a wave offset value for each tile according to their positions in the grid.
-   *
-   * @this DisplacementWaveJob
-   */
-  function initTileProgressOffsets() {
-    var job, i, count, tile, length, deltaX, deltaY, halfWaveProgressWavelength;
-
-    job = this;
-
-    halfWaveProgressWavelength = config.wavelength / 2;
-    job.waveProgressOffsets = [];
-
-    for (i = 0, count = job.grid.allTiles.length; i < count; i += 1) {
-      tile = job.grid.allTiles[i];
-
-      deltaX = tile.originalAnchor.x - config.originX;
-      deltaY = tile.originalAnchor.y - config.originY;
-      length = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + config.wavelength;
-
-      job.waveProgressOffsets[i] = -(length % config.wavelength - halfWaveProgressWavelength)
-          / halfWaveProgressWavelength;
-    }
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private static functions
-
-  /**
-   * Updates the animation progress of the given tile.
-   *
-   * @param {Number} progress
-   * @param {Tile} tile
-   * @param {Number} waveProgressOffset
-   */
-  function updateTile(progress, tile, waveProgressOffset) {
-    var tileProgress =
-        Math.sin(((((progress + 1 + waveProgressOffset) % 2) + 2) % 2 - 1) * Math.PI);
-
-    tile.currentAnchor.x += config.tileDeltaX * tileProgress;
-    tile.currentAnchor.y += config.tileDeltaY * tileProgress;
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Public dynamic functions
-
-  /**
-   * Sets this DisplacementWaveJob as started.
-   *
-   * @this DisplacementWaveJob
-   * @param {Number} startTime
-   */
-  function start(startTime) {
-    var job = this;
-
-    job.startTime = startTime;
-    job.isComplete = false;
-  }
-
-  /**
-   * Updates the animation progress of this DisplacementWaveJob to match the given time.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this DisplacementWaveJob
-   * @param {Number} currentTime
-   * @param {Number} deltaTime
-   */
-  function update(currentTime, deltaTime) {
-    var job, progress, i, count;
-
-    job = this;
-
-    progress = (currentTime + config.halfPeriod) / config.period % 2 - 1;
-
-    for (i = 0, count = job.grid.allTiles.length; i < count; i += 1) {
-      updateTile(progress, job.grid.allTiles[i], job.waveProgressOffsets[i]);
+    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
+      animator.jobs[i].draw();
     }
   }
 
   /**
-   * Draws the current state of this DisplacementWaveJob.
-   *
-   * This should be called from the overall animation loop.
-   *
-   * @this DisplacementWaveJob
+   * Starts the animation loop if it is not already running
    */
-  function draw() {
-    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
-  }
+  function startAnimationLoop() {
+    animator.isPaused = false;
 
-  /**
-   * Stops this DisplacementWaveJob, and returns the element its original form.
-   *
-   * @this DisplacementWaveJob
-   */
-  function cancel() {
-    var job = this;
+    if (!animator.isLooping) {
+      animator.isLooping = true;
+      window.hg.util.requestAnimationFrame(firstAnimationLoop);
+    }
 
-    job.isComplete = true;
-  }
+    // ---  --- //
 
-  /**
-   * @this DisplacementWaveJob
-   */
-  function refresh() {
-    var job = this;
+    /**
+     * The time value provided by requestAnimationFrame appears to be the number of milliseconds since the page loaded.
+     * However, the rest of the application logic expects time values relative to the Unix epoch. This bootstrapping
+     * function helps in translating from the one time frame to the other.
+     *
+     * @param {Number} currentTime
+     */
+    function firstAnimationLoop(currentTime) {
+      animator.previousTime = currentTime;
 
-    init.call(job);
-  }
-
-  /**
-   * @this DisplacementWaveJob
-   */
-  function init() {
-    var job = this;
-
-    config.computeDependentValues();
-    initTileProgressOffsets.call(job);
+      window.hg.util.requestAnimationFrame(animationLoop);
+    }
   }
 
   // ------------------------------------------------------------------------------------------- //
-  // Expose this module's constructor
+  // Public static functions
 
   /**
-   * @constructor
-   * @global
-   * @param {Grid} grid
+   * Starts the given AnimationJob.
+   *
+   * @param {AnimationJob} job
    */
-  function DisplacementWaveJob(grid) {
-    var job = this;
+  function startJob(job) {
+    // Is this a restart?
+    if (!job.isComplete) {
+      console.log('Job restarting: ' + job.constructor.name);
 
-    job.grid = grid;
-    job.waveProgressOffsets = null;
-    job.startTime = 0;
-    job.isComplete = true;
+      if (job.refresh) {
+        job.refresh();
+      } else {
+        job.cancel();
 
-    job.start = start;
-    job.update = update;
-    job.draw = draw;
-    job.cancel = cancel;
-    job.refresh = refresh;
-    job.init = init;
+        job.init();// TODO: get rid of this init function
+        job.start(animator.previousTime);
+      }
+    } else {
+      console.log('Job starting: ' + job.constructor.name);
 
-    job.init();
+      job.init();// TODO: get rid of this init function
+      job.start(animator.previousTime);
+      animator.jobs.push(job);
+    }
 
-    console.log('DisplacementWaveJob created');
+    startAnimationLoop();
   }
 
-  DisplacementWaveJob.config = config;
+  /**
+   * Cancels the given AnimationJob.
+   *
+   * @param {AnimationJob} job
+   */
+  function cancelJob(job) {
+    console.log('Job cancelling: ' + job.constructor.name);
 
-  // Expose this module
-  window.hg = window.hg || {};
-  window.hg.DisplacementWaveJob = DisplacementWaveJob;
+    job.cancel();
+    removeJob(job);
+  }
 
-  console.log('DisplacementWaveJob module loaded');
+  /**
+   * Cancels all running AnimationJobs.
+   */
+  function cancelAll() {
+    while (animator.jobs.length) {
+      cancelJob(animator.jobs[0]);
+    }
+  }
+
+  console.log('animator module loaded');
 })();
 
 /**
@@ -17707,1598 +18206,1099 @@ if (typeof define === 'function' && define.amd) {
   console.log('TileBorderJob module loaded');
 })();
 
-'use strict';
+/**
+ * @typedef {AnimationJob} ColorResetJob
+ */
 
 /**
- * This module defines a singleton that fetches and parses data for the app.
+ * This module defines a constructor for ColorResetJob objects.
  *
- * @module data
+ * ColorResetJob objects reset tile color values during each animation frame.
+ *
+ * @module ColorResetJob
  */
 (function () {
+  // ------------------------------------------------------------------------------------------- //
+  // Private static variables
 
   var config = {};
 
-  config.youtubeVideoBaseUrl = '//www.youtube.com/embed';
-  config.youtubeThumbnailBaseUrl = 'http://img.youtube.com/vi';
+  //  --- Dependent parameters --- //
 
-  config.vimeoVideoBaseUrl = '//player.vimeo.com/video';
+  config.computeDependentValues = function () {
+  };
 
-  config.appRootPath = window.appRootPath || 'example';
-  config.metadataUrl = config.appRootPath + '/dist/data.min.json';
+  config.computeDependentValues();
 
-  var data = {};
+  // ------------------------------------------------------------------------------------------- //
+  // Private dynamic functions
 
-  data.config = config;
-  data.dataRequestState = 'request-not-sent';
-  data.combinedMetadata = {};
-  data.collectionMetadata = {};
-  data.postData = [];
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
 
-  data.fetchData = fetchData;
-
-  window.app = window.app || {};
-  app.data = data;
-
-  // ---  --- //
-
-  function fetchData(callback) {
-    var xhr = new XMLHttpRequest();
-
-    xhr.addEventListener('load', onLoad, false);
-    xhr.addEventListener('error', onError, false);
-    xhr.addEventListener('abort', onAbort, false);
-
-    console.log('Sending request to ' + config.metadataUrl);
-
-    xhr.open('GET', config.metadataUrl, true);
-    xhr.send();
-
-    data.dataRequestState = 'waiting-for-response';
-
-    // ---  --- //
-
-    function onLoad() {
-      console.log('Response status=' + xhr.status + ' (' + xhr.statusText + ')');
-      //console.log('Response body=' + xhr.response);
-
-      data.dataRequestState = 'received-response';
-
-      try {
-        data.combinedMetadata = JSON.parse(xhr.response);
-      } catch (error) {
-        data.combinedMetadata = {};
-        data.collectionMetadata = {};
-        data.postData = [];
-        console.error('Unable to parse response body as JSON: ' + xhr.response);
-        return;
-      }
-
-      data.collectionMetadata = data.combinedMetadata.collectionMetadata;
-      data.postData = data.combinedMetadata.posts;
-
-      updatePostsSrcUrls();
-
-      callback();
-    }
-
-    function onError() {
-      console.error('An error occurred while transferring the data');
-
-      data.dataRequestState = 'error-with-request';
-    }
-
-    function onAbort() {
-      console.error('The transfer has been cancelled by the user');
-
-      data.dataRequestState = 'error-with-request';
-    }
-  }
-
-  function updatePostsSrcUrls() {
-    data.postData.forEach(updatePostSrcUrls);
-
-    // ---  --- //
-
-    function updatePostSrcUrls(postDatum) {
-      var postBaseUrl = data.collectionMetadata.baseUrl + '/' + postDatum.id + '/';
-
-      postDatum.images.forEach(updateSrcImageMetadata);
-      postDatum.videos.forEach(updateSrcVideoMetadata);
-
-      postDatum.thumbnailSrc = postBaseUrl + data.collectionMetadata.thumbnailName;
-      postDatum.logoSrc = postBaseUrl + data.collectionMetadata.logoName;
-
-      // ---  --- //
-
-      function updateSrcImageMetadata(imageMetadatum) {
-        imageMetadatum.src = postBaseUrl + imageMetadatum.fileName;
-      }
-
-      function updateSrcVideoMetadata(videoMetadatum) {
-        switch (videoMetadatum.videoHost) {
-          case 'youtube':
-            videoMetadatum.videoSrc = config.youtubeVideoBaseUrl + '/' + videoMetadatum.id + '?enablejsapi=1';
-            videoMetadatum.thumbnailSrc = config.youtubeThumbnailBaseUrl + '/' + videoMetadatum.id + '/default.jpg';
-            break;
-          case 'vimeo':
-            videoMetadatum.videoSrc = config.vimeoVideoBaseUrl + '/' + videoMetadatum.id;
-            videoMetadatum.thumbnailSrc = null;
-            break;
-          default:
-            throw new Error('Invalid video host: ' + videoMetadatum.videoHost);
-        }
-      }
-    }
-  }
-
-  console.log('data module loaded');
-})();
-
-'use strict';
-
-/**
- * This module defines a singleton that drives the app.
- *
- * @module main
- */
-(function () {
-
-  var main = {};
-
-  main.grid = null;
-
-  window.app = window.app || {};
-  app.main = main;
-
-  window.addEventListener('load', initHexGrid, false);
-
-  // ---  --- //
+  // ------------------------------------------------------------------------------------------- //
+  // Public dynamic functions
 
   /**
-   * This is the event handler for the completion of the DOM loading. This creates the Grid
-   * within the body element.
-   */
-  function initHexGrid() {
-    console.log('onDocumentLoad');
-
-    window.removeEventListener('load', initHexGrid);
-
-    var hexGridContainer = document.getElementById('hex-grid-area');
-
-    main.grid = window.hg.controller.createNewHexGrid(hexGridContainer, app.data.postData, false);
-
-    app.parameters.initDatGui(main.grid);
-
-    app.data.fetchData(updateTileData);
-  }
-
-  function updateTileData() {
-    window.hg.controller.setGridPostData(main.grid, app.data.postData);
-
-    app.parameters.updateForNewPostData(app.data.postData);
-  }
-
-  console.log('main module loaded');
-})();
-
-'use strict';
-
-/**
- * This module defines a singleton that renders a menu panel across the top of the window.
- *
- * @module menu-panel
- */
-(function () {
-
-  var config = {};
-
-  var menuPanel = {};
-
-  menuPanel.config = config;
-
-  window.app = window.app || {};
-  app.menuPanel = menuPanel;
-
-  // ---  --- //
-
-  console.log('menu-panel module loaded');
-})();
-
-'use strict';
-
-/**
- * This module defines a singleton that handles the contents of folders within the dat.GUI menu that represent
- * miscellaneous parameters.
- *
- * @module miscellaneous-parameters
- */
-(function () {
-
-  var config = {};
-
-  config.folders = [
-    {
-      name: 'Main',
-      isOpen: true,
-      createItems: createMainItems,
-      children: [
-        {
-          name: 'Pre-Set Configurations',
-          isOpen: true,
-          createItems: createPreSetConfigurationsItems,
-          children: [
-          ]
-        },
-        {
-          name: 'Filter Posts',
-          isOpen: true,
-          createItems: createFilterPostsItems,
-          children: [
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Grid',
-      isOpen: false,
-      createItems: createGridItems
-    },
-    {
-      name: 'Annotations',
-      isOpen: false,
-      createItems: createAnnotationsItems
-    },
-    {
-      name: 'Particle System',
-      isOpen: false,
-      createItems: createParticleSystemItems
-    },
-    {
-      name: 'Input',
-      isOpen: false,
-      createItems: createInputItems
-    }
-  ];
-
-  config.defaultPreSet = 'gold-scale';
-
-  config.preSetConfigs = {};
-
-  config.preSetConfigs['gold-scale'] = {
-    Grid: {
-      tileGap: 4,
-      backgroundHue: 40,
-      backgroundSaturation: 15,
-      backgroundLightness: 3,
-      tileHue: 45,
-      tileSaturation: 10,
-      tileLightness: 7
-    },
-    TilePost: {
-      inactiveScreenOpacity: 0.84,
-      inactiveScreenHue: 40,
-      inactiveScreenSaturation: 1,
-      inactiveScreenLightness: 1
-    },
-    LineJob: {
-      lineWidth: 4,
-      startSaturation: 100,
-      startLightness: 80,
-      startOpacity: 0.3,
-      endSaturation: 100,
-      endLightness: 60,
-      endOpacity: 0,
-      sameDirectionProb: 0.6
-    },
-    HighlightRadiateJob: {
-      deltaSaturation: 50,
-      deltaLightness: 20,
-    },
-    HighlightHoverJob: {
-      deltaSaturation: 10,
-      deltaLightness: 20,
-    },
-    ColorWaveJob: {
-      deltaSaturation: 20,
-      deltaLightness: 14,
-      wavelength: 4000,
-      period: 4500,
-      originY: 2000
-    },
-    ColorShiftJob: {
-      hueDeltaMin: 0,
-      hueDeltaMax: 0,
-      saturationDeltaMin: -10,
-      saturationDeltaMax: 8,
-      lightnessDeltaMin: -5,
-      lightnessDeltaMax: 5,
-
-      imageBackgroundScreenOpacityDeltaMin: -0.05,
-      imageBackgroundScreenOpacityDeltaMax: 0.05,
-
-      transitionDurationMin: 800,
-      transitionDurationMax: 2000
-    },
-    DisplacementWaveJob: {
-      period: 1000000,
-      tileDeltaX: 0,
-      tileDeltaY: 0
-    },
-    OpenPostJob: {
-      fadePostDurationOffset: 300
-    },
-    ClosePostJob: {
-      duration: 200
-    }
-  };
-  config.preSetConfigs['stormy-sea'] = {
-    LineJob: {
-      isRecurring: true
-    }
-  };
-  config.preSetConfigs['color-worms'] = {
-    Grid: {
-      tileOuterRadius: 50,
-      tileHue: 39,
-      tileSaturation: 49,
-      tileLightness: 12
-    },
-    Tile: {
-      dragCoeff: 0.02,
-      neighborSpringCoeff: 0.000004,
-      innerAnchorSpringCoeff: 0.00002,
-      borderAnchorSpringCoeff: 0.00002
-    },
-    LineJob: {
-      isRecurring: true,
-      lineWidth: 12,
-      lineLength: 400,
-      duration: 70000,
-      lineSidePeriod: 1000,
-      startSaturation: 100,
-      startLightness: 60,
-      startOpacity: 0.8,
-      endSaturation: 100,
-      endLightness: 60,
-      endOpacity: 0,
-      sameDirectionProb: 0.75,
-      avgDelay: 2000,
-      delayDeviationRange: 200
-    },
-    LinesRadiateJob: {
-      lineWidth: 7,
-      lineLength: 250,
-      duration: 30000,
-      lineSidePeriod: 120,
-      startSaturation: 100,
-      startLightness: 60,
-      startOpacity: 0.8,
-      endSaturation: 100,
-      endLightness: 60,
-      endOpacity: 0,
-      sameDirectionProb: 0.75
-    },
-    DisplacementWaveJob: {
-      period: 1000000,
-      tileDeltaX: 0,
-      tileDeltaY: 0
-    },
-    ColorWaveJob: {
-      period: 1000000,
-      deltaLightness: 0
-    },
-    Input: {
-      contentTileClickAnimation: 'None',
-      emptyTileClickAnimation: 'Radiate Lines'
-    },
-    OpenPostJob: {
-      expandedDisplacementTileCount: 4
-    }
-  };
-  config.preSetConfigs['crazy-flux'] = {
-    Grid: {
-      tileOuterRadius: 60,
-      tileGap: 40,
-      tileHue: 24,
-      tileSaturation: 75,
-      tileLightness: 50
-    },
-    LineJob: {
-      isRecurring: true,
-      lineWidth: 100,
-      duration: 3000,
-      startSaturation: 100,
-      startLightness: 60,
-      startOpacity: 0.7,
-      endSaturation: 100,
-      endLightness: 60,
-      endOpacity: 0,
-      sameDirectionProb: 0.25,
-      avgDelay: 20,
-      delayDeviationRange: 10
-    },
-    Input: {
-      contentTileClickAnimation: 'None',
-      emptyTileClickAnimation: 'Radiate Lines'
-    },
-    DisplacementWaveJob: {
-      period: 1400,
-      tileDeltaX: 140,
-      tileDeltaY: -120,
-      originX: 2000,
-      originY: 1800
-    },
-    ColorShiftJob: {
-      hueDeltaMin: -180,
-      hueDeltaMax: 180,
-    }
-  };
-  config.preSetConfigs['wire-frame'] = {
-    LineJob: {
-      isRecurring: true
-    },
-    Annotations: {
-      annotations: {
-        tileNeighborConnections: {
-          enabled: true
-        },
-        tileAnchorCenters: {
-          enabled: true
-        },
-        transparentTiles: {
-          enabled: true
-        },
-        lineAnimationGapPoints: {
-          enabled: true
-        },
-        lineAnimationCornerData: {
-          enabled: true
-        },
-        sectorAnchorCenters: {
-          enabled: true
-        }
-      }
-    },
-    Input: {
-      contentTileClickAnimation: 'None',
-      emptyTileClickAnimation: 'Radiate Lines'
-    },
-    DisplacementWaveJob: {
-      originX: 1600,
-      originY: 1800
-    },
-    Tile: {
-      dragCoeff: 0.013,
-      neighborSpringCoeff: 0.000002,
-      innerAnchorSpringCoeff: 0.00001,
-      borderAnchorSpringCoeff: 0.00002
-    }
-  };
-
-  // ---  --- //
-
-  var miscParams = {};
-
-  miscParams.init = init;
-  miscParams.config = config;
-
-  window.app = window.app || {};
-  app.miscParams = miscParams;
-
-  // ---  --- //
-
-  function init(grid) {
-    miscParams.grid = grid;
-  }
-
-  function createMainItems(folder) {
-    var data = {
-      'Go Home': window.app.parameters.goHome,
-      'Hide Menu': window.app.parameters.hideMenu
-    };
-
-    folder.add(data, 'Go Home');
-    folder.add(data, 'Hide Menu');
-  }
-
-  function createPreSetConfigurationsItems(parentFolder) {
-    var data = {};
-
-    Object.keys(config.preSetConfigs).forEach(addPreSetConfig);
-
-    // ---  --- //
-
-    function addPreSetConfig(preSetName) {
-      data[preSetName] = window.app.parameters.updateToPreSetConfigs.bind(window.app.parameters,
-        config.preSetConfigs[preSetName]);
-      parentFolder.add(data, preSetName);
-    }
-  }
-
-  function createFilterPostsItems(parentFolder) {
-    var data = {
-      'all': filterPosts.bind(window.app.parameters, 'all'),
-      'work': filterPosts.bind(window.app.parameters, 'work'),
-      'research': filterPosts.bind(window.app.parameters, 'research'),
-      'side-projects': filterPosts.bind(window.app.parameters, 'side-project')
-    };
-
-    parentFolder.add(data, 'all');
-    parentFolder.add(data, 'work');
-    parentFolder.add(data, 'research');
-    parentFolder.add(data, 'side-projects');
-    window.app.parameters.categoriesFolder = parentFolder.addFolder('All Categories');
-
-    // ---  --- //
-
-    function filterPosts(category) {
-      window.app.parameters.categoryData[category].menuItem.setValue(true);
-    }
-  }
-
-  function createGridItems(folder) {
-    var colors = {};
-    colors.backgroundColor = window.hg.util.hslToHsv({
-      h: window.hg.Grid.config.backgroundHue,
-      s: window.hg.Grid.config.backgroundSaturation * 0.01,
-      l: window.hg.Grid.config.backgroundLightness * 0.01
-    });
-    colors.tileColor = window.hg.util.hslToHsv({
-      h: window.hg.Grid.config.tileHue,
-      s: window.hg.Grid.config.tileSaturation * 0.01,
-      l: window.hg.Grid.config.tileLightness * 0.01
-    });
-
-    folder.add(miscParams.grid, 'isVertical')
-        .onChange(function () {
-          window.hg.controller.resetGrid(miscParams.grid);
-        });
-    folder.add(window.hg.Grid.config, 'tileOuterRadius', 10, 400)
-        .onChange(function () {
-          window.hg.Grid.config.computeDependentValues();
-          window.hg.controller.resetGrid(miscParams.grid);
-        });
-    folder.add(window.hg.Grid.config, 'tileGap', -50, 100)
-        .onChange(function () {
-          window.hg.Grid.config.computeDependentValues();
-          window.hg.controller.resetGrid(miscParams.grid);
-        });
-    folder.addColor(colors, 'backgroundColor')
-        .onChange(function () {
-          var color = window.hg.util.hsvToHsl(colors.backgroundColor);
-
-          window.hg.Grid.config.backgroundHue = color.h;
-          window.hg.Grid.config.backgroundSaturation = color.s * 100;
-          window.hg.Grid.config.backgroundLightness = color.l * 100;
-
-          miscParams.grid.setBackgroundColor();
-        });
-    folder.addColor(colors, 'tileColor')
-        .onChange(function () {
-          var color = window.hg.util.hsvToHsl(colors.tileColor);
-
-          window.hg.Grid.config.tileHue = color.h;
-          window.hg.Grid.config.tileSaturation = color.s * 100;
-          window.hg.Grid.config.tileLightness = color.l * 100;
-
-          miscParams.grid.updateTileColor();
-          if (window.hg.Annotations.config.annotations['contentTiles'].enabled) {
-            miscParams.grid.annotations.toggleAnnotationEnabled('contentTiles', true);
-          }
-        });
-    folder.add(window.hg.Grid.config, 'firstRowYOffset', -100, 100)
-        .onChange(function () {
-          window.hg.Grid.config.computeDependentValues();
-          window.hg.controller.resetGrid(miscParams.grid);
-        });
-    folder.add(window.hg.Grid.config, 'contentStartingRowIndex', 0, 4).step(1)
-        .onChange(function () {
-          window.hg.Grid.config.computeDependentValues();
-          miscParams.grid.computeContentIndices();
-          window.hg.controller.resetGrid(miscParams.grid);
-        });
-    folder.add(window.hg.Grid.config, 'targetContentAreaWidth', 500, 1500)
-        .onChange(function () {
-          window.hg.Grid.config.computeDependentValues();
-          miscParams.grid.computeContentIndices();
-          window.hg.controller.resetGrid(miscParams.grid);
-        });
-    folder.add(window.hg.Grid.config, 'contentDensity', 0.1, 1.0)
-        .onChange(function () {
-          window.hg.Grid.config.computeDependentValues();
-          miscParams.grid.computeContentIndices();
-          window.hg.controller.resetGrid(miscParams.grid);
-        });
-  }
-
-  function createAnnotationsItems(folder) {
-    var key, data;
-
-    for (key in window.hg.Annotations.config.annotations) {
-      data = {};
-      data[key] = window.hg.Annotations.config.annotations[key].enabled;
-
-      folder.add(data, key).onChange(function (value) {
-        miscParams.grid.annotations.toggleAnnotationEnabled(this.property, value);
-      });
-    }
-  }
-
-  function createInputItems(folder) {
-    folder.add(window.hg.Input.config, 'contentTileClickAnimation',
-        Object.keys(window.hg.Input.config.possibleClickAnimations));
-    folder.add(window.hg.Input.config, 'emptyTileClickAnimation',
-        Object.keys(window.hg.Input.config.possibleClickAnimations));
-  }
-
-  function createParticleSystemItems(folder) {
-    folder.add(window.hg.Tile.config, 'dragCoeff', 0.000001, 0.1);
-    folder.add(window.hg.Tile.config, 'neighborSpringCoeff', 0.000001, 0.0001);
-    folder.add(window.hg.Tile.config, 'neighborDampingCoeff', 0.000001, 0.009999);
-    folder.add(window.hg.Tile.config, 'innerAnchorSpringCoeff', 0.000001, 0.0001);
-    folder.add(window.hg.Tile.config, 'innerAnchorDampingCoeff', 0.000001, 0.009999);
-    folder.add(window.hg.Tile.config, 'borderAnchorSpringCoeff', 0.000001, 0.0001);
-    folder.add(window.hg.Tile.config, 'borderAnchorDampingCoeff', 0.000001, 0.009999);
-    folder.add(window.hg.Tile.config, 'forceSuppressionLowerThreshold', 0.000001, 0.009999);
-    folder.add(window.hg.Tile.config, 'velocitySuppressionLowerThreshold', 0.000001, 0.009999);
-    folder.add(window.hg.Grid.config, 'tileMass', 0.1, 10)
-        .onChange(function (value) {
-          miscParams.grid.updateTileMass(value);
-        });
-  }
-
-  console.log('miscellaneous-parameters module loaded');
-})();
-
-'use strict';
-
-/**
- * This module defines a singleton that handles the communication between the dat.GUI controller
- * and the hex-grid parameters.
- *
- * @module parameters
- */
-(function () {
-
-  var parameters = {},
-      config = {},
-      originalHgConfigs = {};
-
-  config.datGuiWidth = 300;
-
-  config.folders = [
-    createMiscellaneousFolders,
-    {
-      name: 'Animations',
-      isOpen: false,
-      createItems: null,
-      children: [
-        createTransientAnimationsFolder,
-        createPersistentAnimationsFolder
-      ]
-    }
-  ];
-
-  // ---  --- //
-
-  parameters.config = config;
-  parameters.initDatGui = initDatGui;
-  parameters.updateForNewPostData = updateForNewPostData;
-  parameters.goHome = goHome;
-  parameters.hideMenu = hideMenu;
-  parameters.updateToPreSetConfigs = updateToPreSetConfigs;
-  parameters.filterPosts = filterPosts;
-  parameters.recordOpenChildFolders = recordOpenChildFolders;
-  parameters.grid = null;
-  parameters.gui = null;
-  parameters.categoriesFolder = null;
-  parameters.allCategories = [];
-  parameters.categoryData = {};
-
-  window.app = window.app || {};
-  app.parameters = parameters;
-
-  // ---  --- //
-
-  /**
-   * Sets up the dat.GUI controller.
+   * Sets this ColorResetJob as started.
    *
+   * @this ColorResetJob
+   * @param {Number} startTime
+   */
+  function start(startTime) {
+    var job = this;
+
+    job.startTime = startTime;
+    job.isComplete = false;
+  }
+
+  /**
+   * Updates the animation progress of this ColorResetJob to match the given time.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this ColorResetJob
+   * @param {Number} currentTime
+   * @param {Number} deltaTime
+   */
+  function update(currentTime, deltaTime) {
+    var job, i, count;
+
+    job = this;
+
+    for (i = 0, count = job.grid.allTiles.length; i < count; i += 1) {
+      job.grid.allTiles[i].currentColor.h = job.grid.allTiles[i].originalColor.h;
+      job.grid.allTiles[i].currentColor.s = job.grid.allTiles[i].originalColor.s;
+      job.grid.allTiles[i].currentColor.l = job.grid.allTiles[i].originalColor.l;
+      job.grid.allTiles[i].imageScreenOpacity = window.hg.TilePost.config.inactiveScreenOpacity;
+    }
+  }
+
+  /**
+   * Draws the current state of this ColorResetJob.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this ColorResetJob
+   */
+  function draw() {
+    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
+  }
+
+  /**
+   * Stops this ColorResetJob, and returns the element its original form.
+   *
+   * @this ColorResetJob
+   */
+  function cancel() {
+    var job = this;
+
+    job.isComplete = true;
+  }
+
+  /**
+   * @this ColorResetJob
+   */
+  function refresh() {
+    var job = this;
+
+    init.call(job);
+  }
+
+  /**
+   * @this ColorResetJob
+   */
+  function init() {
+  }
+
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this module's constructor
+
+  /**
+   * @constructor
+   * @global
    * @param {Grid} grid
    */
-  function initDatGui(grid) {
-    parameters.grid = grid;
+  function ColorResetJob(grid) {
+    var job = this;
 
-    storeOriginalConfigValues();
+    job.grid = grid;
+    job.startTime = 0;
+    job.isComplete = true;
 
-    window.app.miscParams.init(grid);
-    window.app.persistentParams.init(grid);
-    window.app.transientParams.init(grid);
+    job.start = start;
+    job.update = update;
+    job.draw = draw;
+    job.cancel = cancel;
+    job.refresh = refresh;
+    job.init = init;
 
-    createDatGui();
+    job.init();
 
-    window.app.parameters.updateToPreSetConfigs.call(window.app.parameters,
-        window.app.miscParams.config.preSetConfigs[window.app.miscParams.config.defaultPreSet]);
-
-    var debouncedResize = window.hg.util.debounce(resize, 300);
-    window.addEventListener('resize', debouncedResize, false);
-    debouncedResize();
+    console.log('ColorResetJob created');
   }
 
-  function resize() {
-    setTimeout(function () {
-      // Don't show the menu on smaller screens.
-      if (window.hg.controller.isSmallScreen) {
-        hideMenu();
-      } else {
-        showMenu();
-      }
-    }, 10);
-  }
+  ColorResetJob.config = config;
 
-  function createDatGui() {
-    parameters.gui = new dat.GUI();
-    parameters.gui.close();
-    parameters.gui.width = config.datGuiWidth;
+  // Expose this module
+  window.hg = window.hg || {};
+  window.hg.ColorResetJob = ColorResetJob;
 
-    window.gui = parameters.gui;
+  console.log('ColorResetJob module loaded');
+})();
 
-    // Don't show the menu on smaller screens.
-    if (window.hg.controller.isSmallScreen) {
-      hideMenu();
-    } else {
-      showMenu();
+/**
+ * @typedef {AnimationJob} ColorShiftJob
+ */
+
+/**
+ * @typedef {Object} ShiftStatus
+ * @property {Number} timeStart
+ * @property {Number} timeEnd
+ */
+
+/**
+ * @typedef {ShiftStatus} NonContentTileShiftStatus
+ * @property {Number} hueDeltaStart
+ * @property {Number} hueDeltaEnd
+ * @property {Number} saturationDeltaStart
+ * @property {Number} saturationDeltaEnd
+ * @property {Number} lightnessDeltaStart
+ * @property {Number} lightnessDeltaEnd
+ */
+
+/**
+ * @typedef {ShiftStatus} ContentTileShiftStatus
+ * @property {Number} opacityDeltaStart
+ * @property {Number} opacityDeltaEnd
+ */
+
+/**
+ * This module defines a constructor for ColorShiftJob objects.
+ *
+ * ColorShiftJob objects animate the colors of the tiles in a random fashion.
+ *
+ * @module ColorShiftJob
+ */
+(function () {
+  // ------------------------------------------------------------------------------------------- //
+  // Private static variables
+
+  var config = {};
+
+  config.hueDeltaMin = -20;
+  config.hueDeltaMax = 20;
+  config.saturationDeltaMin = 0;
+  config.saturationDeltaMax = 0;
+  config.lightnessDeltaMin = 0;
+  config.lightnessDeltaMax = 0;
+
+  config.imageBackgroundScreenOpacityDeltaMin = -0.05;
+  config.imageBackgroundScreenOpacityDeltaMax = 0.05;
+
+  config.transitionDurationMin = 200;
+  config.transitionDurationMax = 2000;
+
+  //  --- Dependent parameters --- //
+
+  config.computeDependentValues = function () {
+  };
+
+  config.computeDependentValues();
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private dynamic functions
+
+  /**
+   * Creates a shift status object for each tile to keep track of their individual animation
+   * progress.
+   *
+   * @this ColorShiftJob
+   */
+  function initTileShiftStatuses() {
+    var job, i, count;
+
+    job = this;
+
+    job.shiftStatusesNonContentTiles = [];
+    job.shiftStatusesContentTiles = [];
+
+    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
+      job.shiftStatusesNonContentTiles[i] = {
+        timeStart: 0,
+        timeEnd: 0,
+        hueDeltaStart: 0,
+        hueDeltaEnd: 0,
+        saturationDeltaStart: 0,
+        saturationDeltaEnd: 0,
+        lightnessDeltaStart: 0,
+        lightnessDeltaEnd: 0,
+      };
     }
 
-    createFolders();
+    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
+      job.shiftStatusesContentTiles[i] = {
+        timeStart: 0,
+        timeEnd: 0,
+        opacityDeltaStart: 0,
+        opacityDeltaEnd: 0,
+      };
+    }
   }
 
-  function createFolders() {
-    createChildFolders(config.folders, parameters.gui);
-  }
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
 
-  function createChildFolders(childFolderConfigs, parentFolder) {
-    childFolderConfigs.forEach(function (folderConfig) {
-      if (typeof folderConfig === 'function') {
-        folderConfig(parentFolder);
-      } else {
-        var folder = parentFolder.addFolder(folderConfig.name);
+  /**
+   * Updates the animation progress of the given non-content tile.
+   *
+   * @param {Number} currentTime
+   * @param {Tile} tile
+   * @param {NonContentTileShiftStatus} shiftStatus
+   */
+  function updateNonContentTile(currentTime, tile, shiftStatus) {
+    if (currentTime > shiftStatus.timeEnd) {
+      assignNewNonContentTileTransition(currentTime, shiftStatus);
+    }
 
-        folderConfig.folder = folder;
+    var progress = (currentTime - shiftStatus.timeStart) /
+        (shiftStatus.timeEnd - shiftStatus.timeStart);
 
-        if (folderConfig.isOpen) {
-          folder.open();
-        }
+    tile.currentColor.h += progress *
+        (shiftStatus.hueDeltaEnd - shiftStatus.hueDeltaStart) +
+        shiftStatus.hueDeltaStart;
+    tile.currentColor.s += progress *
+        (shiftStatus.saturationDeltaEnd - shiftStatus.saturationDeltaStart) +
+        shiftStatus.saturationDeltaStart;
+    tile.currentColor.l += progress *
+        (shiftStatus.lightnessDeltaEnd - shiftStatus.lightnessDeltaStart) +
+        shiftStatus.lightnessDeltaStart;
 
-        if (folderConfig.createItems) {
-          folderConfig.createItems(folder);
-        }
-
-        // Recursively create descendent folders
-        if (folderConfig.children) {
-          createChildFolders(folderConfig.children, folder);
-        }
-      }
-    });
-  }
-
-  function createMiscellaneousFolders(parentFolder) {
-    createChildFolders(window.app.miscParams.config.folders, parentFolder);
-  }
-
-  function createTransientAnimationsFolder(parentFolder) {
-    createChildFolders(window.app.transientParams.config.folders, parentFolder);
-  }
-
-  function createPersistentAnimationsFolder(parentFolder) {
-    createChildFolders(window.app.persistentParams.config.folders, parentFolder);
-  }
-
-  function recordOpenFolders() {
-    recordOpenChildFolders(config.folders);
-    window.app.parameters.recordOpenChildFolders(window.app.miscParams.config.folders);
-    window.app.parameters.recordOpenChildFolders(window.app.transientParams.config.folders);
-    window.app.parameters.recordOpenChildFolders(window.app.persistentParams.config.folders);
-  }
-
-  function recordOpenChildFolders(childFolderConfigs) {
-    childFolderConfigs.forEach(function (folderConfig) {
-      if (typeof folderConfig !== 'function') {
-        folderConfig.isOpen = !folderConfig.folder.closed;
-
-        // Recurse
-        if (folderConfig.children) {
-          recordOpenChildFolders(folderConfig.children);
-        }
-      }
-    });
+    // Also add a gradual hue shift across all tiles.
+    tile.currentColor.h += currentTime / 300;
+    tile.currentColor.h %= 360;
   }
 
   /**
-   * @param {Array.<PostData>} postData
+   * Updates the animation progress of the given content tile.
+   *
+   * @param {Number} currentTime
+   * @param {Tile} tile
+   * @param {ContentTileShiftStatus} shiftStatus
    */
-  function updateForNewPostData(postData) {
-    parameters.allCategories = getAllCategories(postData);
-    addCategoryMenuItems();
-
-    // ---  --- //
-
-    function getAllCategories(postData) {
-      // Collect a mapping from each category to its number of occurrences
-      var categoryMap = postData.reduce(function (map, datum) {
-        return datum.categories.reduce(function (map, category) {
-          map[category] = map[category] ? map[category] + 1 : 1;
-          return map;
-        }, map);
-      }, {});
-
-      // Collect an array containing each category, sorted by the number of occurrences of each category (in
-      // DESCENDING order)
-      var categoryArray = Object.keys(categoryMap)
-          .sort(function (category1, category2) {
-            return categoryMap[category2] - categoryMap[category1];
-          });
-
-      return categoryArray;
+  function updateContentTile(currentTime, tile, shiftStatus) {
+    if (currentTime > shiftStatus.timeEnd) {
+      assignNewContentTileTransition(currentTime, shiftStatus);
     }
 
-    function addCategoryMenuItems() {
-      parameters.categoryData = {};
+    var progress = (currentTime - shiftStatus.timeStart) /
+        (shiftStatus.timeEnd - shiftStatus.timeStart);
 
-      // Add an item for showing all categories
-      addCategoryItem(parameters.categoryData, 'all', parameters.categoriesFolder);
-      parameters.categoryData['all']['all'] = true;
-
-      // Add an item for showing each individual category
-      parameters.allCategories.forEach(function (category) {
-        addCategoryItem(parameters.categoryData, category, parameters.categoriesFolder);
-      });
-
-      // ---  --- //
-
-      function addCategoryItem(categoryData, label, folder) {
-        categoryData[label] = {};
-        categoryData[label][label] = false;
-        categoryData[label].menuItem = folder.add(categoryData[label], label)
-            .onChange(function () {
-              filterPosts(label);
-            });
-      }
-    }
+    tile.imageScreenOpacity += progress *
+        (shiftStatus.opacityDeltaEnd - shiftStatus.opacityDeltaStart) +
+        shiftStatus.opacityDeltaStart;
+    // tile.imageScreenOpacity += -tileProgress * config.opacity *
+    //     config.deltaOpacityImageBackgroundScreen;
   }
 
-  function storeOriginalConfigValues() {
-    // Each module/file in the hex-grid project stores a reference to its constructor or singleton in the global hg
-    // namespace
-    originalHgConfigs = Object.keys(window.hg).reduce(function (configs, key) {
-      if (window.hg[key].config) {
-        configs[key] = window.hg.util.deepCopy(window.hg[key].config);
-      }
-      return configs;
-    }, {});
+  /**
+   * @param {Number} currentTime
+   * @param {NonContentTileShiftStatus} shiftStatus
+   */
+  function assignNewNonContentTileTransition(currentTime, shiftStatus) {
+    assignNewTransitionDuration(currentTime, shiftStatus);
+
+    shiftStatus.hueDeltaStart = shiftStatus.hueDeltaEnd;
+    shiftStatus.hueDeltaEnd = getNewHueDelta();
+
+    shiftStatus.saturationDeltaStart = shiftStatus.saturationDeltaEnd;
+    shiftStatus.saturationDeltaEnd = getNewSaturationDelta();
+
+    shiftStatus.lightnessDeltaStart = shiftStatus.lightnessDeltaEnd;
+    shiftStatus.lightnessDeltaEnd = getNewLightnessDelta();
   }
 
-  var categoryStackSize = 0;
+  /**
+   * @param {Number} currentTime
+   * @param {ContentTileShiftStatus} shiftStatus
+   */
+  function assignNewContentTileTransition(currentTime, shiftStatus) {
+    assignNewTransitionDuration(currentTime, shiftStatus);
 
-  function filterPosts(category) {
-    categoryStackSize++;
+    shiftStatus.opacityDeltaStart = shiftStatus.opacityDeltaEnd;
+    shiftStatus.opacityDeltaEnd = getNewOpacityDelta();
+  }
 
-    // Only filter when the checkbox is checked
-    if (parameters.categoryData[category][category]) {
-      // Make sure all other category filters are off (manual radio button logic)
-      Object.keys(parameters.categoryData).forEach(function (key) {
-        // Only turn off the other filters that are turned on
-        if (parameters.categoryData[key][key] && key !== category) {
-          parameters.categoryData[key].menuItem.setValue(false);
-        }
-      });
-
-      window.hg.controller.filterGridPostDataByCategory(parameters.grid, category);
-    } else if (categoryStackSize === 1) {
-      // If unchecking a textbox, turn on the 'all' filter
-      parameters.categoryData['all'].menuItem.setValue(true);
+  /**
+   * Create a new duration value, and set up the start and end time to account for any time gap
+   * between the end of the last transition and the current time.
+   *
+   * @param {Number} currentTime
+   * @param {ShiftStatus} shiftStatus
+   */
+  function assignNewTransitionDuration(currentTime, shiftStatus) {
+    var elapsedTimeSinceEnd = currentTime - shiftStatus.timeEnd;
+    var newDuration = getNewTransitionDuration();
+    while (newDuration <= elapsedTimeSinceEnd) {
+      elapsedTimeSinceEnd -= newDuration;
+      newDuration = getNewTransitionDuration();
     }
 
-    categoryStackSize--;
+    shiftStatus.timeStart = currentTime - elapsedTimeSinceEnd;
+    shiftStatus.timeEnd = shiftStatus.timeStart + newDuration;
   }
 
-  function goHome() {
-    console.log('Go Home clicked');
-    window.location.href = '/';
+  /**
+   * @returns {Number} A random shift transition duration value between the configured min and max.
+   */
+  function getNewTransitionDuration() {
+    return Math.random() * (config.transitionDurationMax - config.transitionDurationMin) +
+        config.transitionDurationMin;
   }
 
-  function hideMenu() {
-    // console.log('Hide Menu clicked');
-    document.querySelector('body > .dg').style.display = 'none';
+  /**
+   * @returns {Number} A random hue delta value between the configured min and max.
+   */
+  function getNewHueDelta() {
+    return Math.random() * (config.hueDeltaMax - config.hueDeltaMin) + config.hueDeltaMin;
   }
 
-  function showMenu() {
-    document.querySelector('body > .dg').style.display = 'block';
+  /**
+   * @returns {Number} A random saturation delta value between the configured min and max.
+   */
+  function getNewSaturationDelta() {
+    return Math.random() * (config.saturationDeltaMax - config.saturationDeltaMin) +
+        config.saturationDeltaMin;
   }
 
-  function updateToPreSetConfigs(preSetConfig) {
-    console.log('Updating to pre-set configuration', preSetConfig);
-
-    recordOpenFolders();
-    resetAllConfigValues();
-    setPreSetConfigValues(preSetConfig);
-
-    parameters.grid.annotations.refresh();
-    window.hg.Grid.config.computeDependentValues();
-    window.hg.controller.resetGrid(parameters.grid);
-    parameters.grid.setBackgroundColor();
-    parameters.grid.resize();
-
-    refreshDatGui();
+  /**
+   * @returns {Number} A random lightness delta value between the configured min and max.
+   */
+  function getNewLightnessDelta() {
+    return Math.random() * (config.lightnessDeltaMax - config.lightnessDeltaMin) +
+        config.lightnessDeltaMin;
   }
 
-  function resetAllConfigValues() {
-    // Reset each module's configuration parameters back to their default values
-    Object.keys(window.hg).forEach(function (moduleName) {
-      if (window.hg[moduleName].config) {
-        Object.keys(originalHgConfigs[moduleName]).forEach(function (parameterName) {
-          window.hg[moduleName].config[parameterName] =
-            window.hg.util.deepCopy(originalHgConfigs[moduleName][parameterName]);
-        });
-      }
-    });
+  /**
+   * @returns {Number} A random opacity delta value between the configured min and max.
+   */
+  function getNewOpacityDelta() {
+    return Math.random() * (config.imageBackgroundScreenOpacityDeltaMax -
+        config.imageBackgroundScreenOpacityDeltaMin) +
+        config.imageBackgroundScreenOpacityDeltaMin;
   }
 
-  function setPreSetConfigValues(preSetConfig) {
-    Object.keys(preSetConfig).forEach(function (moduleName) {
-      // Set all of the special parameters for this new pre-set configuration
-      Object.keys(preSetConfig[moduleName]).forEach(function (key) {
-        setModuleToMatchPreSet(window.hg[moduleName].config, preSetConfig[moduleName], key);
-      });
+  // ------------------------------------------------------------------------------------------- //
+  // Public dynamic functions
 
-      // Update the recurrence of any transient job
-      if (window.hg.controller.transientJobs[moduleName] &&
-          window.hg.controller.transientJobs[moduleName].toggleRecurrence) {
-        window.hg.controller.transientJobs[moduleName].toggleRecurrence(
-          parameters.grid,
-          window.hg[moduleName].config.isRecurring,
-          window.hg[moduleName].config.avgDelay,
-          window.hg[moduleName].config.delayDeviationRange);
-      }
-    });
+  /**
+   * Sets this ColorShiftJob as started.
+   *
+   * @this ColorShiftJob
+   * @param {Number} startTime
+   */
+  function start(startTime) {
+    var job, i, count;
 
-    // ---  --- //
+    job = this;
 
-    function setModuleToMatchPreSet(moduleConfig, preSetConfig, key) {
-      // Recurse on nested objects in the configuration
-      if (typeof preSetConfig[key] === 'object') {
-        Object.keys(preSetConfig[key]).forEach(function (childKey) {
-          setModuleToMatchPreSet(moduleConfig[key], preSetConfig[key], childKey);
-        });
-      } else {
-        moduleConfig[key] = preSetConfig[key];
-      }
+    job.startTime = startTime;
+    job.isComplete = false;
+
+    for (i = 0, count = job.shiftStatusesNonContentTiles.length; i < count; i += 1) {
+      job.shiftStatusesNonContentTiles[i].timeStart = startTime;
+      job.shiftStatusesNonContentTiles[i].timeEnd = startTime;
+    }
+
+    for (i = 0, count = job.shiftStatusesContentTiles.length; i < count; i += 1) {
+      job.shiftStatusesContentTiles[i].timeStart = startTime;
+      job.shiftStatusesContentTiles[i].timeEnd = startTime;
     }
   }
 
-  function refreshDatGui() {
-    parameters.gui.destroy();
-    createDatGui();
+  /**
+   * Updates the animation progress of this ColorShiftJob to match the given time.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this ColorShiftJob
+   * @param {Number} currentTime
+   * @param {Number} deltaTime
+   */
+  function update(currentTime, deltaTime) {
+    var job, i, count;
+
+    job = this;
+
+    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
+      updateNonContentTile(currentTime, job.grid.allNonContentTiles[i],
+          job.shiftStatusesNonContentTiles[i]);
+    }
+
+    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
+      updateContentTile(currentTime, job.grid.contentTiles[i],
+          job.shiftStatusesContentTiles[i]);
+    }
   }
 
-  console.log('parameters module loaded');
+  /**
+   * Draws the current state of this ColorShiftJob.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this ColorShiftJob
+   */
+  function draw() {
+    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
+  }
+
+  /**
+   * Stops this ColorShiftJob.
+   *
+   * @this ColorShiftJob
+   */
+  function cancel() {
+    var job = this;
+
+    job.isComplete = true;
+  }
+
+  /**
+   * @this ColorShiftJob
+   */
+  function refresh() {
+    var job = this;
+
+    init.call(job);
+  }
+
+  /**
+   * @this ColorShiftJob
+   */
+  function init() {
+    var job = this;
+
+    config.computeDependentValues();
+    initTileShiftStatuses.call(job);
+  }
+
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this module's constructor
+
+  /**
+   * @constructor
+   * @global
+   * @param {Grid} grid
+   */
+  function ColorShiftJob(grid) {
+    var job = this;
+
+    job.grid = grid;
+    job.shiftStatusesNonContentTiles = null;
+    job.shiftStatusesContentTiles = null;
+    job.startTime = 0;
+    job.isComplete = true;
+
+    job.start = start;
+    job.update = update;
+    job.draw = draw;
+    job.cancel = cancel;
+    job.refresh = refresh;
+    job.init = init;
+
+    job.init();
+
+    console.log('ColorShiftJob created');
+  }
+
+  ColorShiftJob.config = config;
+
+  // Expose this module
+  window.hg = window.hg || {};
+  window.hg.ColorShiftJob = ColorShiftJob;
+
+  console.log('ColorShiftJob module loaded');
 })();
 
-'use strict';
+/**
+ * @typedef {AnimationJob} ColorWaveJob
+ */
 
 /**
- * This module defines a singleton that handles the contents of folders within the dat.GUI menu that represent
- * persistent animation parameters.
+ * This module defines a constructor for ColorWaveJob objects.
  *
- * @module persistent-animation-parameters
+ * ColorWaveJob objects animate the tiles of a Grid in order to create waves of color.
+ *
+ * @module ColorWaveJob
  */
 (function () {
+  // ------------------------------------------------------------------------------------------- //
+  // Private static variables
 
   var config = {};
 
-  config.folders = [
-    {
-      name: 'Persistent',
-      isOpen: false,
-      createItems: null,
-      children: [
-        {
-          name: 'Color Shift',
-          isOpen: false,
-          createItems: createColorShiftItems
-        },
-        {
-          name: 'Color Wave',
-          isOpen: false,
-          createItems: createColorWaveItems
-        },
-        {
-          name: 'Displacement Wave',
-          isOpen: false,
-          createItems: createDisplacementWaveItems
-        }
-      ]
+  config.period = 1000;
+  config.wavelength = 600;
+  config.originX = -100;
+  config.originY = 1400;
+
+  // Amplitude (will range from negative to positive)
+  config.deltaHue = 0;
+  config.deltaSaturation = 0;
+  config.deltaLightness = 5;
+
+  config.deltaOpacityImageBackgroundScreen = 0.18;
+
+  config.opacity = 0.5;
+
+  //  --- Dependent parameters --- //
+
+  config.computeDependentValues = function () {
+    config.halfPeriod = config.period / 2;
+  };
+
+  config.computeDependentValues();
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private dynamic functions
+
+  /**
+   * Calculates a wave offset value for each tile according to their positions in the grid.
+   *
+   * @this ColorWaveJob
+   */
+  function initTileProgressOffsets() {
+    var job, i, count, tile, length, deltaX, deltaY, halfWaveProgressWavelength;
+
+    job = this;
+
+    halfWaveProgressWavelength = config.wavelength / 2;
+    job.waveProgressOffsetsNonContentTiles = [];
+    job.waveProgressOffsetsContentTiles = [];
+
+    // Calculate offsets for the non-content tiles
+    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
+      tile = job.grid.allNonContentTiles[i];
+
+      deltaX = tile.originalAnchor.x - config.originX;
+      deltaY = tile.originalAnchor.y - config.originY;
+      length = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + config.wavelength;
+
+      job.waveProgressOffsetsNonContentTiles[i] =
+          -(length % config.wavelength - halfWaveProgressWavelength) / halfWaveProgressWavelength;
     }
-  ];
 
-  // ---  --- //
+    // Calculate offsets for the content tiles
+    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
+      tile = job.grid.contentTiles[i];
 
-  var persistentParams = {};
+      deltaX = tile.originalAnchor.x - config.originX;
+      deltaY = tile.originalAnchor.y - config.originY;
+      length = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + config.wavelength;
 
-  persistentParams.init = init;
-  persistentParams.config = config;
-
-  window.app = window.app || {};
-  app.persistentParams = persistentParams;
-
-  // ---  --- //
-
-  function init(grid) {
-    persistentParams.grid = grid;
+      job.waveProgressOffsetsContentTiles[i] =
+          -(length % config.wavelength - halfWaveProgressWavelength) / halfWaveProgressWavelength;
+    }
   }
 
-  function createColorShiftItems(folder) {
-    folder.add(window.hg.ColorShiftJob.config, 'transitionDurationMin', 1, 10000)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.transitionDurationMax = Math.max(
-              window.hg.ColorShiftJob.config.transitionDurationMin,
-              window.hg.ColorShiftJob.config.transitionDurationMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'transitionDurationMax', 1, 10000)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.transitionDurationMin = Math.min(
-              window.hg.ColorShiftJob.config.transitionDurationMin,
-              window.hg.ColorShiftJob.config.transitionDurationMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'hueDeltaMin', -360, 360)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.hueDeltaMax = Math.max(
-              window.hg.ColorShiftJob.config.hueDeltaMin,
-              window.hg.ColorShiftJob.config.hueDeltaMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'hueDeltaMax', -360, 360)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.hueDeltaMin = Math.min(
-              window.hg.ColorShiftJob.config.hueDeltaMin,
-              window.hg.ColorShiftJob.config.hueDeltaMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'saturationDeltaMin', -100, 100)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.saturationDeltaMax = Math.max(
-              window.hg.ColorShiftJob.config.saturationDeltaMin,
-              window.hg.ColorShiftJob.config.saturationDeltaMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'saturationDeltaMax', -100, 100)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.saturationDeltaMin = Math.min(
-              window.hg.ColorShiftJob.config.saturationDeltaMin,
-              window.hg.ColorShiftJob.config.saturationDeltaMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'lightnessDeltaMin', -100, 100)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.lightnessDeltaMax = Math.max(
-              window.hg.ColorShiftJob.config.lightnessDeltaMin,
-              window.hg.ColorShiftJob.config.lightnessDeltaMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'lightnessDeltaMax', -100, 100)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.lightnessDeltaMin = Math.min(
-              window.hg.ColorShiftJob.config.lightnessDeltaMin,
-              window.hg.ColorShiftJob.config.lightnessDeltaMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'imageBackgroundScreenOpacityDeltaMin', -1.0, 1.0)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax = Math.max(
-              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin,
-              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax
-          );
-        });
-    folder.add(window.hg.ColorShiftJob.config, 'imageBackgroundScreenOpacityDeltaMax', -1.0, 1.0)
-        .onChange(function (value) {
-          window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin = Math.min(
-              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMin,
-              window.hg.ColorShiftJob.config.imageBackgroundScreenOpacityDeltaMax
-          );
-        });
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
+
+  /**
+   * Updates the animation progress of the given non-content tile.
+   *
+   * @param {Number} progress From -1 to 1
+   * @param {Tile} tile
+   * @param {Number} waveProgressOffset From -1 to 1
+   */
+  function updateNonContentTile(progress, tile, waveProgressOffset) {
+    var tileProgress =
+        Math.sin(((((progress + 1 + waveProgressOffset) % 2) + 2) % 2 - 1) * Math.PI);
+
+    tile.currentColor.h += config.deltaHue * tileProgress * config.opacity;
+    tile.currentColor.s += config.deltaSaturation * tileProgress * config.opacity;
+    tile.currentColor.l += config.deltaLightness * tileProgress * config.opacity;
   }
 
-  function createColorWaveItems(folder) {
-    folder.add(window.hg.ColorWaveJob.config, 'period', 1, 10000)
-        .onChange(function (value) {
-          window.hg.ColorWaveJob.config.halfPeriod = value / 2;
-        });
-    folder.add(window.hg.ColorWaveJob.config, 'wavelength', 1, 4000)
-        .onChange(function () {
-          window.hg.controller.persistentJobs.ColorWaveJob.start(persistentParams.grid);
-        });
-    folder.add(window.hg.ColorWaveJob.config, 'originX', -500, 3000)
-        .onChange(function () {
-          window.hg.controller.persistentJobs.ColorWaveJob.start(persistentParams.grid);
-        });
-    folder.add(window.hg.ColorWaveJob.config, 'originY', -500, 3000)
-        .onChange(function () {
-          window.hg.controller.persistentJobs.ColorWaveJob.start(persistentParams.grid);
-        });
-    folder.add(window.hg.ColorWaveJob.config, 'deltaHue', 0, 360);
-    folder.add(window.hg.ColorWaveJob.config, 'deltaSaturation', 0, 100);
-    folder.add(window.hg.ColorWaveJob.config, 'deltaLightness', 0, 100);
-    folder.add(window.hg.ColorWaveJob.config, 'opacity', 0, 1);
+  /**
+   * Updates the animation progress of the given content tile.
+   *
+   * @param {Number} progress From -1 to 1
+   * @param {Tile} tile
+   * @param {Number} waveProgressOffset From -1 to 1
+   */
+  function updateContentTile(progress, tile, waveProgressOffset) {
+    var tileProgress =
+        Math.sin(((((progress + 1 + waveProgressOffset) % 2) + 2) % 2 - 1) * Math.PI) * 0.5 + 0.5;
+
+    tile.imageScreenOpacity += -tileProgress * config.opacity *
+        config.deltaOpacityImageBackgroundScreen;
   }
 
-  function createDisplacementWaveItems(folder) {
-    folder.add(window.hg.DisplacementWaveJob.config, 'period', 1, 10000)
-        .onChange(function (value) {
-          window.hg.DisplacementWaveJob.config.halfPeriod = value / 2;
-        });
-    folder.add(window.hg.DisplacementWaveJob.config, 'wavelength', 1, 4000)
-        .onChange(function () {
-          window.hg.controller.persistentJobs.DisplacementWaveJob.start(persistentParams.grid);
-        });
-    folder.add(window.hg.DisplacementWaveJob.config, 'originX', -500, 3000)
-        .onChange(function () {
-          window.hg.controller.persistentJobs.DisplacementWaveJob.start(persistentParams.grid);
-        });
-    folder.add(window.hg.DisplacementWaveJob.config, 'originY', -500, 3000)
-        .onChange(function () {
-          window.hg.controller.persistentJobs.DisplacementWaveJob.start(persistentParams.grid);
-        });
-    folder.add(window.hg.DisplacementWaveJob.config, 'tileDeltaX', -300, 300);
-    folder.add(window.hg.DisplacementWaveJob.config, 'tileDeltaY', -300, 300);
+  // ------------------------------------------------------------------------------------------- //
+  // Public dynamic functions
+
+  /**
+   * Sets this ColorWaveJob as started.
+   *
+   * @this ColorWaveJob
+   * @param {Number} startTime
+   */
+  function start(startTime) {
+    var job = this;
+
+    job.startTime = startTime;
+    job.isComplete = false;
   }
 
-  console.log('persistent-animation-parameters module loaded');
+  /**
+   * Updates the animation progress of this ColorWaveJob to match the given time.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this ColorWaveJob
+   * @param {Number} currentTime
+   * @param {Number} deltaTime
+   */
+  function update(currentTime, deltaTime) {
+    var job, progress, i, count;
+
+    job = this;
+
+    progress = (currentTime + config.halfPeriod) / config.period % 2 - 1;
+
+    for (i = 0, count = job.grid.allNonContentTiles.length; i < count; i += 1) {
+      updateNonContentTile(progress, job.grid.allNonContentTiles[i],
+          job.waveProgressOffsetsNonContentTiles[i]);
+    }
+
+    for (i = 0, count = job.grid.contentTiles.length; i < count; i += 1) {
+      updateContentTile(progress, job.grid.contentTiles[i],
+          job.waveProgressOffsetsContentTiles[i]);
+    }
+  }
+
+  /**
+   * Draws the current state of this ColorWaveJob.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this ColorWaveJob
+   */
+  function draw() {
+    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
+  }
+
+  /**
+   * Stops this ColorWaveJob, and returns the element its original form.
+   *
+   * @this ColorWaveJob
+   */
+  function cancel() {
+    var job = this;
+
+    job.isComplete = true;
+  }
+
+  /**
+   * @this ColorWaveJob
+   */
+  function refresh() {
+    var job = this;
+
+    init.call(job);
+  }
+
+  /**
+   * @this ColorWaveJob
+   */
+  function init() {
+    var job = this;
+
+    config.computeDependentValues();
+    initTileProgressOffsets.call(job);
+  }
+
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this module's constructor
+
+  /**
+   * @constructor
+   * @global
+   * @param {Grid} grid
+   */
+  function ColorWaveJob(grid) {
+    var job = this;
+
+    job.grid = grid;
+    job.waveProgressOffsetsNonContentTiles = null;
+    job.waveProgressOffsetsContentTiles = null;
+    job.startTime = 0;
+    job.isComplete = true;
+
+    job.start = start;
+    job.update = update;
+    job.draw = draw;
+    job.cancel = cancel;
+    job.refresh = refresh;
+    job.init = init;
+
+    job.init();
+
+    console.log('ColorWaveJob created');
+  }
+
+  ColorWaveJob.config = config;
+
+  // Expose this module
+  window.hg = window.hg || {};
+  window.hg.ColorWaveJob = ColorWaveJob;
+
+  console.log('ColorWaveJob module loaded');
 })();
 
-'use strict';
+/**
+ * @typedef {AnimationJob} DisplacementResetJob
+ */
 
 /**
- * This module defines a singleton that handles the contents of folders within the dat.GUI menu that represent
- * transient animation parameters.
+ * This module defines a constructor for DisplacementResetJob objects.
  *
- * @module transient-animation-parameters
+ * DisplacementResetJob objects reset tile displacement values during each animation frame.
+ *
+ * @module DisplacementResetJob
  */
 (function () {
+  // ------------------------------------------------------------------------------------------- //
+  // Private static variables
 
   var config = {};
 
-  config.folders = [
-    {
-      name: 'Transient',
-      isOpen: false,
-      createItems: null,
-      children: [
-        {
-          name: 'Open/Close Post',
-          isOpen: false,
-          createItems: createOpenClosePostItems
-        },
-        {
-          name: 'Displacement Radiate',
-          isOpen: false,
-          createItems: createDisplacementRadiateItems
-        },
-        {
-          name: 'Hover Highlight',
-          isOpen: false,
-          createItems: createHoverHighlightItems
-        },
-        {
-          name: 'Radiating Highlight',
-          isOpen: false,
-          createItems: createRadiatingHighlightItems
-        },
-        {
-          name: 'Intra-Tile Radiate',
-          isOpen: false,
-          createItems: createIntraTileRadiateItems
-        },
-        {
-          name: 'Random Lines',
-          isOpen: false,
-          createItems: createRandomLinesItems
-        },
-        {
-          name: 'Radiating Lines',
-          isOpen: false,
-          createItems: createRadiatingLinesItems
-        },
-        {
-          name: 'Pan',
-          isOpen: false,
-          createItems: createPanItems
-        },
-        {
-          name: 'Spread',
-          isOpen: false,
-          createItems: createSpreadItems
-        },
-        {
-          name: 'Tile Border',
-          isOpen: false,
-          createItems: createTileBorderItems
-        }
-      ]
+  //  --- Dependent parameters --- //
+
+  config.computeDependentValues = function () {
+  };
+
+  config.computeDependentValues();
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private dynamic functions
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
+
+  // ------------------------------------------------------------------------------------------- //
+  // Public dynamic functions
+
+  /**
+   * Sets this DisplacementResetJob as started.
+   *
+   * @this DisplacementResetJob
+   * @param {Number} startTime
+   */
+  function start(startTime) {
+    var job = this;
+
+    job.startTime = startTime;
+    job.isComplete = false;
+  }
+
+  /**
+   * Updates the animation progress of this DisplacementResetJob to match the given time.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this DisplacementResetJob
+   * @param {Number} currentTime
+   * @param {Number} deltaTime
+   */
+  function update(currentTime, deltaTime) {
+    var job, i, count;
+
+    job = this;
+
+    // Update the Tiles
+    for (i = 0, count = job.grid.allTiles.length; i < count; i += 1) {
+      job.grid.allTiles[i].currentAnchor.x = job.grid.allTiles[i].originalAnchor.x;
+      job.grid.allTiles[i].currentAnchor.y = job.grid.allTiles[i].originalAnchor.y;
     }
-  ];
 
-  // ---  --- //
-
-  var transientParams = {};
-
-  transientParams.init = init;
-  transientParams.config = config;
-
-  window.app = window.app || {};
-  app.transientParams = transientParams;
-
-  // ---  --- //
-
-  function init(grid) {
-    transientParams.grid = grid;
-  }
-
-  function createOpenClosePostItems(folder) {
-    var data = {
-      'triggerOpenPost': window.hg.controller.transientJobs.OpenPostJob.createRandom.bind(
-          window.hg.controller, transientParams.grid),
-      'triggerClosePost': window.hg.controller.transientJobs.ClosePostJob.createRandom.bind(
-              window.hg.controller, transientParams.grid, false),
-      'triggerTogglePost': function () {
-        if (transientParams.grid.isPostOpen) {
-          data.triggerClosePost();
-        } else {
-          data.triggerOpenPost();
-        }
-      }
-    };
-
-    folder.add(data, 'triggerTogglePost');
-
-    folder.add(window.hg.OpenPostJob.config, 'duration', 10, 10000)
-        .name('Open Duration');
-    folder.add(window.hg.ClosePostJob.config, 'duration', 10, 10000)
-        .name('Close Duration');
-    folder.add(window.hg.OpenPostJob.config, 'expandedDisplacementTileCount', 0, 5)
-        .step(1);
-  }
-
-  function createDisplacementRadiateItems(folder) {
-    var data = {
-      'triggerDisplacement':
-          window.hg.controller.transientJobs.DisplacementRadiateJob.createRandom.bind(
-              window.hg.controller, transientParams.grid)
-    };
-
-    folder.add(data, 'triggerDisplacement');
-
-    folder.add(window.hg.DisplacementRadiateJob.config, 'duration', 10, 10000);
-
-    // TODO:
-
-    folder.add(window.hg.DisplacementRadiateJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.DisplacementRadiateJob.config, 'avgDelay', 10, 10000)
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.DisplacementRadiateJob.config, 'delayDeviationRange', 0, 10000)
-        .onChange(toggleRecurrence);
-
-    // ---  --- //
-
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.DisplacementRadiateJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.DisplacementRadiateJob.config.isRecurring,
-          window.hg.DisplacementRadiateJob.config.avgDelay,
-          window.hg.DisplacementRadiateJob.config.delayDeviationRange);
+    if (job.grid.isPostOpen) {
+      // Update the Carousel
+      job.grid.pagePost.carousel.currentIndexPositionRatio =
+        job.grid.pagePost.carousel.currentIndex;
     }
   }
 
-  function createHoverHighlightItems(folder) {
-    var data, colors;
+  /**
+   * Draws the current state of this DisplacementResetJob.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this DisplacementResetJob
+   */
+  function draw() {
+    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
+  }
 
-    colors = [];
-    colors.deltaColor = window.hg.util.hslToHsv({
-      h: window.hg.HighlightHoverJob.config.deltaHue,
-      s: window.hg.HighlightHoverJob.config.deltaSaturation * 0.01,
-      l: window.hg.HighlightHoverJob.config.deltaLightness * 0.01
-    });
+  /**
+   * Stops this DisplacementResetJob, and returns the element its original form.
+   *
+   * @this DisplacementResetJob
+   */
+  function cancel() {
+    var job = this;
 
-    data = {
-      'triggerHighlightHover': window.hg.controller.transientJobs.HighlightHoverJob.createRandom.bind(
-          window.hg.controller, transientParams.grid)
-    };
+    job.isComplete = true;
+  }
 
-    folder.add(data, 'triggerHighlightHover');
+  /**
+   * @this DisplacementResetJob
+   */
+  function refresh() {
+    var job = this;
 
-    folder.add(window.hg.HighlightHoverJob.config, 'duration', 10, 10000);
-    folder.addColor(colors, 'deltaColor')
-        .onChange(function () {
-          var color = window.hg.util.hsvToHsl(colors.deltaColor);
+    init.call(job);
+  }
 
-          window.hg.HighlightHoverJob.config.deltaHue = color.h;
-          window.hg.HighlightHoverJob.config.deltaSaturation = color.s * 100;
-          window.hg.HighlightHoverJob.config.deltaLightness = color.l * 100;
-        });
-    folder.add(window.hg.HighlightHoverJob.config, 'opacity', 0, 1);
+  /**
+   * @this DisplacementResetJob
+   */
+  function init() {
+  }
 
-    folder.add(window.hg.HighlightHoverJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.HighlightHoverJob.config, 'avgDelay', 10, 2000)
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.HighlightHoverJob.config, 'delayDeviationRange', 0, 2000)
-        .onChange(toggleRecurrence);
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this module's constructor
 
-    // ---  --- //
+  /**
+   * @constructor
+   * @global
+   * @param {Grid} grid
+   */
+  function DisplacementResetJob(grid) {
+    var job = this;
 
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.HighlightHoverJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.HighlightHoverJob.config.isRecurring,
-          window.hg.HighlightHoverJob.config.avgDelay,
-          window.hg.HighlightHoverJob.config.delayDeviationRange);
+    job.grid = grid;
+    job.startTime = 0;
+    job.isComplete = true;
+
+    job.start = start;
+    job.update = update;
+    job.draw = draw;
+    job.cancel = cancel;
+    job.refresh = refresh;
+    job.init = init;
+
+    job.init();
+
+    console.log('DisplacementResetJob created');
+  }
+
+  DisplacementResetJob.config = config;
+
+  // Expose this module
+  window.hg = window.hg || {};
+  window.hg.DisplacementResetJob = DisplacementResetJob;
+
+  console.log('DisplacementResetJob module loaded');
+})();
+
+/**
+ * @typedef {AnimationJob} DisplacementWaveJob
+ */
+
+/**
+ * This module defines a constructor for DisplacementWaveJob objects.
+ *
+ * DisplacementWaveJob objects animate the tiles of a Grid in order to create waves of
+ * motion.
+ *
+ * @module DisplacementWaveJob
+ */
+(function () {
+  // ------------------------------------------------------------------------------------------- //
+  // Private static variables
+
+  var config = {};
+
+  config.period = 3200;
+  config.wavelength = 1800;
+  config.originX = 0;
+  config.originY = 0;
+
+  // Amplitude (will range from negative to positive)
+  config.tileDeltaX = -15;
+  config.tileDeltaY = -config.tileDeltaX * Math.sqrt(3);
+
+  //  --- Dependent parameters --- //
+
+  config.computeDependentValues = function () {
+    config.halfPeriod = config.period / 2;
+
+    config.displacementAmplitude =
+        Math.sqrt(config.tileDeltaX * config.tileDeltaX +
+            config.tileDeltaY * config.tileDeltaY);
+  };
+
+  config.computeDependentValues();
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private dynamic functions
+
+  /**
+   * Calculates a wave offset value for each tile according to their positions in the grid.
+   *
+   * @this DisplacementWaveJob
+   */
+  function initTileProgressOffsets() {
+    var job, i, count, tile, length, deltaX, deltaY, halfWaveProgressWavelength;
+
+    job = this;
+
+    halfWaveProgressWavelength = config.wavelength / 2;
+    job.waveProgressOffsets = [];
+
+    for (i = 0, count = job.grid.allTiles.length; i < count; i += 1) {
+      tile = job.grid.allTiles[i];
+
+      deltaX = tile.originalAnchor.x - config.originX;
+      deltaY = tile.originalAnchor.y - config.originY;
+      length = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + config.wavelength;
+
+      job.waveProgressOffsets[i] = -(length % config.wavelength - halfWaveProgressWavelength)
+          / halfWaveProgressWavelength;
     }
   }
 
-  function createRadiatingHighlightItems(folder) {
-    var data, colors;
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
 
-    colors = [];
-    colors.deltaColor = window.hg.util.hslToHsv({
-      h: window.hg.HighlightRadiateJob.config.deltaHue,
-      s: window.hg.HighlightRadiateJob.config.deltaSaturation * 0.01,
-      l: window.hg.HighlightRadiateJob.config.deltaLightness * 0.01
-    });
+  /**
+   * Updates the animation progress of the given tile.
+   *
+   * @param {Number} progress
+   * @param {Tile} tile
+   * @param {Number} waveProgressOffset
+   */
+  function updateTile(progress, tile, waveProgressOffset) {
+    var tileProgress =
+        Math.sin(((((progress + 1 + waveProgressOffset) % 2) + 2) % 2 - 1) * Math.PI);
 
-    data = {
-      'triggerHighlightRadiate':
-          window.hg.controller.transientJobs.HighlightRadiateJob.createRandom.bind(
-              window.hg.controller, transientParams.grid)
-    };
+    tile.currentAnchor.x += config.tileDeltaX * tileProgress;
+    tile.currentAnchor.y += config.tileDeltaY * tileProgress;
+  }
 
-    folder.add(data, 'triggerHighlightRadiate');
+  // ------------------------------------------------------------------------------------------- //
+  // Public dynamic functions
 
-    folder.add(window.hg.HighlightRadiateJob.config, 'shimmerSpeed', 0.1, 10);
-    folder.add(window.hg.HighlightRadiateJob.config, 'shimmerWaveWidth', 1, 2000);
-    folder.add(window.hg.HighlightRadiateJob.config, 'duration', 10, 10000);
-    folder.addColor(colors, 'deltaColor')
-        .onChange(function () {
-          var color = window.hg.util.hsvToHsl(colors.deltaColor);
+  /**
+   * Sets this DisplacementWaveJob as started.
+   *
+   * @this DisplacementWaveJob
+   * @param {Number} startTime
+   */
+  function start(startTime) {
+    var job = this;
 
-          window.hg.HighlightRadiateJob.config.deltaHue = color.h;
-          window.hg.HighlightRadiateJob.config.deltaSaturation = color.s * 100;
-          window.hg.HighlightRadiateJob.config.deltaLightness = color.l * 100;
-        });
-    folder.add(window.hg.HighlightRadiateJob.config, 'opacity', 0, 1);
+    job.startTime = startTime;
+    job.isComplete = false;
+  }
 
-    folder.add(window.hg.HighlightRadiateJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.HighlightRadiateJob.config, 'avgDelay', 10, 10000)
-        .onChange(toggleRecurrence);
-    folder
-        .add(window.hg.HighlightRadiateJob.config, 'delayDeviationRange', 0, 10000)
-        .onChange(toggleRecurrence);
+  /**
+   * Updates the animation progress of this DisplacementWaveJob to match the given time.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this DisplacementWaveJob
+   * @param {Number} currentTime
+   * @param {Number} deltaTime
+   */
+  function update(currentTime, deltaTime) {
+    var job, progress, i, count;
 
-    // ---  --- //
+    job = this;
 
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.HighlightRadiateJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.HighlightRadiateJob.config.isRecurring,
-          window.hg.HighlightRadiateJob.config.avgDelay,
-          window.hg.HighlightRadiateJob.config.delayDeviationRange);
+    progress = (currentTime + config.halfPeriod) / config.period % 2 - 1;
+
+    for (i = 0, count = job.grid.allTiles.length; i < count; i += 1) {
+      updateTile(progress, job.grid.allTiles[i], job.waveProgressOffsets[i]);
     }
   }
 
-  function createIntraTileRadiateItems(folder) {
-    var data = {
-      'triggerIntraTileRadiate':
-          window.hg.controller.transientJobs.IntraTileRadiateJob.createRandom.bind(
-              window.hg.controller, transientParams.grid)
-    };
-
-    folder.add(data, 'triggerIntraTileRadiate');
-
-    folder.add(window.hg.IntraTileRadiateJob.config, 'duration', 10, 10000);
-
-    // TODO:
-
-    folder.add(window.hg.IntraTileRadiateJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.IntraTileRadiateJob.config, 'avgDelay', 10, 10000)
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.IntraTileRadiateJob.config, 'delayDeviationRange',
-        0, 10000)
-        .onChange(toggleRecurrence);
-
-    // ---  --- //
-
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.IntraTileRadiateJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.IntraTileRadiateJob.config.isRecurring,
-          window.hg.IntraTileRadiateJob.config.avgDelay,
-          window.hg.IntraTileRadiateJob.config.delayDeviationRange);
-    }
+  /**
+   * Draws the current state of this DisplacementWaveJob.
+   *
+   * This should be called from the overall animation loop.
+   *
+   * @this DisplacementWaveJob
+   */
+  function draw() {
+    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
   }
 
-  function createRandomLinesItems(folder) {
-    var data = {
-      'triggerLine': window.hg.controller.transientJobs.LineJob.createRandom.bind(
-          window.hg.controller, transientParams.grid)
-    };
+  /**
+   * Stops this DisplacementWaveJob, and returns the element its original form.
+   *
+   * @this DisplacementWaveJob
+   */
+  function cancel() {
+    var job = this;
 
-    folder.add(data, 'triggerLine');
-
-    folder.add(window.hg.LineJob.config, 'duration', 100, 20000);
-    folder.add(window.hg.LineJob.config, 'lineWidth', 1, 100);
-    folder.add(window.hg.LineJob.config, 'lineLength', 10, 60000);
-    folder.add(window.hg.LineJob.config, 'lineSidePeriod', 5, 500);
-    folder.add(window.hg.LineJob.config, 'startSaturation', 0, 100);
-    folder.add(window.hg.LineJob.config, 'startLightness', 0, 100);
-    folder.add(window.hg.LineJob.config, 'startOpacity', 0, 1);
-    folder.add(window.hg.LineJob.config, 'endSaturation', 0, 100);
-    folder.add(window.hg.LineJob.config, 'endLightness', 0, 100);
-    folder.add(window.hg.LineJob.config, 'endOpacity', 0, 1);
-    folder.add(window.hg.LineJob.config, 'sameDirectionProb', 0, 1);
-
-    folder.add(window.hg.LineJob.config, 'isBlurOn');
-    folder.add(window.hg.LineJob.config, 'blurStdDeviation', 0, 80);
-
-    folder.add(window.hg.LineJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.LineJob.config, 'avgDelay', 10, 10000)
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.LineJob.config, 'delayDeviationRange', 0, 10000)
-        .onChange(toggleRecurrence);
-
-    // ---  --- //
-
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.LineJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.LineJob.config.isRecurring,
-          window.hg.LineJob.config.avgDelay,
-          window.hg.LineJob.config.delayDeviationRange);
-    }
+    job.isComplete = true;
   }
 
-  function createRadiatingLinesItems(folder) {
-    var data = {
-      'triggerLinesRadiate': window.hg.controller.transientJobs.LinesRadiateJob.createRandom.bind(
-          window.hg.controller, transientParams.grid)
-    };
+  /**
+   * @this DisplacementWaveJob
+   */
+  function refresh() {
+    var job = this;
 
-    folder.add(data, 'triggerLinesRadiate');
-
-    folder.add(window.hg.LinesRadiateJob.config, 'duration', 100, 20000);
-    folder.add(window.hg.LinesRadiateJob.config, 'lineWidth', 1, 100);
-    folder.add(window.hg.LinesRadiateJob.config, 'lineLength', 10, 60000);
-    folder.add(window.hg.LinesRadiateJob.config, 'lineSidePeriod', 5, 500);
-    folder.add(window.hg.LinesRadiateJob.config, 'startSaturation', 0, 100);
-    folder.add(window.hg.LinesRadiateJob.config, 'startLightness', 0, 100);
-    folder.add(window.hg.LinesRadiateJob.config, 'startOpacity', 0, 1);
-    folder.add(window.hg.LinesRadiateJob.config, 'endSaturation', 0, 100);
-    folder.add(window.hg.LinesRadiateJob.config, 'endLightness', 0, 100);
-    folder.add(window.hg.LinesRadiateJob.config, 'endOpacity', 0, 1);
-    folder.add(window.hg.LinesRadiateJob.config, 'sameDirectionProb', 0, 1);
-
-    folder.add(window.hg.LinesRadiateJob.config, 'isBlurOn');
-    folder.add(window.hg.LinesRadiateJob.config, 'blurStdDeviation', 0, 80);
-
-    folder.add(window.hg.LinesRadiateJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.LinesRadiateJob.config, 'avgDelay', 10, 10000)
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.LinesRadiateJob.config, 'delayDeviationRange', 0, 10000)
-        .onChange(toggleRecurrence);
-
-    // ---  --- //
-
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.LinesRadiateJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.LinesRadiateJob.config.isRecurring,
-          window.hg.LinesRadiateJob.config.avgDelay,
-          window.hg.LinesRadiateJob.config.delayDeviationRange);
-    }
+    init.call(job);
   }
 
-  function createPanItems(folder) {
-    var data = {
-      'triggerPan':
-          window.hg.controller.transientJobs.PanJob.createRandom.bind(
-              window.hg.controller, transientParams.grid)
-    };
+  /**
+   * @this DisplacementWaveJob
+   */
+  function init() {
+    var job = this;
 
-    folder.add(data, 'triggerPan');
-
-    folder.add(window.hg.PanJob.config, 'duration', 10, 10000);
-
-    folder.add(window.hg.PanJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.PanJob.config, 'avgDelay', 10, 10000)
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.PanJob.config, 'delayDeviationRange', 0, 10000)
-        .onChange(toggleRecurrence);
-
-    // ---  --- //
-
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.PanJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.PanJob.config.isRecurring,
-          window.hg.PanJob.config.avgDelay,
-          window.hg.PanJob.config.delayDeviationRange);
-    }
+    config.computeDependentValues();
+    initTileProgressOffsets.call(job);
   }
 
-  function createSpreadItems(folder) {
-    var data = {
-      'triggerSpread':
-          window.hg.controller.transientJobs.SpreadJob.createRandom.bind(
-              window.hg.controller, transientParams.grid)
-    };
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this module's constructor
 
-    folder.add(data, 'triggerSpread');
+  /**
+   * @constructor
+   * @global
+   * @param {Grid} grid
+   */
+  function DisplacementWaveJob(grid) {
+    var job = this;
 
-    folder.add(window.hg.SpreadJob.config, 'duration', 10, 10000);
+    job.grid = grid;
+    job.waveProgressOffsets = null;
+    job.startTime = 0;
+    job.isComplete = true;
 
-    folder.add(window.hg.SpreadJob.config, 'displacementRatio', 0.01, 1);
+    job.start = start;
+    job.update = update;
+    job.draw = draw;
+    job.cancel = cancel;
+    job.refresh = refresh;
+    job.init = init;
 
-    folder.add(window.hg.SpreadJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.SpreadJob.config, 'avgDelay', 10, 10000)
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.SpreadJob.config, 'delayDeviationRange', 0, 10000)
-        .onChange(toggleRecurrence);
+    job.init();
 
-    // ---  --- //
-
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.SpreadJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.SpreadJob.config.isRecurring,
-          window.hg.SpreadJob.config.avgDelay,
-          window.hg.SpreadJob.config.delayDeviationRange);
-    }
+    console.log('DisplacementWaveJob created');
   }
 
-  function createTileBorderItems(folder) {
-    var data = {
-      'triggerTileBorder': window.hg.controller.transientJobs.TileBorderJob.createRandom.bind(
-              window.hg.controller, transientParams.grid)
-    };
+  DisplacementWaveJob.config = config;
 
-    folder.add(data, 'triggerTileBorder');
+  // Expose this module
+  window.hg = window.hg || {};
+  window.hg.DisplacementWaveJob = DisplacementWaveJob;
 
-    folder.add(window.hg.TileBorderJob.config, 'duration', 10, 10000);
-
-    // TODO:
-
-    folder.add(window.hg.TileBorderJob.config, 'isRecurring')
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.TileBorderJob.config, 'avgDelay', 10, 10000)
-        .onChange(toggleRecurrence);
-    folder.add(window.hg.TileBorderJob.config, 'delayDeviationRange', 0, 10000)
-        .onChange(toggleRecurrence);
-
-    // ---  --- //
-
-    function toggleRecurrence() {
-      window.hg.controller.transientJobs.TileBorderJob.toggleRecurrence(
-          transientParams.grid,
-          window.hg.TileBorderJob.config.isRecurring,
-          window.hg.TileBorderJob.config.avgDelay,
-          window.hg.TileBorderJob.config.delayDeviationRange);
-    }
-  }
-
-  console.log('transient-animation-parameters module loaded');
+  console.log('DisplacementWaveJob module loaded');
 })();
