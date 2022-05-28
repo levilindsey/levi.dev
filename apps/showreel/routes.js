@@ -1,6 +1,6 @@
 const routeRegex = /^\/((game(play)?)?-?show-?reel)(?:\/.*)?$/i;
 
-const youtubeUrl = 'https://www.youtube.com/watch?v=XCHBPZsOKGw';
+const youtubeUrl = 'https://www.youtube.com/watch?v=VKTejiouFJk';
 const portfolioUrl = 'https://levi.dev#showreel';
 
 // Attaches the route handlers for this app.
