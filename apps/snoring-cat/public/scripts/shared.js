@@ -42,6 +42,9 @@
     setTimeout(function () {
       mainContainer.style.visibility = 'visible';
     }, 40);
+
+    document.addEventListener('mousedown', autoplaySnores);
+    document.addEventListener('touchstart', autoplaySnores);
   }
 
   function onHeaderClick(card) {
@@ -91,6 +94,13 @@
           matchingCard.scrollIntoView();
         }, 10);
       }
+    }
+  }
+
+  function autoplaySnores() {
+    const audio = document.querySelector('#cat-snores-sound');
+    if (audio.paused) {
+      audio.play();
     }
   }
 
