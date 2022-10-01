@@ -176,6 +176,11 @@ const redirects = [
     routeRegex: /^\/(ld50|ludum-?dare-?50)(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.github.io/ludum-dare-50/',
   },
+  // Ludum Dare 51
+  {
+    routeRegex: /^\/(ld51|ludum-?dare-?51)(?:\/.*)?$/i,
+    redirectUrl: 'https://levilindsey.github.io/ludum-dare-51/',
+  },
 ];
 
 // Attaches the route handlers for this app.
