@@ -178,7 +178,7 @@ const redirects = [
   },
   // Ludum Dare 51
   {
-    routeRegex: /^\/(ld51|ludum-?dare-?51)(?:\/.*)?$/i,
+    routeRegex: /^\/(ld51|ludum-?dare-?51|village|village-?defender|defender)(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.github.io/ludum-dare-51/',
   },
 ];
