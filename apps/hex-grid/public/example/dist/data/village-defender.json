@@ -1,0 +1,47 @@
+{
+  "id": "village-defender",
+  "titleShort": "Platformer\nstrategy game",
+  "titleLong": "Village Defender: Platformer strategy game",
+  "emphasis": 0.6,
+  "color": "#d4ce63",
+  "urls": {
+    "demo": "https://levi.dev/ld51",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/51/ludum-dare-51-here-we-come",
+    "github": "https://github.com/levilindsey/ludum-dare-51",
+    "soundcloud": "https://soundcloud.com/levilindsey/sets/village-defender"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "10/2022",
+  "categories": [
+    "side-project",
+    "app",
+    "godot",
+    "game",
+    "AI",
+    "2D",
+    "game-jam"
+  ],
+  "images": [
+    {
+      "fileName": "ld51_raining.gif",
+      "description": "Some gameplay. Lots of arrows and rocks flying back and forth!"
+    },
+    {
+      "fileName": "worker_standing_256.gif",
+      "description": "Down, up, down, up, down, up, ..."
+    },
+    {
+      "fileName": "cover.png",
+      "description": "Cover art for Village Defender."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "Ix7IdaGE3AA",
+      "description": "A gameplay video for Village Defender."
+    }
+  ],
+  "content": "> 🏹 Lead the village the defend against relentless waves of monsters!\n\n\n_Check-out Levi's **[retrospective post](https:\/\/devlog.levi.dev\/2022\/10\/ludum-dare-51-village-defender.html)** for more details on how this game was made._\n\n\nAll design, code, images, sound effects, and music were created during the jam.\n\n\n## ‍💻 The jam\n\n[Ludum Dare](https:\/\/ldjam.com\/events\/ludum-dare\/51\/) is a semi-annual event where people create a game over the weekend.\n-   It is a ranked competition, with a clever voting system that gets more eyes on your game when you in turn rate other games.\n-   There are a few different tracks you can participate in; I usually do the more-challenging \"**Compo**\" track, where you must create all your own art, music, sounds, etc. from scratch, work by yourself, and finish within **48 hours**.\n-   The games all follow some central theme, which is only announced at the start of the jam.\n\nI worked solo and created everything during the event (the Compo track). Except of course for my frameworks (which is fine, you're allowed to use pre-existing code).\n\n### 💡 The theme\n\n\"Every 10 seconds\"\n\n\n## 🎮 Controls\n\n🖱️+⌨️\n-   WASD\/arrows to move\n-   Space to jump\n-   Click on units to select and command them\n\n\n## 💿 Software used\n\n-   **[Godot](https:\/\/godotengine.org\/):** Game engine.\n-   **[Aseprite](https:\/\/www.aseprite.org\/):** Pixel-art image editor.\n-   **[FamiStudio](https:\/\/famistudio.org\/):** Chiptune music tracker.\n-   **[Bfxr](https:\/\/www.bfxr.net\/):** Sound effects editor.\n-   **[Surfacer](https:\/\/godotengine.org\/asset-library\/asset\/968):** Framework for procedural path-finding across 2D platforms.\n-   **[Scaffolder](https:\/\/godotengine.org\/asset-library\/asset\/969):** Framework for general app and UI infrastructure.\n-   **[SurfaceTiler](https:\/\/github.com\/SnoringCatGames\/surface_tiler):** Framework for \"next-level\" autotiling.\n\n\n![A villager](https:\/\/s3-us-west-2.amazonaws.com\/levi-portfolio-media\/village-defender\/worker_standing_256.gif)\n"
+}
