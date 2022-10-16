@@ -1,0 +1,31 @@
+{
+  "id": "bungie",
+  "titleShort": "Bungie:\nDestiny 2",
+  "titleLong": "Bungie: Destiny 2",
+  "emphasis": 1.0,
+  "color": "#1195d3",
+  "urls": {
+    "homepage": "https://www.bungie.net/"
+  },
+  "jobTitle": "Senior Gameplay Engineer",
+  "location": "Bellevue, WA",
+  "date": {
+    "start": "8/2022",
+    "end": "Present",
+    "tieBreaker": 9
+  },
+  "categories": [
+    "work",
+    "ai",
+    "animation",
+    "c++",
+    "game",
+    "3D",
+    "teamwork"
+  ],
+  "images": [
+  ],
+  "videos": [
+  ],
+  "content": "_[Bungie](https:\/\/www.bungie.net\/) is a video game company based in Bellevue, Washington._\r\n\r\nLevi is a senior gameplay engineer working on the AI in Destiny 2.\r\n"
+}
