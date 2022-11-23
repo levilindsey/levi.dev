@@ -21,74 +21,9 @@ var Q = require('q');
 
 // ---  --- //
 
-gulp.task('clean-data', function () {
-  return gulp.src(config.exampleDistPath, {read: false, allowEmpty: true})
-      .pipe(plugins.clean());
-});
+gulp.task('data', ['merge-data']);
 
-gulp.task('inject-data-descriptions', gulp.series(function () {
-  var streams = [];
-
-  glob.sync(config.metadataSrc)
-      .forEach(injectDescription.bind(this, streams));
-
-  // Merge all of the individual streams into one stream
-  if (streams.length) {
-    return mergeStreams(streams);
-  }
-
-  // ---  --- //
-
-  function injectDescription(streams, metadataFilePath) {
-    // Determine the file path for the description file that corresponds to the given metadata file
-    var dataItemDirectoryPath = metadataFilePath.substr(0, metadataFilePath.indexOf('metadata.json'));
-    var descriptionFilePath = dataItemDirectoryPath + 'description.md';
-    var dataItemName = dataItemDirectoryPath.substring(config.exampleDataPath.length + 1, dataItemDirectoryPath.length - 1);
-
-    // Create a stream for a single data item to read its description file and inject it into its metadata file
-    var stream = gulp.src(metadataFilePath)
-        // Inject the description after sanitizing it for JSON
-        .pipe(plugins.replace('"content": ""', function () {
-          var descriptionData = fs.readFileSync(descriptionFilePath).toString();
-
-          descriptionData = sanitizeForJson(descriptionData);
-
-          return '"content": "' + descriptionData + '"';
-        }))
-        // Rename the metadata file to match the name of the data item
-        .pipe(plugins.rename(function (path) {
-          path.basename = dataItemName;
-        }))
-        // Write out the metadata with the injected description to a separate file
-        .pipe(gulp.dest(config.injectedMetadataDist));
-
-    streams.push(stream);
-  }
-
-  function mergeStreams(streams) {
-    var i, count;
-    var totalStream = streams[0];
-
-    for (i = 1, count = streams.length; i < count; i += 1) {
-      totalStream = merge(totalStream, streams[i]);
-    }
-
-    return totalStream;
-  }
-
-  function sanitizeForJson(rawString) {
-    return rawString
-        .replace(/\\/g, '\\\\')
-        .replace(/"/g, '\\\"')
-        .replace(/\//g, '\\/')
-        .replace(/\f/g, '\\f')
-        .replace(/\n/g, '\\n')
-        .replace(/\r/g, '\\r')
-        .replace(/\t/g, '\\t');
-  }
-}));
-
-gulp.task('merge-data', gulp.series('inject-data-descriptions', function () {
+gulp.task('merge-data', ['inject-data-descriptions'], function () {
   var metadataPromises = [];
   var metadataArray = [];
   var collectionMetadata;
@@ -254,6 +189,71 @@ gulp.task('merge-data', gulp.series('inject-data-descriptions', function () {
         .pipe(plugins.injectString.replace('<!-- inject:sitemapData -->', sitemapString))
         .pipe(gulp.dest(config.exampleDistPath));
   }
-}));
+});
 
-gulp.task('data', gulp.series('merge-data'));
+gulp.task('inject-data-descriptions', ['clean-data'], function () {
+  var streams = [];
+
+  glob.sync(config.metadataSrc)
+      .forEach(injectDescription.bind(this, streams));
+
+  // Merge all of the individual streams into one stream
+  if (streams.length) {
+    return mergeStreams(streams);
+  }
+
+  // ---  --- //
+
+  function injectDescription(streams, metadataFilePath) {
+    // Determine the file path for the description file that corresponds to the given metadata file
+    var dataItemDirectoryPath = metadataFilePath.substr(0, metadataFilePath.indexOf('metadata.json'));
+    var descriptionFilePath = dataItemDirectoryPath + 'description.md';
+    var dataItemName = dataItemDirectoryPath.substring(config.exampleDataPath.length + 1, dataItemDirectoryPath.length - 1);
+
+    // Create a stream for a single data item to read its description file and inject it into its metadata file
+    var stream = gulp.src(metadataFilePath)
+        // Inject the description after sanitizing it for JSON
+        .pipe(plugins.replace('"content": ""', function () {
+          var descriptionData = fs.readFileSync(descriptionFilePath).toString();
+
+          descriptionData = sanitizeForJson(descriptionData);
+
+          return '"content": "' + descriptionData + '"';
+        }))
+        // Rename the metadata file to match the name of the data item
+        .pipe(plugins.rename(function (path) {
+          path.basename = dataItemName;
+        }))
+        // Write out the metadata with the injected description to a separate file
+        .pipe(gulp.dest(config.injectedMetadataDist));
+
+    streams.push(stream);
+  }
+
+  function mergeStreams(streams) {
+    var i, count;
+    var totalStream = streams[0];
+
+    for (i = 1, count = streams.length; i < count; i += 1) {
+      totalStream = merge(totalStream, streams[i]);
+    }
+
+    return totalStream;
+  }
+
+  function sanitizeForJson(rawString) {
+    return rawString
+        .replace(/\\/g, '\\\\')
+        .replace(/"/g, '\\\"')
+        .replace(/\//g, '\\/')
+        .replace(/\f/g, '\\f')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
+        .replace(/\t/g, '\\t');
+  }
+});
+
+gulp.task('clean-data', function () {
+  return gulp.src([config.exampleDistPath], {read: false})
+      .pipe(plugins.clean());
+});
