@@ -181,12 +181,20 @@
     </url>
 
     <url>
+<<<<<<< HEAD
         <loc>https://www.levi.dev/#progress-circle</loc>
+=======
+        <loc>https://www.levi.dev/#photo-viewer</loc>
+>>>>>>> d5a68f484c6a6198e6ae5a384340c507ea8aeb9e
         <lastmod>2022-11-23</lastmod>
     </url>
 
     <url>
+<<<<<<< HEAD
         <loc>https://www.levi.dev/#photo-viewer</loc>
+=======
+        <loc>https://www.levi.dev/#progress-circle</loc>
+>>>>>>> d5a68f484c6a6198e6ae5a384340c507ea8aeb9e
         <lastmod>2022-11-23</lastmod>
     </url>
 
