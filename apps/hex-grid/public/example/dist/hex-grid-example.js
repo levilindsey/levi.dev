@@ -5236,7 +5236,8 @@ if (typeof define === 'function' && define.amd) {
 
 //# sourceMappingURL=showdown.js.map
 
-/*! showdown-twitter 26-11-2016 */(function (extension) {
+/*! showdown-twitter 26-11-2016 */
+(function (extension) {
   'use strict';
 
   if (typeof showdown !== 'undefined') {
@@ -5506,6 +5507,528 @@ if (typeof define === 'function' && define.amd) {
       canRunWithOpenGrid: true
     }
   };
+
+  internal.grids = [];
+  internal.inputs = [];
+  internal.annotations = [];
+  internal.postData = [];
+  internal.performanceCheckJob = true;
+
+  controller.isLowPerformanceBrowser = false;
+  controller.isSafariBrowser = false;
+  controller.isIosBrowser = false;
+  controller.isSmallScreen = false;
+
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this singleton
+
+  controller.config = config;
+
+  controller.createNewHexGrid = createNewHexGrid;
+  controller.resetGrid = resetGrid;
+  controller.resetPersistentJobs = resetPersistentJobs;
+  controller.setGridPostData = setGridPostData;
+  controller.filterGridPostDataByCategory = filterGridPostDataByCategory;
+
+  // Expose this module
+  window.hg = window.hg || {};
+  window.hg.controller = controller;
+
+  window.addEventListener('load', initController, false);
+
+  function initController() {
+    window.removeEventListener('load', initController);
+
+    var debouncedResize = window.hg.util.debounce(resize, 300);
+    window.addEventListener('resize', debouncedResize, false);
+  }
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
+
+  /**
+   * Starts repeating any AnimationJobs that are configured to recur.
+   *
+   * @param {Window.hg.Grid} grid
+   */
+  function startRecurringAnimations(grid) {
+    Object.keys(controller.transientJobs).forEach(function (key) {
+      var config = window.hg[controller.transientJobs[key].constructorName].config;
+
+      if (config.isRecurring) {
+        controller.transientJobs[key].toggleRecurrence(grid, true, config.avgDelay,
+            config.delayDeviationRange);
+      }
+    });
+  }
+
+  /**
+   * @param {String} jobId
+   * @param {Grid} grid
+   * @param {Tile} tile
+   * @param {Function} onComplete
+   * @param {*} [extraArg]
+   * @returns {AnimationJob}
+   */
+  function generalTransientJobCreator(jobId, grid, tile, onComplete, extraArg) {
+    return new window.hg[controller.transientJobs[jobId].constructorName](grid, tile, onComplete,
+        extraArg);
+  }
+
+  /**
+   * @param {?Function} creator
+   * @param {Array.<AnimationJob>} jobId
+   * @param {Grid} grid
+   * @param {?Tile} tile
+   * @param {*} [extraArg]
+   * @returns {?AnimationJob}
+   */
+  function createTransientJob(creator, jobId, grid, tile, extraArg) {
+    var job;
+
+    if (!grid.isPostOpen || controller.transientJobs[jobId].canRunWithOpenGrid) {
+      creator = creator || generalTransientJobCreator.bind(controller, jobId);
+
+      // Create the job with whatever custom logic is needed for this particular type of job
+      job = creator(grid, tile, onComplete, extraArg);
+
+      // Store a reference to this job within the controller
+      controller.transientJobs[jobId].jobs[grid.index].push(job);
+      window.hg.animator.startJob(job);
+
+      return job;
+    } else {
+      console.log('Cannot create a ' + controller.transientJobs[jobId].constructorName +
+          ' while the Grid is expanded');
+
+      return null;
+    }
+
+    // ---  --- //
+
+    function onComplete() {
+      // Destroy both references to this now-complete job
+      controller.transientJobs[jobId].jobs[grid.index].splice(
+          controller.transientJobs[jobId].jobs[grid.index].indexOf(job), 1);
+    }
+  }
+
+  /**
+   * @param {String} jobId
+   * @param {Grid} grid
+   * @returns {?AnimationJob}
+   */
+  function createTransientJobWithARandomTile(jobId, grid) {
+    return controller.transientJobs[jobId].create(grid, getRandomOriginalTile(grid));
+  }
+
+  /**
+   * Toggles whether an AnimationJob is automatically repeated.
+   *
+   * @param {String} jobId
+   * @param {Grid} grid
+   * @param {Boolean} isRecurring
+   * @param {Number} avgDelay
+   * @param {Number} delayDeviationRange
+   */
+  function toggleJobRecurrence(jobId, grid, isRecurring, avgDelay, delayDeviationRange) {
+    var minDelay, maxDelay, actualDelayRange, jobTimeouts;
+
+    jobTimeouts = controller.transientJobs[jobId].timeouts;
+
+    // Compute the delay deviation range
+    minDelay = avgDelay - delayDeviationRange * 0.5;
+    minDelay = minDelay > 0 ? minDelay : 1;
+    maxDelay = avgDelay + delayDeviationRange * 0.5;
+    actualDelayRange = maxDelay - minDelay;
+
+    // Stop any pre-existing recurrence
+    if (jobTimeouts[grid.index]) {
+      clearTimeout(jobTimeouts[grid.index]);
+      jobTimeouts[grid.index] = null;
+    }
+
+    // Should we start the recurrence?
+    if (isRecurring) {
+      jobTimeouts[grid.index] = setTimeout(recur, avgDelay);
+    }
+
+    // ---  --- //
+
+    /**
+     * Creates a new occurrence of the AnimationJob and starts a new timeout to repeat this.
+     */
+    function recur() {
+      var delay = Math.random() * actualDelayRange + minDelay;
+      controller.transientJobs[jobId].createRandom(grid);
+      jobTimeouts[grid.index] = setTimeout(recur, delay);
+    }
+  }
+
+  /**
+   * @param {String} jobId
+   * @param {Grid} grid
+   */
+  function createPersistentJob(jobId, grid) {
+    var jobDefinition, job;
+
+    jobDefinition = controller.persistentJobs[jobId];
+
+    job = new window.hg[jobDefinition.constructorName](grid);
+    jobDefinition.jobs[grid.index].push(job);
+    jobDefinition.start(grid, jobDefinition.jobs[grid.index].length - 1);
+  }
+
+  /**
+   * @param {String} jobId
+   * @param {Grid} grid
+   * @param {Number} [jobIndex] If not given, ALL persistent jobs (of this bound type) will be
+   * restarted for the given grid.
+   */
+  function restartPersistentJob(jobId, grid, jobIndex) {
+    if (typeof jobIndex !== 'undefined') {
+      window.hg.animator.startJob(controller.persistentJobs[jobId].jobs[grid.index][jobIndex]);
+    } else {
+      controller.persistentJobs[jobId].jobs[grid.index].forEach(window.hg.animator.startJob);
+    }
+  }
+
+  /**
+   * @param {String} jobId
+   * @param {Grid} grid
+   * @param {Number} [jobIndex] If not given, ALL persistent jobs (of this bound type) will be
+   * cancelled for the given grid.
+   */
+  function cancelPersistentJob(jobId, grid, jobIndex) {
+    if (typeof jobIndex !== 'undefined') {
+      controller.persistentJobs[jobId].jobs[grid.index][jobIndex].cancel();
+    } else {
+      controller.persistentJobs[jobId].jobs[grid.index].forEach(function (job) {
+        job.cancel();
+      });
+    }
+  }
+
+  /**
+   * Resizes all of the hex-grid components.
+   */
+  function resize() {
+    internal.grids.forEach(resetGrid);
+  }
+
+  /**
+   * @param {Grid} grid
+   * @returns {Tile}
+   */
+  function getRandomOriginalTile(grid) {
+    var tileIndex = parseInt(Math.random() * grid.originalTiles.length);
+    return grid.originalTiles[tileIndex];
+  }
+
+  /**
+   * @param {Grid} grid
+   * @returns {Tile}
+   */
+  function getRandomContentTile(grid) {
+    var contentIndex = parseInt(Math.random() * grid.contentTiles.length);
+    return grid.contentTiles[contentIndex];
+  }
+
+  // --- One-time-job creation functions --- //
+
+  /**
+   * @param {Grid} grid
+   * @param {Tile} tile
+   * @param {Function} onComplete
+   * @returns {Window.hg.LineJob}
+   */
+  function randomLineCreator(grid, tile, onComplete) {
+    return window.hg.LineJob.createRandomLineJob(grid, onComplete);
+  }
+
+  /**
+   * @param {Grid} grid
+   * @param {Tile} tile
+   * @param {Function} onComplete
+   * @returns {Window.hg.LinesRadiateJob}
+   */
+  function linesRadiateCreator(grid, tile, onComplete) {
+    var job = new window.hg.LinesRadiateJob(grid, tile, onAllLinesComplete);
+
+    // Also store references to each of the individual child lines
+    job.lineJobs.forEach(function (lineJob) {
+      controller.transientJobs.LineJob.jobs[grid.index].push(lineJob);
+    });
+
+    return job;
+
+    // ---  --- //
+
+    function onAllLinesComplete() {
+      // Destroy the references to the individual child lines
+      job.lineJobs.forEach(function (lineJob) {
+        controller.transientJobs.LineJob.jobs[grid.index].splice(
+            controller.transientJobs.LineJob.jobs[grid.index].indexOf(lineJob), 1);
+      });
+
+      onComplete();
+    }
+  }
+
+  // --- One-time-job random creation functions --- //
+
+  /**
+   * @param {Grid} grid
+   * @returns {?Window.hg.OpenPostJob}
+   */
+  function openRandomPost(grid) {
+    // If no post is open, pick a random content tile, and open the post; otherwise, do nothing
+    if (!grid.isPostOpen) {
+      return controller.transientJobs.OpenPostJob.create(grid, getRandomContentTile(grid));
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * @param {Grid} grid
+   * @param {Boolean} isPairedWithAnotherOpen
+   * @returns {?Window.hg.ClosePostJob}
+   */
+  function closePost(grid, isPairedWithAnotherOpen) {
+    // If a post is open, close it; otherwise, do nothing
+    if (grid.isPostOpen) {
+      return controller.transientJobs.ClosePostJob.create(
+          grid, grid.expandedTile, isPairedWithAnotherOpen);
+    } else {
+      return null;
+    }
+  }
+
+  // ------------------------------------------------------------------------------------------- //
+  // Public static functions
+
+  /**
+   * Creates a Grid object and registers it with the animator.
+   *
+   * @param {HTMLElement} parent
+   * @param {Array.<Object>} tileData
+   * @param {Boolean} isVertical
+   * @returns {Window.hg.Grid}
+   */
+  function createNewHexGrid(parent, tileData, isVertical) {
+    var grid, index, annotations, input;
+
+    index = internal.grids.length;
+
+    initializeJobArraysForGrid(index);
+
+    grid = new window.hg.Grid(index, parent, tileData, isVertical);
+    internal.grids.push(grid);
+
+    annotations = grid.annotations;
+    internal.annotations.push(annotations);
+
+    input = new window.hg.Input(grid);
+    internal.inputs.push(input);
+
+    window.hg.animator.startJob(grid);
+
+    controller.persistentJobs.ColorResetJob.create(grid);
+    controller.persistentJobs.DisplacementResetJob.create(grid);
+
+    window.hg.animator.startJob(annotations);
+
+    controller.persistentJobs.ColorShiftJob.create(grid);
+    controller.persistentJobs.ColorWaveJob.create(grid);
+    controller.persistentJobs.DisplacementWaveJob.create(grid);
+
+    startRecurringAnimations(grid);
+
+    handleSafariBrowser(grid);
+    handleIosBrowser();
+    handleSmallScreen();
+
+    return grid;
+
+    // ---  --- //
+
+    function initializeJobArraysForGrid(index) {
+      Object.keys(controller.persistentJobs).forEach(function (key) {
+        controller.persistentJobs[key].jobs[index] = [];
+      });
+
+      Object.keys(controller.transientJobs).forEach(function (key) {
+        controller.transientJobs[key].jobs[index] = [];
+      });
+    }
+  }
+
+  /**
+   * @param {Grid} grid
+   */
+  function resetGrid(grid) {
+    var expandedTile;
+    var expandedPostId = grid.isPostOpen ? grid.expandedTile.postData.id : null;
+
+    window.hg.animator.cancelAll();
+
+    grid.resize();
+
+    resetPersistentJobs(grid);
+
+    if (expandedPostId) {
+      expandedTile = getTileFromPostId(grid, expandedPostId);
+      controller.transientJobs.OpenPostJob.create(grid, expandedTile);
+    }
+
+    if (internal.performanceCheckJob) {
+      runPerformanceCheck();
+    }
+
+    handleSafariBrowser(grid);
+    handleIosBrowser();
+    handleSmallScreen();
+  }
+
+  /**
+   * @param {Grid} grid
+   * @param {String} postId
+   */
+  function getTileFromPostId(grid, postId) {
+    var i, count;
+
+    for (i = 0, count = grid.originalTiles.length; i < count; i += 1) {
+      if (grid.originalTiles[i].holdsContent && grid.originalTiles[i].postData.id === postId) {
+        return grid.originalTiles[i];
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * @param {Grid} grid
+   */
+  function resetPersistentJobs(grid) {
+    window.hg.animator.startJob(grid);
+
+    controller.persistentJobs.ColorResetJob.start(grid);
+    controller.persistentJobs.DisplacementResetJob.start(grid);
+
+    window.hg.animator.startJob(internal.annotations[grid.index]);
+
+    // Don't run these persistent animations on low-performance browsers
+    if (!controller.isLowPerformanceBrowser) {
+      controller.persistentJobs.ColorShiftJob.start(grid);
+      controller.persistentJobs.ColorWaveJob.start(grid);
+      controller.persistentJobs.DisplacementWaveJob.start(grid);
+    }
+  }
+
+  /**
+   * @param {Grid} grid
+   */
+  function stopPersistentJobsForLowPerformanceBrowser(grid) {
+    controller.persistentJobs.ColorShiftJob.cancel(grid);
+    controller.persistentJobs.ColorWaveJob.cancel(grid);
+    controller.persistentJobs.DisplacementWaveJob.cancel(grid);
+  }
+
+  /**
+   * @param {Grid} grid
+   * @param {Array.<PostData>} postData
+   */
+  function setGridPostData(grid, postData) {
+    internal.postData[grid.index] = postData;
+
+    setGridFilteredPostData(grid, postData);
+
+    openPostForHash(grid);
+  }
+
+  /**
+   * @param {Grid} grid
+   * @param {String} category A value of 'all' will match all categories.
+   */
+  function filterGridPostDataByCategory(grid, category) {
+    var matches;
+    var postData = internal.postData[grid.index];
+
+    if (category !== 'all') {
+      matches = postData.filter(function (postDatum) {
+        return postDatum.categories.indexOf(category) >= 0;
+      });
+    } else {
+      matches = postData.slice(0);
+    }
+
+    setGridFilteredPostData(grid, matches);
+  }
+
+  /**
+   * @param {Grid} grid
+   * @param {Array.<PostData>} postData
+   */
+  function setGridFilteredPostData(grid, postData) {
+    //TODO: check that these resets are correct
+    grid.isPostOpen = false;
+    grid.pagePost = null;
+    grid.isTransitioning = false;
+    grid.expandedTile = null;
+    grid.sectors = null;
+    grid.allNonContentTiles = null;
+
+    grid.postData = postData;
+
+    grid.computeContentIndices();
+
+    resetGrid(grid);
+  }
+
+  /**
+   * @param {Grid} grid
+   */
+  function openPostForHash(grid) {
+    if (location.hash.length > 1) {
+      var tile = getTileFromPostId(grid, location.hash.substr(1));
+      if (tile) {
+        internal.inputs[0].createClickAnimation(grid, tile);
+      }
+    }
+  }
+
+  /**
+   * @param {Grid} grid
+   */
+  function handleSafariBrowser(grid) {
+    if (window.hg.util.checkForSafari()) {
+      console.info('Is a Safari browser');
+
+      controller.isSafariBrowser = true;
+
+      // Safari browsers do not recognize pointer events on SVG children that overflow the SVG container
+      grid.svg.style.width = grid.parent.offsetWidth + 'px';
+      grid.svg.style.height = grid.parent.offsetHeight + 'px';
+    }
+  }
+
+  function handleIosBrowser() {
+    if (window.hg.util.checkForIos()) {
+      console.info('Is an iOS browser');
+
+      controller.isIosBrowser = true;
+    }
+  }
+
+  function handleSmallScreen() {
+    if (document.documentElement.clientWidth < 1250) {
+      console.info('Is a small-screen browser');
+      controller.isSmallScreen = true;
+    } else {
+      controller.isSmallScreen = false;
+    }
+  }
 
   internal.grids = [];
   internal.inputs = [];
@@ -6390,6 +6913,8 @@ if (typeof define === 'function' && define.amd) {
     element.style.OTransition = value;
   }
 
+  var utilStyleSheet;
+
   /**
    * Sets the CSS transition duration style of the given element.
    *
@@ -6976,6 +7501,214 @@ if (typeof define === 'function' && define.amd) {
   window.hg.util = util;
 
   console.log('util module loaded');
+})();
+
+/**
+ * This module defines a singleton for animating things.
+ *
+ * The animator singleton handles the animation loop for the application and updates all
+ * registered AnimationJobs during each animation frame.
+ *
+ * @module animator
+ */
+(function () {
+  /**
+   * @typedef {{start: Function, update: Function(Number, Number), draw: Function, cancel: Function, init: Function, isComplete: Boolean}} AnimationJob
+   */
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private static variables
+
+  var animator = {};
+  var config = {};
+
+  config.deltaTimeUpperThreshold = 160;
+
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this singleton
+
+  animator.jobs = [];
+  animator.previousTime = window.performance && window.performance.now() || 0;
+  animator.isLooping = false;
+  animator.isPaused = true;
+  animator.startJob = startJob;
+  animator.cancelJob = cancelJob;
+  animator.cancelAll = cancelAll;
+
+  animator.config = config;
+
+  // Expose this module
+  window.hg = window.hg || {};
+  window.hg.animator = animator;
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
+
+  /**
+   * This is the animation loop that drives all of the animation.
+   *
+   * @param {Number} currentTime
+   */
+  function animationLoop(currentTime) {
+    var deltaTime = currentTime - animator.previousTime;
+    deltaTime = deltaTime > config.deltaTimeUpperThreshold ?
+        config.deltaTimeUpperThreshold : deltaTime;
+    animator.isLooping = true;
+
+    if (!animator.isPaused) {
+      updateJobs(currentTime, deltaTime);
+      drawJobs();
+      window.hg.util.requestAnimationFrame(animationLoop);
+    } else {
+      animator.isLooping = false;
+    }
+
+    animator.previousTime = currentTime;
+  }
+
+  /**
+   * Updates all of the active AnimationJobs.
+   *
+   * @param {Number} currentTime
+   * @param {Number} deltaTime
+   */
+  function updateJobs(currentTime, deltaTime) {
+    var i, count;
+
+    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
+      animator.jobs[i].update(currentTime, deltaTime);
+
+      // Remove jobs from the list after they are complete
+      if (animator.jobs[i].isComplete) {
+        removeJob(animator.jobs[i], i);
+        i--;
+        count--;
+      }
+    }
+  }
+
+  /**
+   * Removes the given job from the collection of active, animating jobs.
+   *
+   * @param {AnimationJob} job
+   * @param {Number} [index]
+   */
+  function removeJob(job, index) {
+    var count;
+
+    if (typeof index === 'number') {
+      animator.jobs.splice(index, 1);
+    } else {
+      for (index = 0, count = animator.jobs.length; index < count; index += 1) {
+        if (animator.jobs[index] === job) {
+          animator.jobs.splice(index, 1);
+          break;
+        }
+      }
+    }
+
+    // Stop the animation loop when there are no more jobs to animate
+    if (animator.jobs.length === 0) {
+      animator.isPaused = true;
+    }
+  }
+
+  /**
+   * Draws all of the active AnimationJobs.
+   */
+  function drawJobs() {
+    var i, count;
+
+    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
+      animator.jobs[i].draw();
+    }
+  }
+
+  /**
+   * Starts the animation loop if it is not already running
+   */
+  function startAnimationLoop() {
+    animator.isPaused = false;
+
+    if (!animator.isLooping) {
+      animator.isLooping = true;
+      window.hg.util.requestAnimationFrame(firstAnimationLoop);
+    }
+
+    // ---  --- //
+
+    /**
+     * The time value provided by requestAnimationFrame appears to be the number of milliseconds since the page loaded.
+     * However, the rest of the application logic expects time values relative to the Unix epoch. This bootstrapping
+     * function helps in translating from the one time frame to the other.
+     *
+     * @param {Number} currentTime
+     */
+    function firstAnimationLoop(currentTime) {
+      animator.previousTime = currentTime;
+
+      window.hg.util.requestAnimationFrame(animationLoop);
+    }
+
+    annotations.tileDisplacementCircles = [];
+  }
+
+  // ------------------------------------------------------------------------------------------- //
+  // Public static functions
+
+  /**
+   * Starts the given AnimationJob.
+   *
+   * @param {AnimationJob} job
+   */
+  function startJob(job) {
+    // Is this a restart?
+    if (!job.isComplete) {
+      console.log('Job restarting: ' + job.constructor.name);
+
+      if (job.refresh) {
+        job.refresh();
+      } else {
+        job.cancel();
+
+        job.init();// TODO: get rid of this init function
+        job.start(animator.previousTime);
+      }
+    } else {
+      console.log('Job starting: ' + job.constructor.name);
+
+      job.init();// TODO: get rid of this init function
+      job.start(animator.previousTime);
+      animator.jobs.push(job);
+    }
+
+    startAnimationLoop();
+  }
+
+  /**
+   * Cancels the given AnimationJob.
+   *
+   * @param {AnimationJob} job
+   */
+  function cancelJob(job) {
+    console.log('Job cancelling: ' + job.constructor.name);
+
+    job.cancel();
+    removeJob(job);
+  }
+
+  /**
+   * Cancels all running AnimationJobs.
+   */
+  function cancelAll() {
+    while (animator.jobs.length) {
+      cancelJob(animator.jobs[0]);
+    }
+
+    annotations.tileOuterRadii = [];
+  }
+
+  console.log('animator module loaded');
 })();
 
 /**
@@ -7915,6 +8648,7 @@ if (typeof define === 'function' && define.amd) {
    * Updates a dot at the center of each tile at its current position.
    *
    * @this Annotations
+   * @param {Boolean} isExpanded
    */
   function updateTileParticleCenters() {
     var annotations, i, count;
@@ -7975,6 +8709,11 @@ if (typeof define === 'function' && define.amd) {
           .setAttribute('cy', annotations.grid.allTiles[i].particle.py);
     }
   }
+
+  addChevronDefinition();
+
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this module's constructor
 
   /**
    * Updates the inner radius of each tile.
@@ -8123,6 +8862,8 @@ if (typeof define === 'function' && define.amd) {
         annotations.grid.svg.appendChild(annotations.lineAnimationGapDots[k]);
       }
     }
+
+    setPrevNextButtonVisibility.call(carousel);
   }
 
   /**
@@ -8187,6 +8928,10 @@ if (typeof define === 'function' && define.amd) {
         y: tile.outerVertices[corner * 2 + 1]
       };
     }
+
+    carousel.elements.previousButtonPanel.style.visibility = prevVisibility;
+    carousel.elements.nextButtonPanel.style.visibility = nextVisibility;
+    carousel.elements.buttonsContainer.style.visibility = panelVisibility;
   }
 
   /**
@@ -8260,7 +9005,8 @@ if (typeof define === 'function' && define.amd) {
   function toggleAnnotationEnabled(annotation, enabled) {
     var annotations;
 
-    annotations = this;
+    carousel.previousIndex = carousel.currentIndex;
+    carousel.currentIndex = nextIndex;
 
     annotations.annotations[annotation].enabled = enabled;
 
@@ -8269,7 +9015,6 @@ if (typeof define === 'function' && define.amd) {
     } else {
       annotations.annotations[annotation].destroy.call(annotations);
     }
-  }
 
   /**
    * Computes spatial parameters of the tile annotations and creates SVG elements to represent
@@ -8313,7 +9058,17 @@ if (typeof define === 'function' && define.amd) {
   function setExpandedAnnotations(isExpanded) {
     var annotations;
 
-    annotations = this;
+      thumbnailElement = document.createElement('div');
+      thumbnailElement.setAttribute('data-hg-carousel-thumbnail',
+        'data-hg-carousel-thumbnail');
+      thumbnailElement.style.backgroundImage = 'url(' + thumbnailSrc + ')';
+      thumbnailElement.style.backgroundSize = 'contain';
+      thumbnailElement.style.backgroundRepeat = 'no-repeat';
+      thumbnailElement.style.backgroundPosition = '50% 50%';
+      thumbnailElement.style.width = config.thumbnailWidth + 'px';
+      thumbnailElement.style.height = config.thumbnailHeight + 'px';
+      thumbnailElement.style.styleFloat = 'left';
+      thumbnailElement.style.cssFloat = 'left';
 
     if (annotations.annotations.tileNeighborConnections.enabled) {
       destroyTileNeighborConnections.call(annotations);
@@ -8342,7 +9097,7 @@ if (typeof define === 'function' && define.amd) {
   function update(currentTime, deltaTime) {
     var annotations, i, count;
 
-    annotations = this;
+        console.log('Sending request for Vimeo metadata to ' + url);
 
     for (i = 0, count = config.annotationsArray.length; i < count; i += 1) {
       if (config.annotationsArray[i].enabled) {
@@ -9486,6 +10241,7 @@ if (typeof define === 'function' && define.amd) {
         neighborDeltaIndices[3] = Number.NaN;
       }
     }
+  }
 
     return neighborDeltaIndices;
   }
@@ -9858,8 +10614,15 @@ if (typeof define === 'function' && define.amd) {
   window.hg = window.hg || {};
   window.hg.Input = Input;
 
-  // ------------------------------------------------------------------------------------------- //
-  // Private dynamic functions
+    topGradient.style.position = 'absolute';
+    topGradient.style.top = '0';
+    topGradient.style.left = paddingX + 'px';
+    topGradient.style.height = paddingY + 'px';
+    topGradient.style.width = width + 'px';
+    topGradient.style.backgroundColor = '#000000';
+    topGradient.style.background =
+      'linear-gradient(0,' + gradientColor2String + ',' + gradientColor1String + ' 75%)';
+    topGradient.style.pointerEvents = 'none';
 
   /**
    * Adds event listeners for mouse and touch events for the grid.
@@ -10948,6 +11711,11 @@ if (typeof define === 'function' && define.amd) {
 
       } while (anchorX >= bounds.minX && anchorX <= bounds.maxX && anchorY >= bounds.minY && anchorY <= bounds.maxY);
     }
+
+    for (i = 0, count = sector.newTiles.length; i < count; i += 1) {
+      sector.newTiles[i].neighborStates = null;
+      sector.newTiles[i].destroy();
+    }
   }
 
   /**
@@ -11461,6 +12229,9 @@ if (typeof define === 'function' && define.amd) {
     updateVertices.call(tile, tile.currentAnchor.x, tile.currentAnchor.y);
   }
 
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
+
   /**
    * @this Tile
    */
@@ -11919,6 +12690,8 @@ if (typeof define === 'function' && define.amd) {
       // Set the position and opacity of the TilePost
       tile.tilePost.draw();
     }
+
+    return currentVertexDeltas;
   }
 
   /**
@@ -12042,6 +12815,7 @@ if (typeof define === 'function' && define.amd) {
       currentVertexDeltas[coordIndex++] = radius * cosines[trigIndex];
       currentVertexDeltas[coordIndex++] = radius * sines[trigIndex];
     }
+  }
 
     return currentVertexDeltas;
   }
@@ -12315,6 +13089,9 @@ if (typeof define === 'function' && define.amd) {
   // ------------------------------------------------------------------------------------------- //
   // Public dynamic functions
 
+  // ------------------------------------------------------------------------------------------- //
+  // Public static functions
+
   /**
    * @this TilePost
    */
@@ -12351,210 +13128,6 @@ if (typeof define === 'function' && define.amd) {
   }
 
   console.log('TilePost module loaded');
-})();
-
-/**
- * This module defines a singleton for animating things.
- *
- * The animator singleton handles the animation loop for the application and updates all
- * registered AnimationJobs during each animation frame.
- *
- * @module animator
- */
-(function () {
-  /**
-   * @typedef {{start: Function, update: Function(Number, Number), draw: Function, cancel: Function, init: Function, isComplete: Boolean}} AnimationJob
-   */
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private static variables
-
-  var animator = {};
-  var config = {};
-
-  config.deltaTimeUpperThreshold = 160;
-
-  // ------------------------------------------------------------------------------------------- //
-  // Expose this singleton
-
-  animator.jobs = [];
-  animator.previousTime = window.performance && window.performance.now() || 0;
-  animator.isLooping = false;
-  animator.isPaused = true;
-  animator.startJob = startJob;
-  animator.cancelJob = cancelJob;
-  animator.cancelAll = cancelAll;
-
-  animator.config = config;
-
-  // Expose this module
-  window.hg = window.hg || {};
-  window.hg.animator = animator;
-
-  // ------------------------------------------------------------------------------------------- //
-  // Private static functions
-
-  /**
-   * This is the animation loop that drives all of the animation.
-   *
-   * @param {Number} currentTime
-   */
-  function animationLoop(currentTime) {
-    var deltaTime = currentTime - animator.previousTime;
-    deltaTime = deltaTime > config.deltaTimeUpperThreshold ?
-        config.deltaTimeUpperThreshold : deltaTime;
-    animator.isLooping = true;
-
-    if (!animator.isPaused) {
-      updateJobs(currentTime, deltaTime);
-      drawJobs();
-      window.hg.util.requestAnimationFrame(animationLoop);
-    } else {
-      animator.isLooping = false;
-    }
-
-    animator.previousTime = currentTime;
-  }
-
-  /**
-   * Updates all of the active AnimationJobs.
-   *
-   * @param {Number} currentTime
-   * @param {Number} deltaTime
-   */
-  function updateJobs(currentTime, deltaTime) {
-    var i, count;
-
-    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
-      animator.jobs[i].update(currentTime, deltaTime);
-
-      // Remove jobs from the list after they are complete
-      if (animator.jobs[i].isComplete) {
-        removeJob(animator.jobs[i], i);
-        i--;
-        count--;
-      }
-    }
-  }
-
-  /**
-   * Removes the given job from the collection of active, animating jobs.
-   *
-   * @param {AnimationJob} job
-   * @param {Number} [index]
-   */
-  function removeJob(job, index) {
-    var count;
-
-    if (typeof index === 'number') {
-      animator.jobs.splice(index, 1);
-    } else {
-      for (index = 0, count = animator.jobs.length; index < count; index += 1) {
-        if (animator.jobs[index] === job) {
-          animator.jobs.splice(index, 1);
-          break;
-        }
-      }
-    }
-
-    // Stop the animation loop when there are no more jobs to animate
-    if (animator.jobs.length === 0) {
-      animator.isPaused = true;
-    }
-  }
-
-  /**
-   * Draws all of the active AnimationJobs.
-   */
-  function drawJobs() {
-    var i, count;
-
-    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
-      animator.jobs[i].draw();
-    }
-  }
-
-  /**
-   * Starts the animation loop if it is not already running
-   */
-  function startAnimationLoop() {
-    animator.isPaused = false;
-
-    if (!animator.isLooping) {
-      animator.isLooping = true;
-      window.hg.util.requestAnimationFrame(firstAnimationLoop);
-    }
-
-    // ---  --- //
-
-    /**
-     * The time value provided by requestAnimationFrame appears to be the number of milliseconds since the page loaded.
-     * However, the rest of the application logic expects time values relative to the Unix epoch. This bootstrapping
-     * function helps in translating from the one time frame to the other.
-     *
-     * @param {Number} currentTime
-     */
-    function firstAnimationLoop(currentTime) {
-      animator.previousTime = currentTime;
-
-      window.hg.util.requestAnimationFrame(animationLoop);
-    }
-  }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Public static functions
-
-  /**
-   * Starts the given AnimationJob.
-   *
-   * @param {AnimationJob} job
-   */
-  function startJob(job) {
-    // Is this a restart?
-    if (!job.isComplete) {
-      console.log('Job restarting: ' + job.constructor.name);
-
-      if (job.refresh) {
-        job.refresh();
-      } else {
-        job.cancel();
-
-        job.init();// TODO: get rid of this init function
-        job.start(animator.previousTime);
-      }
-    } else {
-      console.log('Job starting: ' + job.constructor.name);
-
-      job.init();// TODO: get rid of this init function
-      job.start(animator.previousTime);
-      animator.jobs.push(job);
-    }
-
-    startAnimationLoop();
-  }
-
-  /**
-   * Cancels the given AnimationJob.
-   *
-   * @param {AnimationJob} job
-   */
-  function cancelJob(job) {
-    console.log('Job cancelling: ' + job.constructor.name);
-
-    job.cancel();
-    removeJob(job);
-  }
-
-  /**
-   * Cancels all running AnimationJobs.
-   */
-  function cancelAll() {
-    while (animator.jobs.length) {
-      cancelJob(animator.jobs[0]);
-    }
-  }
-
-  console.log('animator module loaded');
 })();
 
 /**
