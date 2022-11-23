@@ -5142,8 +5142,7 @@ if (typeof define === 'function' && define.amd) {
 
 //# sourceMappingURL=showdown.js.map
 
-/*! showdown-twitter 26-11-2016 */
-(function (extension) {
+/*! showdown-twitter 26-11-2016 */(function (extension) {
   'use strict';
 
   if (typeof showdown !== 'undefined') {
@@ -12261,6 +12260,210 @@ if (typeof define === 'function' && define.amd) {
 })();
 
 /**
+ * This module defines a singleton for animating things.
+ *
+ * The animator singleton handles the animation loop for the application and updates all
+ * registered AnimationJobs during each animation frame.
+ *
+ * @module animator
+ */
+(function () {
+  /**
+   * @typedef {{start: Function, update: Function(Number, Number), draw: Function, cancel: Function, init: Function, isComplete: Boolean}} AnimationJob
+   */
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private static variables
+
+  var animator = {};
+  var config = {};
+
+  config.deltaTimeUpperThreshold = 160;
+
+  // ------------------------------------------------------------------------------------------- //
+  // Expose this singleton
+
+  animator.jobs = [];
+  animator.previousTime = window.performance && window.performance.now() || 0;
+  animator.isLooping = false;
+  animator.isPaused = true;
+  animator.startJob = startJob;
+  animator.cancelJob = cancelJob;
+  animator.cancelAll = cancelAll;
+
+  animator.config = config;
+
+  // Expose this module
+  window.hg = window.hg || {};
+  window.hg.animator = animator;
+
+  // ------------------------------------------------------------------------------------------- //
+  // Private static functions
+
+  /**
+   * This is the animation loop that drives all of the animation.
+   *
+   * @param {Number} currentTime
+   */
+  function animationLoop(currentTime) {
+    var deltaTime = currentTime - animator.previousTime;
+    deltaTime = deltaTime > config.deltaTimeUpperThreshold ?
+        config.deltaTimeUpperThreshold : deltaTime;
+    animator.isLooping = true;
+
+    if (!animator.isPaused) {
+      updateJobs(currentTime, deltaTime);
+      drawJobs();
+      window.hg.util.requestAnimationFrame(animationLoop);
+    } else {
+      animator.isLooping = false;
+    }
+
+    animator.previousTime = currentTime;
+  }
+
+  /**
+   * Updates all of the active AnimationJobs.
+   *
+   * @param {Number} currentTime
+   * @param {Number} deltaTime
+   */
+  function updateJobs(currentTime, deltaTime) {
+    var i, count;
+
+    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
+      animator.jobs[i].update(currentTime, deltaTime);
+
+      // Remove jobs from the list after they are complete
+      if (animator.jobs[i].isComplete) {
+        removeJob(animator.jobs[i], i);
+        i--;
+        count--;
+      }
+    }
+  }
+
+  /**
+   * Removes the given job from the collection of active, animating jobs.
+   *
+   * @param {AnimationJob} job
+   * @param {Number} [index]
+   */
+  function removeJob(job, index) {
+    var count;
+
+    if (typeof index === 'number') {
+      animator.jobs.splice(index, 1);
+    } else {
+      for (index = 0, count = animator.jobs.length; index < count; index += 1) {
+        if (animator.jobs[index] === job) {
+          animator.jobs.splice(index, 1);
+          break;
+        }
+      }
+    }
+
+    // Stop the animation loop when there are no more jobs to animate
+    if (animator.jobs.length === 0) {
+      animator.isPaused = true;
+    }
+  }
+
+  /**
+   * Draws all of the active AnimationJobs.
+   */
+  function drawJobs() {
+    var i, count;
+
+    for (i = 0, count = animator.jobs.length; i < count; i += 1) {
+      animator.jobs[i].draw();
+    }
+  }
+
+  /**
+   * Starts the animation loop if it is not already running
+   */
+  function startAnimationLoop() {
+    animator.isPaused = false;
+
+    if (!animator.isLooping) {
+      animator.isLooping = true;
+      window.hg.util.requestAnimationFrame(firstAnimationLoop);
+    }
+
+    // ---  --- //
+
+    /**
+     * The time value provided by requestAnimationFrame appears to be the number of milliseconds since the page loaded.
+     * However, the rest of the application logic expects time values relative to the Unix epoch. This bootstrapping
+     * function helps in translating from the one time frame to the other.
+     *
+     * @param {Number} currentTime
+     */
+    function firstAnimationLoop(currentTime) {
+      animator.previousTime = currentTime;
+
+      window.hg.util.requestAnimationFrame(animationLoop);
+    }
+  }
+
+  // ------------------------------------------------------------------------------------------- //
+  // Public static functions
+
+  /**
+   * Starts the given AnimationJob.
+   *
+   * @param {AnimationJob} job
+   */
+  function startJob(job) {
+    // Is this a restart?
+    if (!job.isComplete) {
+      console.log('Job restarting: ' + job.constructor.name);
+
+      if (job.refresh) {
+        job.refresh();
+      } else {
+        job.cancel();
+
+        job.init();// TODO: get rid of this init function
+        job.start(animator.previousTime);
+      }
+    } else {
+      console.log('Job starting: ' + job.constructor.name);
+
+      job.init();// TODO: get rid of this init function
+      job.start(animator.previousTime);
+      animator.jobs.push(job);
+    }
+
+    startAnimationLoop();
+  }
+
+  /**
+   * Cancels the given AnimationJob.
+   *
+   * @param {AnimationJob} job
+   */
+  function cancelJob(job) {
+    console.log('Job cancelling: ' + job.constructor.name);
+
+    job.cancel();
+    removeJob(job);
+  }
+
+  /**
+   * Cancels all running AnimationJobs.
+   */
+  function cancelAll() {
+    while (animator.jobs.length) {
+      cancelJob(animator.jobs[0]);
+    }
+  }
+
+  console.log('animator module loaded');
+})();
+
+/**
  * @typedef {AnimationJob} ColorResetJob
  */
 
@@ -12272,14 +12475,9 @@ if (typeof define === 'function' && define.amd) {
  * @module ColorResetJob
  */
 (function () {
-  /**
-   * @typedef {{start: Function, update: Function(Number, Number), draw: Function, cancel: Function, init: Function, isComplete: Boolean}} AnimationJob
-   */
-
   // ------------------------------------------------------------------------------------------- //
   // Private static variables
 
-  var animator = {};
   var config = {};
 
   //  --- Dependent parameters --- //
@@ -12295,17 +12493,17 @@ if (typeof define === 'function' && define.amd) {
   // ------------------------------------------------------------------------------------------- //
   // Private static functions
 
+  // ------------------------------------------------------------------------------------------- //
+  // Public dynamic functions
+
   /**
    * Sets this ColorResetJob as started.
    *
    * @this ColorResetJob
    * @param {Number} startTime
    */
-  function animationLoop(currentTime) {
-    var deltaTime = currentTime - animator.previousTime;
-    deltaTime = deltaTime > config.deltaTimeUpperThreshold ?
-        config.deltaTimeUpperThreshold : deltaTime;
-    animator.isLooping = true;
+  function start(startTime) {
+    var job = this;
 
     job.startTime = startTime;
     job.isComplete = false;
@@ -12349,8 +12547,8 @@ if (typeof define === 'function' && define.amd) {
    *
    * @this ColorResetJob
    */
-  function drawJobs() {
-    var i, count;
+  function cancel() {
+    var job = this;
 
     job.isComplete = true;
   }
@@ -12371,7 +12569,7 @@ if (typeof define === 'function' && define.amd) {
   }
 
   // ------------------------------------------------------------------------------------------- //
-  // Public static functions
+  // Expose this module's constructor
 
   /**
    * @constructor
@@ -12734,7 +12932,7 @@ if (typeof define === 'function' && define.amd) {
   /**
    * @this ColorShiftJob
    */
-  function refresh() {
+  function init() {
     var job = this;
 
     config.computeDependentValues();
@@ -12903,10 +13101,8 @@ if (typeof define === 'function' && define.amd) {
    * @this ColorWaveJob
    * @param {Number} startTime
    */
-  function updateNonContentTile(currentTime, tile, shiftStatus) {
-    if (currentTime > shiftStatus.timeEnd) {
-      assignNewNonContentTileTransition(currentTime, shiftStatus);
-    }
+  function start(startTime) {
+    var job = this;
 
     job.startTime = startTime;
     job.isComplete = false;
@@ -12919,8 +13115,7 @@ if (typeof define === 'function' && define.amd) {
    *
    * @this ColorWaveJob
    * @param {Number} currentTime
-   * @param {Tile} tile
-   * @param {ContentTileShiftStatus} shiftStatus
+   * @param {Number} deltaTime
    */
   function update(currentTime, deltaTime) {
     var job, progress, i, count;
@@ -13048,37 +13243,6 @@ if (typeof define === 'function' && define.amd) {
 
   // ------------------------------------------------------------------------------------------- //
   // Private static functions
-
-  /**
-   * Updates the animation progress of the given non-content tile.
-   *
-   * @param {Number} progress From -1 to 1
-   * @param {Tile} tile
-   * @param {Number} waveProgressOffset From -1 to 1
-   */
-  function updateNonContentTile(progress, tile, waveProgressOffset) {
-    var tileProgress =
-        Math.sin(((((progress + 1 + waveProgressOffset) % 2) + 2) % 2 - 1) * Math.PI);
-
-    tile.currentColor.h += config.deltaHue * tileProgress * config.opacity;
-    tile.currentColor.s += config.deltaSaturation * tileProgress * config.opacity;
-    tile.currentColor.l += config.deltaLightness * tileProgress * config.opacity;
-  }
-
-  /**
-   * Updates the animation progress of the given content tile.
-   *
-   * @param {Number} progress From -1 to 1
-   * @param {Tile} tile
-   * @param {Number} waveProgressOffset From -1 to 1
-   */
-  function updateContentTile(progress, tile, waveProgressOffset) {
-    var tileProgress =
-        Math.sin(((((progress + 1 + waveProgressOffset) % 2) + 2) % 2 - 1) * Math.PI) * 0.5 + 0.5;
-
-    tile.imageScreenOpacity += -tileProgress * config.opacity *
-        config.deltaOpacityImageBackgroundScreen;
-  }
 
   // ------------------------------------------------------------------------------------------- //
   // Public dynamic functions
@@ -13416,11 +13580,6 @@ if (typeof define === 'function' && define.amd) {
   //  --- Dependent parameters --- //
 
   config.computeDependentValues = function () {
-    config.halfPeriod = config.period / 2;
-
-    config.displacementAmplitude =
-        Math.sqrt(config.tileDeltaX * config.tileDeltaX +
-            config.tileDeltaY * config.tileDeltaY);
   };
 
   config.computeDependentValues();
@@ -13431,8 +13590,8 @@ if (typeof define === 'function' && define.amd) {
   /**
    * @this CarouselImageSlideJob
    */
-  function initTileProgressOffsets() {
-    var job, i, count, tile, length, deltaX, deltaY, halfWaveProgressWavelength;
+  function handleComplete(wasCancelled) {
+    var job = this;
 
     console.log('CarouselImageSlideJob ' + (wasCancelled ? 'cancelled' : 'completed'));
 
@@ -13509,7 +13668,7 @@ if (typeof define === 'function' && define.amd) {
   function cancel() {
     var job = this;
 
-    job.isComplete = true;
+    handleComplete.call(job, true);
   }
 
   /**
@@ -13549,7 +13708,7 @@ if (typeof define === 'function' && define.amd) {
     job.update = update;
     job.draw = draw;
     job.cancel = cancel;
-    job.refresh = refresh;
+    job.onComplete = onComplete;
     job.init = init;
 
     console.log('CarouselImageSlideJob created: currentIndex=' + job.carousel.currentIndex +
@@ -13713,7 +13872,7 @@ if (typeof define === 'function' && define.amd) {
    * @this ClosePostJob
    */
   function draw() {
-    // This animation job updates the state of the carousel and has nothing of its own to draw
+    // This animation job updates the state of actual tiles, so it has nothing of its own to draw
   }
 
   /**
@@ -13850,7 +14009,6 @@ if (typeof define === 'function' && define.amd) {
    * @param {Number} startTime
    */
   function start(startTime) {
-    var panDisplacement;
     var job = this;
 
     job.startTime = startTime;
@@ -14381,8 +14539,7 @@ if (typeof define === 'function' && define.amd) {
   function updateFadeOut(currentTime, deltaTime) {
     var job, progress, quick1FadeProgress;
 
-    handleComplete.call(job, true);
-  }
+    job = this;
 
     // Calculate progress with an easing function
     progress = (currentTime - job.startTime) / job.duration;
@@ -14416,9 +14573,6 @@ if (typeof define === 'function' && define.amd) {
       handleComplete.call(job, false);
     }
   }
-
-  // ------------------------------------------------------------------------------------------- //
-  // Expose this module's constructor
 
   /**
    * Draws the current state of this FadePostJob.
@@ -14592,7 +14746,6 @@ if (typeof define === 'function' && define.amd) {
    * @param {Number} startTime
    */
   function start(startTime) {
-    var expandedTileOuterRadius;
     var job = this;
 
     job.startTime = startTime;
@@ -14628,8 +14781,6 @@ if (typeof define === 'function' && define.amd) {
 
       job.updateTile(job.tile, durationRatio);
     }
-
-    job.baseTile.element.style.pointerEvents = 'none';
   }
 
   /**

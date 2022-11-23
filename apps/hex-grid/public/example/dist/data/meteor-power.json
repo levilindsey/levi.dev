@@ -1,0 +1,46 @@
+{
+  "id": "meteor-power",
+  "titleShort": "Mobile RTS\nPoint-and-click\nplatformer",
+  "titleLong": "Meteor Power: RTS point-and-click platformer",
+  "emphasis": 0.9,
+  "color": "#636a94",
+  "urls": {
+    "demo": "https://levi.dev/ld50",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/50/meteor-power",
+    "github": "https://github.com/levilindsey/ludum-dare-50"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "4/2022",
+  "categories": [
+    "side-project",
+    "app",
+    "godot",
+    "game",
+    "AI",
+    "2D",
+    "game-jam"
+  ],
+  "images": [
+    {
+      "fileName": "construction_bot_walking_256.gif",
+      "description": "Go little construction bot—keep on building!"
+    },
+    {
+      "fileName": "meteor-power-short-clip.gif",
+      "description": "Some gameplay. Notice the control of multiple bots, and the damage from falling meteors!"
+    },
+    {
+      "fileName": "cover-art-big.png",
+      "description": "Cover art for Meteor Power."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "tQ6M2WWKj7k",
+      "description": "A gameplay video for Meteor Power."
+    }
+  ],
+  "content": "> Meteor Power is a mobile RTS point-and-click 2D platformer.\r\n>\r\n> ☄️🤖 _Build solar stations, connect power, avoid meteors!_\r\n\r\nAll design, code, images, sound effects, and music were created during the jam.\r\n\r\n\r\n## 📱 The mobile app\r\n\r\nI am currently extending the Ludum Dare version of Meteor Power into a more-polished mobile version.\r\n\r\n-   It should be released late June.\r\n-   You can follow my progress at [devlog.levi.dev](https:\/\/devlog.levi.dev).\r\n-   This extended version is also [open-source on GitHub](https:\/\/github.com\/SnoringCatGames\/meteor_power).\r\n\r\n\r\n## ‍💻 The jam\r\n\r\n**Theme: \"Delay the inevitable\"**\r\n\r\nLudum Dare is a semi-annual event where people create a game over the weekend. Ludum Dare is a ranked competition, with a clever voting system that gets more eyes on your game when you in turn rate other games. There are two tracks you can participate in:\r\n\r\n-   In the \"**Compo**\" track, you must create all your own art, music, sounds, etc. from scratch, work by yourself, and finish within 48 hours.\r\n-   In the \"**Jam**\" track, you can work with a team, you can use art, code, music, sounds, etc. that already existed or was created by someone else, and you get 72 hours to finish.\r\n\r\nAdditionally, the games all follow some central theme, which is only announced at the start of the jam.\r\n\r\nI worked solo and created everything during the event. Except of course for my Scaffolder and Surfacer frameworks (which is fine, you're allowed to use pre-existing code).\r\n\r\n\r\n## 🎮 Controls\r\n\r\n-   Mouse and keyboard.\r\n-   A\/S\/D\/Q\/W\/E to select a bot.\r\n-   Left-click on a platform to move the bot.\r\n-   Left-click a station button to do that command.\r\n\r\n\r\n## 💿 Software used\r\n\r\n-   **[Godot](https:\/\/godotengine.org\/):** Game engine.\r\n-   **[Aseprite](https:\/\/www.aseprite.org\/):** Pixel-art image editor.\r\n-   **[Bfxr](https:\/\/www.bfxr.net\/):** Sound effects editor.\r\n-   **[DefleMask](https:\/\/www.deflemask.com\/):** Chiptune music tracker.\r\n-   **[Surfacer](https:\/\/godotengine.org\/asset-library\/asset\/968):** Framework for procedural path-finding across 2D platforms.\r\n-   **[Scaffolder](https:\/\/godotengine.org\/asset-library\/asset\/969):** Framework for general app and UI infrastructure.\r\n-   **[SurfaceTiler](https:\/\/github.com\/SnoringCatGames\/surface_tiler):** Framework for \"next-level\" autotiling.\r\n\r\n> _The latest version of **Meteor Power** is owned by [Snoring Cat LLC](https:\/\/snoringcat.games), but the original version was published by Levi in the Ludum Dare 50 game jam._\r\n\r\n\r\n![A constructor bot](https:\/\/s3-us-west-2.amazonaws.com\/levi-portfolio-media\/meteor-power\/construction_bot_walking_256.gif)\r\n"
+}
