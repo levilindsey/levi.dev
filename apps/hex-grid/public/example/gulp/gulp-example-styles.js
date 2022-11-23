@@ -4,7 +4,7 @@ var plugins = require('gulp-load-plugins')();
 
 // ---  --- //
 
-gulp.task('example-styles', function () {
+gulp.task('example-styles', ['hg-styles'], function () {
   return gulp.src(config.exampleStylesSrc)
     .pipe(plugins.plumber())
     .pipe(plugins.autoprefixer('last 2 version'))

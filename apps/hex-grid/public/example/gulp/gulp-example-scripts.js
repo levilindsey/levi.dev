@@ -9,7 +9,7 @@ config.vendorAndHgScriptsNonMinSrc.push(config.hgScriptsDistNonMinFilePath);
 config.vendorAndHgScriptsMinSrc = config.exampleVendorScriptsSrc.slice(0);
 config.vendorAndHgScriptsMinSrc.push(config.hgScriptsDistMinFilePath);
 
-gulp.task('example-scripts', function () {
+gulp.task('example-scripts', ['hg-scripts'], function () {
   // The goal of this function is to generate two versions of the concatenated scripts: one with the minified example
   // source, and one with non-minified. However, both need to have the unadulterated version of the vendor code.
 
