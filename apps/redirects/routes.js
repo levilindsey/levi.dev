@@ -92,8 +92,13 @@ const redirects = [
   },
   // Music
   {
-    routeRegex: /^\/(music|songs?|sounds?|audio|chip-?tunes?|compositions?|performances?|acappella)(?:\/.*)?$/i,
+    routeRegex: /^\/(music|performances?|acappella)(?:\/.*)?$/i,
     redirectUrl: 'https://levi.dev/#music',
+  },
+  // Chiptunes specifically
+  {
+    routeRegex: /^\/(songs?|sounds?|audio|chip-?tunes?|compositions?)(?:\/.*)?$/i,
+    redirectUrl: 'https://soundcloud.com/levilindsey',
   },
 
   // --- Frameworks and games --- //
