@@ -26,11 +26,6 @@ const redirects = [
     routeRegex: /^\/(youtube)(?:\/.*)?$/i,
     redirectUrl: 'https://www.youtube.com/playlist?list=PLIuJN99AFOPSF3p4f0siFo22XiMXqijQU',
   },
-  // SoundCloud
-  {
-    routeRegex: /^\/(sound-?cloud)(?:\/.*)?$/i,
-    redirectUrl: 'https://soundcloud.com/levilindsey/sets/chiptunes',
-  },
   // itch.io
   {
     routeRegex: /^\/(itch(\.?io)?)(?:\/.*)?$/i,
@@ -98,7 +93,7 @@ const redirects = [
   // Chiptunes specifically
   {
     routeRegex: /^\/(songs?|sounds?|audio|chip-?tunes?|compositions?)(?:\/.*)?$/i,
-    redirectUrl: 'https://soundcloud.com/levilindsey',
+    redirectUrl: 'https://soundcloud.com/levilindsey/sets/chiptunes',
   },
 
   // --- Frameworks and games --- //
@@ -186,6 +181,11 @@ const redirects = [
     routeRegex: /^\/(ld51|ludum-?dare-?51|village|village-?defender|defender)(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.itch.io/village-defender',
     // redirectUrl: 'https://levilindsey.github.io/ludum-dare-51/',
+  },
+  // Ludum Dare 52
+  {
+    routeRegex: /^\/(ld52|ludum-?dare-?52|(what-?)?must-?be-?done)(?:\/.*)?$/i,
+    redirectUrl: 'https://drgvdg.itch.io/what-must-be-done',
   },
 ];
 

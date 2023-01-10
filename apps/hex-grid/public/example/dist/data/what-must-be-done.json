@@ -1,0 +1,68 @@
+{
+  "id": "what-must-be-done",
+  "titleShort": "2D\nbullet hell\ngame",
+  "titleLong": "What Must Be Done: A 2D bullet hell game",
+  "emphasis": 0.6,
+  "color": "#1dcd73",
+  "urls": {
+    "demo": "https://drgvdg.itch.io/what-must-be-done",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/52/what-must-be-done",
+    "soundcloud": "https://soundcloud.com/levilindsey/sets/what-must-be-done-ludum-dare-52",
+    "github": "https://github.com/diegoteran/LudumDare52"
+  },
+  "jobTitle": "Composer and sound designer",
+  "location": "",
+  "date": "1/2023",
+  "categories": [
+    "side-project",
+    "app",
+    "godot",
+    "game",
+    "music",
+    "2D",
+    "game-jam",
+    "teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "gameplay-1.gif",
+      "description": "The player starts out with a simple close-range scalpel weapon."
+    },
+    {
+      "fileName": "gameplay-2.gif",
+      "description": "The player can unlock more exciting weapons after the gather resources."
+    },
+    {
+      "fileName": "screenshot-1.png",
+      "description": "A screenshot of the reward screen with some randomized upgrade options where the player can temporarily upgrade their character for the current run."
+    },
+    {
+      "fileName": "screenshot-2.png",
+      "description": "A screenshot of the reward screen with some other randomized upgrade options where the player can temporarily upgrade their character for the current run."
+    },
+    {
+      "fileName": "screenshot-3.png",
+      "description": "A screenshot of the research screen where the player can permanently upgrade their character between runs."
+    },
+    {
+      "fileName": "doctor-walk.gif",
+      "description": "The walk animation for the doctor character the player controls."
+    },
+    {
+      "fileName": "title-screen.png",
+      "description": "The title screen."
+    },
+    {
+      "fileName": "end-screen.png",
+      "description": "The ending screen."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "2HLIjrdR5D0",
+      "description": "A gameplay video for What Must Be Done."
+    }
+  ],
+  "content": "_This is a top-down 2D bullet-hell game._\r\n\r\n> You are Dr. Frankenstein-esque surgeon on a mission to do what must be done.\r\n\r\nLevi created the **music and sounds** for this game.\r\n\r\nAll design, code, images, sound effects, and music were created during the jam.\r\n\r\n<iframe\r\n    width=\"100%\"\r\n    height=\"450\"\r\n    scrolling=\"no\"\r\n    frameborder=\"no\"\r\n    allow=\"autoplay\"\r\n    src=\"https:\/\/w.soundcloud.com\/player\/?url=https%3A\/\/api.soundcloud.com\/playlists\/1552766014&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true\">\r\n<\/iframe>\r\n<div style=\"font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;\">\r\n  <a href=\"https:\/\/soundcloud.com\/levilindsey\"\r\n     title=\"Levi Lindsey\"\r\n     target=\"_blank\"\r\n     style=\"color: #cccccc; text-decoration: none;\"\r\n    >Levi Lindsey<\/a>\r\n  ·\r\n  <a href=\"https:\/\/soundcloud.com\/levilindsey\/sets\/what-must-be-done-ludum-dare-52\"\r\n     title=\"What Must Be Done - Ludum Dare 52\"\r\n     target=\"_blank\"\r\n     style=\"color: #cccccc; text-decoration: none;\"\r\n    >What Must Be Done - Ludum Dare 52<\/a>\r\n<\/div>\r\n\r\n## The jam\r\n\r\nThis game was created in 72-hours as a [submission](https:\/\/ldjam.com\/events\/ludum-dare\/52\/what-must-be-done) for the [Ludum Dare 52 game jam](https:\/\/ldjam.com\/events\/ludum-dare\/52).\r\n\r\n**Theme: \"Harvest\"**\r\n\r\n## The team\r\n\r\n-   [Diego Gonzalez](https:\/\/drgvdg.itch.io\/)\r\n-   [Natasha Kononenko](https:\/\/knknatasha.itch.io\/)\r\n-   [Levi Lindsey](https:\/\/levi.dev)\r\n-   [Diego Teran](https:\/\/clerium.itch.io\/)\r\n\r\n\r\n![TODO](https:\/\/s3-us-west-2.amazonaws.com\/levi-portfolio-media\/what-must-be-done\/doctor-walk.gif)\r\n"
+}
