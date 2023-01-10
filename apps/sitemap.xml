@@ -21,7 +21,7 @@
     </url>
 
     <url>
-        <loc>https://www.levi.dev/#snoring-cat</loc>
+        <loc>https://www.levi.dev/#devlog</loc>
         <lastmod>2023-01-10</lastmod>
     </url>
 
@@ -32,6 +32,11 @@
 
     <url>
         <loc>https://www.levi.dev/#scaffolder</loc>
+        <lastmod>2023-01-10</lastmod>
+    </url>
+
+    <url>
+        <loc>https://www.levi.dev/#snoring-cat</loc>
         <lastmod>2023-01-10</lastmod>
     </url>
 
@@ -186,12 +191,12 @@
     </url>
 
     <url>
-        <loc>https://www.levi.dev/#progress-circle</loc>
+        <loc>https://www.levi.dev/#photo-viewer</loc>
         <lastmod>2023-01-10</lastmod>
     </url>
 
     <url>
-        <loc>https://www.levi.dev/#photo-viewer</loc>
+        <loc>https://www.levi.dev/#progress-circle</loc>
         <lastmod>2023-01-10</lastmod>
     </url>
 
