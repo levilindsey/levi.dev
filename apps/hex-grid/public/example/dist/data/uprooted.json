@@ -1,0 +1,50 @@
+{
+  "id": "uprooted",
+  "titleShort": "3D first-person\nshooter",
+  "titleLong": "Uprooted: 3D first-person shooter",
+  "emphasis": 0.6,
+  "color": "#4deb8f",
+  "urls": {
+    "demo": "https://voithos.itch.io/uprooted",
+    "global-game-jam": "https://globalgamejam.org/2023/games/uprooted-4-1",
+    "github": "https://github.com/voithos/uprooted"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "2/2023",
+  "categories": [
+    "side-project",
+    "app",
+    "godot",
+    "game",
+    "3D",
+    "game-jam",
+    "teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "wave.png",
+      "description": "Enemies come in waves and you must constantly avoid them."
+    },
+    {
+      "fileName": "pool.gif",
+      "description": "You must root yourself at a pool in order to be able to fire at the enemies."
+    },
+    {
+      "fileName": "level.png",
+      "description": "Our level features interesting terrain and obstacles."
+    },
+    {
+      "fileName": "enemy.png",
+      "description": "A chainsaw robot."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "ja2sXmBZEL4",
+      "description": "A gameplay video for Uprooted."
+    }
+  ],
+  "content": "_This is a 3D first-person shooter._\r\n\r\n> You are a walking tree, and you must survive as long as you can through endless waves of wood-cutting robots. In order to defend yourself, you must place roots near a pool of fresh spring water. But these springs are fickle, and they constantly dry-up, so you must keep uprooting yourself in search of fresh water and safety.\r\n\r\nAll design and code were created during the jam. Some art, models, music, and sfx were borrowed from other sources.\r\n\r\n## The jam\r\n\r\nThis game was created in 48-hours as a [submission](https:\/\/globalgamejam.org\/2023\/games\/uprooted-4-1) for the [2023 Global Game Jam](https:\/\/globalgamejam.org\/).\r\n\r\n**Theme: \"Roots\"**\r\n\r\n## The team\r\n\r\n-   [Zaven Muradyan](https:\/\/voithos.io\/)\r\n-   [Levi Lindsey](https:\/\/levi.dev)\r\n"
+}
