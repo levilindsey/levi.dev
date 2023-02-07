@@ -155,6 +155,12 @@ const redirects = [
     redirectUrl: 'https://voithos.itch.io/tale-of-two-sides',
     // redirectUrl: 'https://voithos.github.io/global-game-jam-2022',
   },
+  // GGJ22
+  {
+    routeRegex: /^\/((up)?root(ed)?|(ggj|global-?game-?jam)-?(2023|23)?)(?:\/.*)?$/i,
+    redirectUrl: 'https://voithos.itch.io/uprooted',
+    // redirectUrl: 'https://voithos.github.io/uprooted',
+  },
   // Ludum Dare 47
   {
     routeRegex: /^\/(ld47|ludum-?dare-?47|stuck-in-an-inner-tube|tube-climber)(?:\/.*)?$/i,
