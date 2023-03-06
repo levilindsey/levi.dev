@@ -56,7 +56,7 @@ const redirects = [
   },
   // AI movement tutorial
   {
-    routeRegex: /^\/((platform(er)?|(platform(er)?-?)?ai)-?(movement|series|pathfinding|tutorial)?)(?:\/.*)?$/i,
+    routeRegex: /^\/(((2d-?)?(platform(er)?|(platform(er)?-?)?ai)-?(movement|series|path-?find(ing)?|tutorial)?)|path-?finding)(?:\/.*)?$/i,
     redirectUrl: 'https://devlog.levi.dev/2021/09/building-platformer-ai-from-low-level.html',
   },
   // Gameplay showreel
