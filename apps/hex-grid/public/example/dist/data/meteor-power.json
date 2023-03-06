@@ -5,7 +5,7 @@
   "emphasis": 0.9,
   "color": "#636a94",
   "urls": {
-    "demo": "https://levi.dev/ld50",
+    "demo": "https://levi.dev/meteor-power",
     "ludum-dare": "https://ldjam.com/events/ludum-dare/50/meteor-power",
     "github": "https://github.com/levilindsey/ludum-dare-50"
   },
@@ -13,16 +13,16 @@
   "location": "",
   "date": "4/2022",
   "categories": [
-    "side-project",
-    "app",
-    "godot",
-    "game",
-    "music",
-    "art",
-    "animation",
+    "Side-Project",
+    "App",
+    "Godot",
+    "Game",
+    "Music",
+    "Art",
+    "Animation",
     "AI",
     "2D",
-    "game-jam"
+    "Game-Jam"
   ],
   "images": [
     {
