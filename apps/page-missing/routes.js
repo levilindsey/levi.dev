@@ -19,7 +19,8 @@ exports.attachRoutes = (server, appPath, config) => {
     const content = {
       status: 404,
       pageName: req.hostname + req.path,
-      portfolioAnalyticsScript: config.app.portfolioAnalyticsScript
+      portfolioAnalyticsScriptGA4: config.app.portfolioAnalyticsScriptGA4,
+      portfolioAnalyticsScriptGA4ID: config.app.portfolioAnalyticsScriptGA4ID
     };
     res.status(404).render(templatePath, content);
   }

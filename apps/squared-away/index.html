@@ -11,6 +11,9 @@
     <link rel="shortcut icon" href="/squared-away/images/favicon<%= cacheBuster %>.ico">
     <link rel="stylesheet" href="/squared-away/main<%= cacheBuster %>.css">
   </head>
+  
+  <script><%= portfolioAnalyticsScriptGA4 %></script>
+
   <body>
     <div id="pageColumn">
       <header id="mainTitle"><img id="title" src="<%= baseDir %>/images/title<%= cacheBuster %>.png" alt="Squared Away Title">
@@ -398,7 +401,5 @@
     <script src="<%= baseDir %>/scripts/sound.js"></script>
     <script src="<%= baseDir %>/scripts/game.js"></script>
     <script src="<%= baseDir %>/scripts/main.js"></script>
-
-    <script><%= portfolioAnalyticsScript %></script>
   </body>
 </html>
