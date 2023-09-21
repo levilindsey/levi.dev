@@ -24,14 +24,42 @@ config.app.sitemapPath = config.app.appsPath + '/sitemap.xml';
 config.app.bowerComponentsPath = config.app.projectRootPath + '/bower_components';
 config.app.faviconPath = config.app.homePath + '/public/images/favicon-32x32.png';
 
-config.portfolioAnalyticsScript =
+config.app.portfolioAnalyticsScript =
     "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" +
-    "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," +
-    "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" +
+      "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," +
+      "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" +
     "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');" +
     "ga('create', 'UA-43971205-4', 'auto');" +
     "ga('set', 'anonymizeIp', true);" +
     "ga('send', 'pageview');";
+config.app.portfolioAnalyticsScriptGA4 =
+    "<!-- Google tag (gtag.js) -->" +
+    "<script async src='https://www.googletagmanager.com/gtag/js?id=G-SPHSZD3C8T'></script>" +
+    "<script>" +
+      "window.dataLayer = window.dataLayer || [];" +
+      "function gtag(){dataLayer.push(arguments);}" +
+      "gtag('js', new Date());" +
+      "gtag('config', 'G-SPHSZD3C8T');" +
+    "</script>";
+config.app.portfolioAnalyticsScriptGA4ID = "G-SPHSZD3C8T";
+
+config.app.snoringCatAnalyticsScript =
+    "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" +
+      "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," +
+      "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" +
+    "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');" +
+    "ga('create', 'UA-43971205-9', 'auto');" +
+    "ga('set', 'anonymizeIp', true);" +
+    "ga('send', 'pageview');";
+config.app.snoringCatAnalyticsScriptGA4 =
+    "<!-- Google tag (gtag.js) -->"
+    "<script async src='https://www.googletagmanager.com/gtag/js?id=G-TSV2TNLHJ9'></script>"
+    "<script>"
+      "window.dataLayer = window.dataLayer || [];"
+      "function gtag(){dataLayer.push(arguments);}"
+      "gtag('js', new Date());"
+      "gtag('config', 'G-TSV2TNLHJ9');"
+    "</script>";
 
 config.app.cacheMaxAge = 2592000000;
 

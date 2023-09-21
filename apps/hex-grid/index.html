@@ -44,6 +44,9 @@
           <!--type="text/javascript"-->
           <!--src="<%= baseDir %>/example/dist/hex-grid-example.min<%= cacheBuster %>.js"></script>-->
 </head>
+
+<script><%= portfolioAnalyticsScriptGA4 %></script>
+
 <body>
 <div id="hex-grid-area"></div>
 
@@ -58,7 +61,5 @@
 <audio id="konami-code-confirmation-sound"
        preload
        src="https://js-konami-code.s3.us-west-2.amazonaws.com/contra_title.mp3"></audio>
-
-<script><%= portfolioAnalyticsScript %></script>
 </body>
 </html>

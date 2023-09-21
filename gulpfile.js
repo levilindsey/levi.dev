@@ -21,6 +21,16 @@ config.portfolioAnalyticsScript =
     "ga('create', 'UA-43971205-4', 'auto');" +
     "ga('set', 'anonymizeIp', true);" +
     "ga('send', 'pageview');";
+config.portfolioAnalyticsScriptGA4 =
+    "<!-- Google tag (gtag.js) -->" +
+    "<script async src='https://www.googletagmanager.com/gtag/js?id=G-SPHSZD3C8T'></script>" +
+    "<script>" +
+      "window.dataLayer = window.dataLayer || [];" +
+      "function gtag(){dataLayer.push(arguments);}" +
+      "gtag('js', new Date());" +
+      "gtag('config', 'G-SPHSZD3C8T');" +
+    "</script>";
+config.portfolioAnalyticsScriptGA4ID = "G-SPHSZD3C8T";
 
 config.snoringCatAnalyticsScript =
     "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" +
@@ -30,6 +40,15 @@ config.snoringCatAnalyticsScript =
     "ga('create', 'UA-43971205-9', 'auto');" +
     "ga('set', 'anonymizeIp', true);" +
     "ga('send', 'pageview');";
+config.snoringCatAnalyticsScriptGA4 =
+    "<!-- Google tag (gtag.js) -->"
+    "<script async src='https://www.googletagmanager.com/gtag/js?id=G-TSV2TNLHJ9'></script>"
+    "<script>"
+      "window.dataLayer = window.dataLayer || [];"
+      "function gtag(){dataLayer.push(arguments);}"
+      "gtag('js', new Date());"
+      "gtag('config', 'G-TSV2TNLHJ9');"
+    "</script>";
 
 // ---  --- //
 
@@ -40,8 +59,9 @@ gulp.task('templates', () => {
   return gulp.src(config.templatesSrc)
       .pipe(plugins.plumber())
       .pipe(plugins.template({
-        portfolioAnalyticsScript: config.portfolioAnalyticsScript,
-        snoringCatAnalyticsScript: config.snoringCatAnalyticsScript,
+        portfolioAnalyticsScriptGA4: config.portfolioAnalyticsScriptGA4,
+        portfolioAnalyticsScriptGA4ID: config.portfolioAnalyticsScriptGA4ID,
+        snoringCatAnalyticsScriptGA4: config.snoringCatAnalyticsScriptGA4,
       }))
       .pipe(plugins.rename(path => {
         path.dirname += '/public';

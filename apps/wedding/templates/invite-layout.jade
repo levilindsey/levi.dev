@@ -13,6 +13,14 @@ html(lang='en')
 
     link(href='#{baseDir}/styles/wedding.css#{currentVersion}', type='text/css', rel='stylesheet')
     link(href='#{baseDir}/images/icon.ico#{currentVersion}', type='image/gif', rel='shortcut icon')
+
+  script(async src='https://www.googletagmanager.com/gtag/js?id=#{portfolioAnalyticsScriptGA4ID}')
+  script
+    | window.dataLayer = window.dataLayer || [];
+    | function gtag(){dataLayer.push(arguments);}
+    | gtag('js', new Date());
+    | gtag('config', '#{portfolioAnalyticsScriptGA4ID}');
+
   body
 
     a#ribbon(href='/wedding/photos')
