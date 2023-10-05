@@ -1,0 +1,50 @@
+{
+  "id": "orbital-meltdown",
+  "titleShort": "3D third-person\nshooter",
+  "titleLong": "Orbital Meltdown: Death by Laser Beneath the Naked Sun",
+  "emphasis": 0.6,
+  "color": "#538fff",
+  "urls": {
+    "demo": "https://levilindsey.itch.io/orbital-meltdown-death-by-laser-beneath-the-naked-sun",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/54/ludum-dare-54",
+    "github": "https://github.com/voithos/ludum-dare-54"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "10/2023",
+  "categories": [
+    "Side-Project",
+    "App",
+    "Unreal",
+    "Game",
+    "3D",
+    "Game-Jam",
+    "Teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "destroy-platforms.gif",
+      "description": "Featuring a fully-destructible level!"
+    },
+    {
+      "fileName": "enemies.gif",
+      "description": "A host of exciting baddies!"
+    },
+    {
+      "fileName": "destroy-prop.gif",
+      "description": "Even more destruction!"
+    },
+    {
+      "fileName": "cover-full.png",
+      "description": "And a beautiful loading screen."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "CSwQXfaj5zg",
+      "description": "A gameplay video for Orbital Meltdown: Death by Laser Beneath the Naked Sun."
+    }
+  ],
+  "content": "> Holy moly look at all these craaaaaaazy robots!\r\n\r\n> Wow, I sure hope they're friendly. Buuuut in case they're not, let's pick up that convenient laser gun. Maybe there will be other items to find too! Maybe they'll make big ol' BOOMS! But be careful, these weapons are HOT and this ol' space platform is a little rickety. Wouldn't want to blow too many holes in it or we might just run out of space!\r\n\r\n> 🎸🎸🎸\r\n\r\n- All design, code, and audio were created during the jam.\r\n- Graphics were are borrowed from elsewhere ([attributions](https:\/\/github.com\/voithos\/ludum-dare-54\/blob\/main\/ATTRIBUTION.md)).\r\n- Made with [Unreal](https:\/\/www.unrealengine.com).\r\n\r\n## The jam\r\n\r\nThis game was created in 72-hours as a [submission](https:\/\/ldjam.com\/events\/ludum-dare\/54\/ludum-dare-54) for the [Ludum Dare 54 game jam](https:\/\/ldjam.com).\r\n\r\n**Theme: \"Limited Space\"**\r\n\r\n## The team\r\n\r\n-   [Zaven Muradyan](https:\/\/voithos.io\/)\r\n-   [Alden Witt](https:\/\/www.instagram.com\/aldenwitty)\r\n-   [Levi Lindsey](https:\/\/levi.dev)\r\n"
+}

@@ -193,6 +193,11 @@ const redirects = [
     routeRegex: /^\/(ld52|ludum-?dare-?52|(what-?)?must-?be-?done)(?:\/.*)?$/i,
     redirectUrl: 'https://drgvdg.itch.io/what-must-be-done',
   },
+  // Ludum Dare 54
+  {
+    routeRegex: /^\/(ld54|ludum-?dare-?54|orbital(-?melt-?down(-?death-?by-?lasers?-?beneath-?the-?naked-?sun)?)?)(?:\/.*)?$/i,
+    redirectUrl: 'https://levilindsey.itch.io/orbital-meltdown-death-by-laser-beneath-the-naked-sun',
+  },
 ];
 
 // Attaches the route handlers for this app.
