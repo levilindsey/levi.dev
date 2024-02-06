@@ -63,7 +63,6 @@ const redirects = [
   {
     routeRegex: /^\/((game(play)?)?-?show-?reel)(?:\/.*)?$/i,
     redirectUrl: 'https://levi.dev#showreel',
-    // redirectUrl: 'https://www.youtube.com/watch?v=VKTejiouFJk',
   },
   // Octobit pictures
   {
@@ -127,7 +126,6 @@ const redirects = [
   {
     routeRegex: /^\/(momma-duck|momma_duck|mama-duck|mamma-duck|mama|momma|mamma|duck|duckling|ducks|ducklings)(?:\/.*)?$/i,
     redirectUrl: 'https://snoringcatgames.github.io/momma_duck',
-    // redirectUrl: 'https://levilindsey.itch.io/momma-duck',
   },
   // TODO: Move this out into a separate redirect configuration file, in the same style as Inner-Tube Climber
   //       (so I can redirect depending on the User Agent).
@@ -146,20 +144,23 @@ const redirects = [
   },
   // GGJ21
   {
-    routeRegex: /^\/(ooboloo|(ggj|global-?game-?jam)-?(2021|21))(?:\/.*)?$/i,
+    routeRegex: /^\/(ooboloo|(ggj|global-?game-?jam)-?((20)?21))(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.itch.io/ooboloo',
   },
   // GGJ22
   {
-    routeRegex: /^\/((tale-?of-?)?two-?sides|(ggj|global-?game-?jam)-?(2022|22)?)(?:\/.*)?$/i,
+    routeRegex: /^\/((tale-?of-?)?two-?sides|(ggj|global-?game-?jam)-?((20)?22)?)(?:\/.*)?$/i,
     redirectUrl: 'https://voithos.itch.io/tale-of-two-sides',
-    // redirectUrl: 'https://voithos.github.io/global-game-jam-2022',
   },
-  // GGJ22
+  // GGJ23
   {
-    routeRegex: /^\/((up)?root(ed)?|(ggj|global-?game-?jam)-?(2023|23)?)(?:\/.*)?$/i,
+    routeRegex: /^\/((up)?root(ed)?|(ggj|global-?game-?jam)-?((20)?23)?)(?:\/.*)?$/i,
     redirectUrl: 'https://voithos.itch.io/uprooted',
-    // redirectUrl: 'https://voithos.github.io/uprooted',
+  },
+  // GGJ24
+  {
+    routeRegex: /^\/(beans?)|(farts?)|(pull-?my-?finger((-?a)?-?bean-?based-?survival-?game)?|(ggj|global-?game-?jam)-?((20)?24)?)(?:\/.*)?$/i,
+    redirectUrl: 'https://levilindsey.itch.io/pull-my-finger-a-bean-based-survival-game',
   },
   // Ludum Dare 47
   {
@@ -175,7 +176,6 @@ const redirects = [
   {
     routeRegex: /^\/(ld49|ludum-?dare-?49|(the-?)?eye-?of-?glower-?on|mount-?oh-?no|eye)(?:\/.*)?$/i,
     redirectUrl: 'https://snoringcatgames.github.io/eye_of_glower_on/',
-    // redirectUrl: 'https://levilindsey.itch.io/the-eye-of-glower-on',
   },
   // Ludum Dare 50
   {
@@ -186,7 +186,6 @@ const redirects = [
   {
     routeRegex: /^\/(ld51|ludum-?dare-?51|village|village-?defender|defender)(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.itch.io/village-defender',
-    // redirectUrl: 'https://levilindsey.github.io/ludum-dare-51/',
   },
   // Ludum Dare 52
   {
