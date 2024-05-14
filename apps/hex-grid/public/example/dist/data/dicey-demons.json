@@ -1,0 +1,54 @@
+{
+  "id": "dicey-demons",
+  "titleShort": "Deck-building\nauto-battler",
+  "titleLong": "Dicey Demons: A deck-building auto-battler",
+  "emphasis": 0.8,
+  "color": "#e685f4",
+  "urls": {
+    "demo": "https://levi.dev/dicey-demons",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/55/dicey-demons",
+    "github": "https://github.com/DiegoRGonzalez/ludumdare55"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "4/2024",
+  "categories": [
+    "Side-Project",
+    "App",
+    "Godot",
+    "Game",
+    "3D",
+    "Game-Jam",
+    "Teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "roll-dice.gif",
+      "description": "Satisfying dice physics!"
+    },
+    {
+      "fileName": "use-dice.gif",
+      "description": "Use your dice and choose your lineup"
+    },
+    {
+      "fileName": "battle-dice.gif",
+      "description": "Casual auto-battling"
+    },
+    {
+      "fileName": "dice-for-sale.png",
+      "description": "The grumpy shopkeeper cat is full of bad puns"
+    },
+    {
+      "fileName": "boss.png",
+      "description": "We even added a boss!"
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "nRomWI3wxOg",
+      "description": "A trailer for Dicey Demons."
+    }
+  ],
+  "content": "> Do battle against your foes in our newest adventure, **Dicey Demons!** Choose from an array of enchanted dice to summon adorable (yet killer) demon monsters to do slay your enemies. Make your way through trials and tribulations to earn your freedom through strategic survival and careful planning!\r\n\r\n## ‍💻 The jam\r\n\r\n**Theme: \"Summoning\"**\r\n\r\nWe made this game for the Ludum Dare 55 game jam. This was a \"jam\" submission, created in 72 hours.\r\n\r\nAll design, code, images, sound effects, and music were created during the jam.\r\n\r\n## 🎮 How to play\r\n\r\n🖱️ Click the mouse for everything, including:\r\n  * Rolling your dice\r\n  * Purchasing new dice from the shop\r\n  * Summoning monsters in position (and collecting bones)\r\n  * Defeating your foes!...\r\n  * (...and advancing dialogue).\r\n\r\n## 🛠️ Our tools\r\n\r\n* **[Godot 4.2.1](https:\/\/godotengine.org\/)**: Game engine\r\n* **[Ableton 10](https:\/\/www.ableton.com\/en\/)**: Digital audio workstation\r\n* **[Procreate](https:\/\/procreate.com\/)**: Graphics editor\r\n\r\n## 👋 Our team\r\n\r\n* **Levi Lindsey** (UkuleleFury) — _Code_ — **[levi.dev](https:\/\/levi.dev)** \r\n* **Natasha Kononenko** (Skoprimon) — _Code_ — **[https:\/\/natasha.dev](https:\/\/natasha.dev)**\r\n* **Diego** (Diego Teran) — _Code_ — **[https:\/\/clerium.itch.io](https:\/\/clerium.itch.io\/)**\r\n* **Diego** (DGo) - _Code_ - **[https:\/\/drgvdg.itch.io](https:\/\/drgvdg.itch.io)**\r\n* **Seth** (Seth Johnson) — _Dicemaster (Shaders and Code)_ \r\n* **Anna** (peachy) — _Art_ \r\n* **Handong** (hanadulcet) — _Music and Code_ — **[Soundcloud](https:\/\/soundcloud.com\/hanadulcet)** \r\n"
+}
