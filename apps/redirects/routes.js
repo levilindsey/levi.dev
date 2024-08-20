@@ -145,7 +145,7 @@ const redirects = [
   // GMTK24
   {
     routeRegex: /^\/(gmtk-?(20)?24|sticky-?ships?|sticky|ships?)(?:\/.*)?$/i,
-    redirectUrl: 'https://github.com/voithos/ggj2024',
+    redirectUrl: 'https://voithos.itch.io/sticky-ships',
   },
   // GGJ21
   {
