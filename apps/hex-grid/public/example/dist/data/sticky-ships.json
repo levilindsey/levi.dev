@@ -1,0 +1,50 @@
+{
+  "id": "sticky-ships",
+  "titleShort": "Bullet-hell\ngame",
+  "titleLong": "Sticky Ships: A 2D bullet-hell game",
+  "emphasis": 0.8,
+  "color": "#60ff64",
+  "urls": {
+    "demo": "https://levi.dev/sticky-ships",
+    "gmtk": "https://itch.io/jam/gmtk-2024/rate/2912461",
+    "github": "https://github.com/voithos/ggj2024"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "8/2024",
+  "categories": [
+    "Side-Project",
+    "App",
+    "Godot",
+    "Game",
+    "2D",
+    "Game-Jam",
+    "Teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "attachment-madness.gif",
+      "description": "Eventually, you have many parts attached to your ship!"
+    },
+    {
+      "fileName": "level-up.gif",
+      "description": "When you accumulate enough parts, you upgrade to a larger core size."
+    },
+    {
+      "fileName": "growth_effect_extended.gif",
+      "description": "The ship-upgrade animation turned out well!"
+    },
+    {
+      "fileName": "cover-art.png",
+      "description": "Cover art for Stick Ships."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "g-EjWoMBvPE",
+      "description": "A gameplay video for Sticky Ships."
+    }
+  ],
+  "content": "> The armada has arrived!! You're outnumbered and outgunned, but you have an ace up your sleeve: the power of fusion.\r\n> \r\n> Use your fallen enemies to scale up and rival your greatest foes. Stick 'em up!\r\n\r\n## 🎮 How to play\r\n\r\n⌨️ Keyboard controls\r\n-   WASD to move\r\n-   Spacebar or mouse-click to fire\r\n-   E to equip the husks of your fallen enemies\r\n-   Survive the waves and grow grow grow!\r\n-   Once you gather enough parts, you'll EVOLVE to the next core type!\r\n\r\n## 🛠️ Our tools\r\n\r\n-   **[Godot](https:\/\/godotengine.org\/):** Game engine.\r\n-   **[Pro Tools](https:\/\/www.avid.com\/pro-tools):** Digital audio workstation.\r\n-   **[SpriteMancer](https:\/\/codemanu.itch.io\/spritemancer):** Particle effect engine.\r\n-   **[Aseprite](https:\/\/www.aseprite.org\/):** Pixel-art image editor.\r\n\r\n## ‍💻 The jam\r\n\r\n_Everything in this game was created during the jam._\r\n\r\nThis game was created in 96-hours as a [submission](https:\/\/github.com\/voithos\/ggj2024) for the [GMTK 2024 game jam](https:\/\/itch.io\/jam\/gmtk-2024).\r\n\r\n**Theme: \"Built to Scale\"**\r\n\r\n## 👋 Our team\r\n\r\n-   [Zaven Muradyan](https:\/\/voithos.io\/)\r\n-   [Alden Witt](https:\/\/www.instagram.com\/aldenwitty)\r\n-   [Levi Lindsey](https:\/\/levi.dev)\r\n"
+}

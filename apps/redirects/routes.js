@@ -139,8 +139,13 @@ const redirects = [
 
   // GMTK21
   {
-    routeRegex: /^\/(gmtk-2021|gmtk-21|gmtk2021|gmtk21)(?:\/.*)?$/i,
+    routeRegex: /^\/(gmtk-?(20)?21)(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.github.io/gmtk-2021',
+  },
+  // GMTK24
+  {
+    routeRegex: /^\/(gmtk-?(20)?24|sticky-?ships?|sticky|ships?)(?:\/.*)?$/i,
+    redirectUrl: 'https://github.com/voithos/ggj2024',
   },
   // GGJ21
   {
