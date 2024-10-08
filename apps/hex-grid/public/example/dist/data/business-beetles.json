@@ -1,0 +1,46 @@
+{
+  "id": "business-beetles",
+  "titleShort": "Simulation\ngame",
+  "titleLong": "Business Beetles: A chill simulation game",
+  "emphasis": 0.8,
+  "color": "#ce5c2f",
+  "urls": {
+    "demo": "https://levi.dev/business-beetles",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/56/business-beetles",
+    "github": "https://github.com/DiegoRGonzalez/ludumdare56"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "10/2024",
+  "categories": [
+    "Side-Project",
+    "App",
+    "Godot",
+    "Game",
+    "2D",
+    "Game-Jam",
+    "Teamwork"
+  ],
+  "images": [
+    {
+      "fileName": "mafia-birds.gif",
+      "description": "Beetles go about their business during the day. Sales-beetles look for customers, make sales, and return with money balls to the office."
+    },
+    {
+      "fileName": "make-a-sale.gif",
+      "description": "You see your stats and allocate new recruits at the end of each day."
+    },
+    {
+      "fileName": "hire-recruits.gif",
+      "description": "Mafia crows want to take your money! Also, you can speed-up time."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "OPPdCdK4F0Y",
+      "description": "A gameplay video for Business Beetles."
+    }
+  ],
+  "content": "> Welcome to your first day as the CEO of Business Beetles! Lead your tiny beetle employee-servants by hiring recruiter beetles, raising revenue by selling your products, and employing guards who can defend you from the bird mafia (who may be out to collect on some unpaid loans the company might have failed to pay back). \r\n> \r\n> Try your best to keep the mini-corporation's profits high! (or at the very least, try your best to keep it profitable...hopefully...)\r\n\r\nSee the [devlog post](https:\/\/devlog.levi.dev\/2024\/10\/ludum-dare-56-business-beetles.html) for more info on the jam.\r\n\r\n## ‍💻 The jam\r\n\r\n**Theme: \"Tiny Creatures\"**\r\n\r\nWe made this game for the Ludum Dare 56 game jam. This was a \"jam\" submission, created in 72 hours.\r\n\r\nAll design, code, images, sound effects, and music were created during the jam.\r\n\r\n## 🛠️ Our tools\r\n\r\n* **[Godot 4.3](https:\/\/godotengine.org\/)**: Game engine\r\n* **[Ableton 10](https:\/\/www.ableton.com\/en\/)**: Digital audio workstation\r\n* **[Procreate](https:\/\/procreate.com\/)**: Graphics editor\r\n\r\n## 👋 Our team\r\n\r\n* **Levi Lindsey** (UkuleleFury) — _Code_ — **[levi.dev](https:\/\/levi.dev)**\r\n* **Natasha Kononenko** (Skoprimon) — _Code_ — **[natasha.dev](https:\/\/natasha.dev)**\r\n* **Diego** (Diego Teran) — _Code_ — **[clerium.itch.io](https:\/\/clerium.itch.io\/)**\r\n* **Diego** (DGo) - _Code_ - **[drgvdg.itch.io](https:\/\/drgvdg.itch.io)**\r\n* **Anna** (peachy) — _Art_ - **[annastmartinart.com](https:\/\/www.annastmartinart.com\/)**\r\n* **Handong** (hanadulcet) — _Music_ — **[soundcloud.com\/hanadulcet](https:\/\/soundcloud.com\/hanadulcet)**\r\n"
+}
