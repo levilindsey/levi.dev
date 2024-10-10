@@ -28,10 +28,10 @@
   "dependencies": {
     "@sendgrid/mail": "^8.1.0",
     "body-parser": "^1.20.1",
-    "cookie-parser": "^1.4.5",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^8.2.0",
-    "express": "^4.21.0",
-    "express-session": "^1.17.1",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
     "jade": "^0.29.0",
     "morgan": "^1.10.0",
     "q": "^1.5.1",
