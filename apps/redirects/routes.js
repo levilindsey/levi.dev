@@ -167,6 +167,12 @@ const redirects = [
     routeRegex: /^\/(beans?)|(farts?)|(pull-?my-?finger((-?a)?-?bean-?based-?survival-?game)?|(ggj|global-?game-?jam)-?((20)?24)?)(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.itch.io/pull-my-finger-a-bean-based-survival-game',
   },
+  // GGJ25
+  {
+    routeRegex: /^\/(ggj|global-?game-?jam)-?((20)?25)?(?:\/.*)?$/i,
+    redirectUrl: 'https://levilindsey.github.io/ggj25',
+    // redirectUrl: 'https://levilindsey.itch.io/ggj25',
+  },
   // Ludum Dare 47
   {
     routeRegex: /^\/(ld47|ludum-?dare-?47|stuck-in-an-inner-tube|tube-climber)(?:\/.*)?$/i,
