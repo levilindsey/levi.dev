@@ -169,9 +169,8 @@ const redirects = [
   },
   // GGJ25
   {
-    routeRegex: /^\/(ggj|global-?game-?jam)-?((20)?25)?(?:\/.*)?$/i,
-    redirectUrl: 'https://levilindsey.github.io/ggj25',
-    // redirectUrl: 'https://levilindsey.itch.io/ggj25',
+    routeRegex: /^\/(((((oh-?)?the-?)?places-?you(ll)?-?blow)|blow|(bubble(-?gum)?))|(ggj|global-?game-?jam)-?((20)?25)?)(?:\/.*)?$/i,
+    redirectUrl: 'https://levilindsey.itch.io/oh-the-places-youll-blow',
   },
   // Ludum Dare 47
   {
