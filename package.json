@@ -1,6 +1,6 @@
 {
   "name": "levi.dev",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Levi Lindsey's web portfolio",
   "licenses": [
     {
@@ -49,6 +49,6 @@
     "natives": "^1.1.6"
   },
   "engines": {
-    "node": "18.x"
+    "node": "23.x"
   }
 }

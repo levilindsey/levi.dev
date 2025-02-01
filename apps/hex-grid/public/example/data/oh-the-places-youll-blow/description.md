@@ -6,6 +6,8 @@
 
 🐞 The Windows build has the fewest issues. On Android, we have sometimes seen issues with the audio input cutting out after half a minute or so.
 
+⭐ The theme for the jam was "Bubble".
+
 ### 🙌 Our team
 
 -   **Alden Witt** — _Music & Sound Design_ — **[instagram.com/aldenwitty](https://instagram.com/aldenwitty)**
