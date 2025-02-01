@@ -6,7 +6,7 @@
   "color": "#ff7aed",
   "urls": {
     "demo": "https://levi.dev/blow",
-    "ggj": "https://globalgamejam.org/games/2025/oh-places-youll-blow-7",
+    "global-game-jam": "https://globalgamejam.org/games/2025/oh-places-youll-blow-7",
     "github": "https://github.com/levilindsey/ggj25/"
   },
   "jobTitle": "",
@@ -43,5 +43,5 @@
       "description": "A gameplay video for Oh, the Places You'll Blow."
     }
   ],
-  "content": "> 🍬🫧 The age-old story of blowing an overly ambitious bubble and being carried away to lands unknown.\r\n\r\n🎙️ This game is controlled using only your microphone!\r\n\r\n⏰ This was made in 48 hours for [Global Game Jam 2025](https:\/\/globalgamejam.org\/games\/2025\/oh-places-youll-blow-7).\r\n\r\n🐞 The Windows build has the fewest issues. On Android, we have sometimes seen issues with the audio input cutting out after half a minute or so.\r\n\r\n### 🙌 Our team\r\n\r\n-   **Alden Witt** — _Music & Sound Design_ — **[instagram.com\/aldenwitty](https:\/\/instagram.com\/aldenwitty)**\r\n-   **Levi Lindsey** — _Code & Art_ — **[levi.dev](https:\/\/levi.dev)**\r\n"
+  "content": "> 🍬🫧 The age-old story of blowing an overly ambitious bubble and being carried away to lands unknown.\r\n\r\n🎙️ This game is controlled using only your microphone!\r\n\r\n⏰ This was made in 48 hours for [Global Game Jam 2025](https:\/\/globalgamejam.org\/games\/2025\/oh-places-youll-blow-7).\r\n\r\n🐞 The Windows build has the fewest issues. On Android, we have sometimes seen issues with the audio input cutting out after half a minute or so.\r\n\r\n⭐ The theme for the jam was \"Bubble\".\r\n\r\n### 🙌 Our team\r\n\r\n-   **Alden Witt** — _Music & Sound Design_ — **[instagram.com\/aldenwitty](https:\/\/instagram.com\/aldenwitty)**\r\n-   **Levi Lindsey** — _Code & Art_ — **[levi.dev](https:\/\/levi.dev)**\r\n"
 }
