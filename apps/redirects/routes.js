@@ -217,6 +217,11 @@ const redirects = [
     routeRegex: /^\/((ld|ludum-?dare-?)56|(business?-?be(e|a)tles?|business|be(e|a)tles?))(?:\/.*)?$/i,
     redirectUrl: 'https://drgvdg.itch.io/business-beetles',
   },
+  // Ludum Dare 57
+  {
+    routeRegex: /^\/((ld|ludum-?dare-?)57|(TODO-Add-LD-Game-Name-Here))(?:\/.*)?$/i,
+    redirectUrl: 'https://github.com/levilindsey/ld57',
+  },
 ];
 
 // Attaches the route handlers for this app.

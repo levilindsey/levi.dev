@@ -7,7 +7,7 @@
   "urls": {
     "homepage": "https://cloud.google.com/"
   },
-  "jobTitle": "Senior Software Engineer and Technical Lead",
+  "jobTitle": "Lead Software Engineer",
   "location": "Seattle, WA",
   "date": {
     "start": "1/2017",
@@ -34,7 +34,6 @@
       "description": "This screenshot shows some of the other top-level panels in the app. Essentially every panel and every page are maintained by a different team within Google's massive Cloud organization, and getting them all to work together seamlessly is non-trivial!"
     }
   ],
-  "videos": [
-  ],
-  "content": "_[Google][google-url] is a multinational corporation specializing in Internet-related services and products. [Google Cloud Platform][cloud-url] (GCP) is a cloud computing service that offers hosting on the same supporting infrastructure that Google uses internally for their end-user products. The Cloud Console is the web UI for end users of GCP._\r\n\r\nLevi was a tech lead on the frontend framework for the Cloud Console. There he pushed the limits of what Angular and Typescript can do in what is probably the world's largest Angular application.\r\n\r\nHighlights:\r\n\r\n-   Helped lead the >4-year migration of >10M lines of JS code with >8M active-monthly users by >800 SWEs across >180 teams from AngularJS to Angular.\r\n-   Tech lead (of 4 other SWEs) for Angular Infrastructure:\r\n    -   Bootstrapping the application\r\n    -   Client-side routing\r\n    -   Top-level UI layout\r\n    -   Angular migration strategies\r\n    -   Deferred-loading\r\n    -   Ensuring client infrastructure code health\r\n-   Collaborated across teams to align priorities, review designs, and guide strategies.\r\n-   Designed novel patterns for deferred-loading AoT-compiled Angular components.\r\n\r\n[google-url]: https:\/\/google.com\/about\r\n[cloud-url]: https:\/\/cloud.google.com\r\n"
+  "videos": [],
+  "content": "_[Google][google-url] is a multinational corporation specializing in Internet-related services and products. [Google Cloud Platform][cloud-url] (GCP) is a cloud computing service that offers hosting on the same supporting infrastructure that Google uses internally for their end-user products. The Cloud Console is the web UI for end users of GCP._\r\n\r\nLevi was a tech lead on the frontend framework for the Cloud Console. There he pushed the limits of what Angular and Typescript can do in what is probably the world's largest Angular application.\r\n\r\nHighlights:\r\n\r\n-   Helped lead the 6-year migration of **>10M lines of JS** code with **>8M active-monthly users** by **>800 SWEs** across **>180 teams** from AngularJS to Angular.\r\n-   **Tech lead** (of 5 other SWEs) for:\r\n    -   bootstrapping the application,\r\n    -   client-side routing,\r\n    -   top-level UI layout,\r\n    -   Angular migration strategies,\r\n    -   deferred-loading,\r\n    -   and ensuring client infrastructure code health.\r\n-   Invented novel technical patterns for **deferred-loading** AoT-compiled Angular components. This became a critical tool for dozens of other external Google products.\r\n-   As a lead in the client core infrastructure team for the massive Cloud Console application, a large part of Levi's role was to support distributed Cloud service teams, identify problems and solutions in our complex monolith codebase, and coordinate cross-team dependencies and systems design.\r\n\r\n[google-url]: https:\/\/google.com\/about\r\n[cloud-url]: https:\/\/cloud.google.com\r\n"
 }
