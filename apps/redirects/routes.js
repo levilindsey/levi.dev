@@ -220,7 +220,7 @@ const redirects = [
   // Ludum Dare 57
   {
     routeRegex: /^\/((ld|ludum-?dare-?)57|((typ(e|ing)-?(at-?)?depth)|(typ(e|ing))|depth|deep))(?:\/.*)?$/i,
-    redirectUrl: 'https://github.com/levilindsey/ld57',
+    redirectUrl: 'https://levilindsey.itch.io/typing-at-depth',
   },
 ];
 
