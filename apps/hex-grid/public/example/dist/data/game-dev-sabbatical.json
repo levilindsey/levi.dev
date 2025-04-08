@@ -3,7 +3,7 @@
   "titleShort": "Sabbatical:\nGame dev\nexploration",
   "titleLong": "Sabbatical: Adventures in game development",
   "emphasis": 0.8,
-  "color": "#18ffff",
+  "color": "#ffe642",
   "urls": {
     "devlog": "https://devlog.levi.dev",
     "snoring-cat": "https://snoringcat.games"
@@ -25,8 +25,7 @@
     "2D",
     "Solo-Work"
   ],
-  "images": [
-  ],
+  "images": [],
   "videos": [],
   "content": "Levi left Google to pursue his passion of game development. He spent a year and a half doing solo game development using the [Godot game engine](https:\/\/godotengine.org\/) and making 2D platformers.\r\n\r\nIn particular, if you're curious about Levi's motivations and goals for his sabbatical, check out [his first post](https:\/\/devlog.levi.dev\/2021\/01\/wait-what-am-i-doing.html).\r\n \r\n-   Created 9 small games (mostly through game jams).\r\n-   Created robust frameworks for platformer AI ([snoringcat.games\/surfacer](https:\/\/snoringcat.games\/surfacer)) and UI\/app scaffolding ([snoringcat.games\/scaffolder](https:\/\/snoringcat.games\/scaffolder)).\r\n-   Published 1.5 devlog posts per week: [devlog.levi.dev](https:\/\/devlog.levi.dev).\r\n-   Formed an LLC to publish my games under: [snoringcat.games](https:\/\/snoringcat.games).\r\n-   Wrote many game-dev tutorials: [levi.dev\/game-dev-tutorials](https:\/\/levi.dev\/game-dev-tutorials).\r\n    -   In particular, a 6-part tutorial series on creating platformer AIs: [levi.dev\/platformer-ai-tutorial](https:\/\/levi.dev\/platformer-ai-tutorial).\r\n"
 }
