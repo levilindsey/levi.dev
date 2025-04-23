@@ -97,6 +97,12 @@ const redirects = [
 
   // --- Frameworks and games --- //
 
+  // generator-meanie
+  {
+    routeRegex: /^\/((generator-?)?mean(ie)?)(?:\/.*)?$/i,
+    redirectUrl: 'https://npmjs.org/package/generator-meanie',
+  },
+
   // Surfacer
   {
     routeRegex: /^\/(surfacer?)(?:\/.*)?$/i,
