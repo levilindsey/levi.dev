@@ -11,18 +11,23 @@
   "location": "Remote",
   "date": {
     "start": "4/2023",
-    "end": "Present",
-    "tieBreaker": 30
+    "end": "7/2025"
   },
   "categories": [
     "Work",
     "C++",
     "Unreal",
+    "Lua",
     "Game",
     "3D",
     "Teamwork"
   ],
-  "images": [],
+  "images": [
+    {
+      "fileName": "core-games.jpg",
+      "description": "Core is a platform for players to create and share games."
+    }
+  ],
   "videos": [],
   "content": "_[Manticore Games](https:\/\/www.manticoregames.com\/) is a video game company based in San Mateo, California._\r\n\r\n-   Massive impact on our codebase: **Created 25% of the CLs** (of 20 devs), while accounting for only 5% of the bugs.\r\n-   Extensive work on: networking, engine, UI architecture (both UMG and Slate), Blueprints, matchmaking, game-loading, inventory systems, UGC systems (authoring \/ dynamic-loading \/ in-game-usage), editor tooling, C++\/Lua script-binding, telemetry and performance optimization.\r\n-   Specific impact:\r\n    -   Drove adoption of Unreal’s **ViewModel framework**—yielding **3x speed-up for UI creation and maintenance**.\r\n    -   Added **telemetry tools** and introduced **object-pooling**, to **optimize performance of critical gameplay features by 2x to 30x**.\r\n    -   Architected **configurable UI layout systems**, which let devs **create new overlays 4x as quickly**.\r\n    -   Designed a **Hierarchical State Machine**, which **halved the bugs** in a complex matchmaking system.\r\n    -   Implemented an **event-logging system**, which let devs debug issues in published servers **10x as quickly**.\r\n    -   Designed **developer tooling** to let QA and devs test issues in the most Critical User Journeys in **half the time** (e.g. a teleport system and a     -   UGC-management system).\r\n    -   Improved **Bounding Box calculation** **accuracy by 2x** and **efficiency by 3x**.\r\n    -   Introduced **automated testing practices** across engineering teams.\r\n    -   Created **robust tweening libraries**, in both Lua and Blueprints, enabling animations of any property.\r\n    -   And many other systems that are under NDA!\r\n"
 }
