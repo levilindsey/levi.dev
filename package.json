@@ -31,9 +31,9 @@
     "cookie-parser": "^1.4.7",
     "dotenv": "^8.2.0",
     "express": "^4.21.2",
-    "express-session": "^1.18.1",
+    "express-session": "^1.18.2",
     "jade": "^0.29.0",
-    "morgan": "^1.10.0",
+    "morgan": "^1.10.1",
     "q": "^1.5.1",
     "serve-favicon": "^2.5.0",
     "serve-static": "^1.16.2"
