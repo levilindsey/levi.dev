@@ -1,0 +1,56 @@
+{
+  "id": "if-i-ran-the-alien-zoo",
+  "titleShort": "Action\nAlien Abduction\nGame",
+  "titleLong": "If I Ran the (Alien) Zoo",
+  "emphasis": 0.6,
+  "color": "#99e550",
+  "urls": {
+    "demo": "https://levi.dev/if-i-ran-the-alien-zoo",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/58/if-i-ran-the-alien-zoo",
+    "github": "https://github.com/levilindsey/ld58"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "10/2025",
+  "categories": [
+    "Side-Project",
+    "App",
+    "Art",
+    "Godot",
+    "Game",
+    "2D",
+    "Game-Jam",
+    "Teamwork",
+    "Animation"
+  ],
+  "images": [
+    {
+      "fileName": "entity_demo.gif",
+      "description": "There are lots of interesting Earthlings out there. Gotta catch 'em all!"
+    },
+    {
+      "fileName": "abduct.gif",
+      "description": "Your goal is to collect specific Earthlings as requested by the alien zookeeper."
+    },
+    {
+      "fileName": "splat.gif",
+      "description": "Don't drop the fragile Earthlings!"
+    },
+    {
+      "fileName": "zookeeper-screen.png",
+      "description": "You earn spacebucks for collecting the right Earthlings, which you can then use to upgrade your ship."
+    },
+    {
+      "fileName": "youtube_cover.png",
+      "description": "Cover image."
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "8iptih5O6BY",
+      "description": "A gameplay video for If I Ran the (Alien) Zoo."
+    }
+  ],
+  "content": "## An action alien-abduction game! 👽🛸\r\n\r\n\r\n> There are lots of interesting Earthlings out there. Gotta catch 'em all!\r\n\r\n⏰ This was made in 72 hours for the [Ludum Dare 58 game jam](https:\/\/ldjam.com\/events\/ludum-dare\/58\/if-i-ran-the-alien-zoo).\r\n\r\n⭐ The theme for the jam was \"Collector\".\r\n\r\nFor this one, I made a level with infite scroll, a region-based Earthling-spawner system, a complex detection system with nuanced police chasing and flashlight behaviors, and lots of fun pixel art.\r\n\r\nWe created all sounds, art, code, everything in this game from scratch.\r\n\r\n### 🛠️ Our tools\r\n\r\n*   **[Godot](https:\/\/godotengine.org)**: Game engine\r\n*   **[Pro Tools](https:\/\/www.avid.com\/pro-tools)**: Digital audio workstation\r\n-   **[Aseprite](https:\/\/www.aseprite.org\/):** Pixel-art image editor.\r\n\r\n\r\n### 👋 Our team\r\n\r\n*   **Jake Shoudy** — _Code_ — **[instagram.com\/jshoudy](https:\/\/www.instagram.com\/jshoudy\/)**\r\n*   **Alden Witt** — _Music, Sound, and Game Design_ — **[instagram.com\/aldenwitty](https:\/\/instagram.com\/aldenwitty)**\r\n*   **Levi Lindsey** — _Code_ — **[levi.dev](https:\/\/levi.dev)**\r\n"
+}

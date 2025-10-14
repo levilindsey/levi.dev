@@ -228,6 +228,11 @@ const redirects = [
     routeRegex: /^\/((ld|ludum-?dare-?)57|((typ(e|ing)-?(at-?)?depth)|(typ(e|ing))|depth|deep))(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.itch.io/typing-at-depth',
   },
+  // Ludum Dare 58
+  {
+    routeRegex: /^\/((ld|ludum-?dare-?)58|if-?i-?ran-?the(-?alien)?-?zoo|zoo|alien-?(abduction)?|ufo)(?:\/.*)?$/i,
+    redirectUrl: 'https://levilindsey.itch.io/if-i-ran-the-alien-zoo',
+  },
 ];
 
 // Attaches the route handlers for this app.
