@@ -2,7 +2,7 @@
   "id": "typing-at-depth",
   "titleShort": "Action typing\ngame",
   "titleLong": "Typing at Depth",
-  "emphasis": 0.8,
+  "emphasis": 0.6,
   "color": "#00dedb",
   "urls": {
     "demo": "https://levi.dev/typing-at-depth",
@@ -48,5 +48,5 @@
       "description": "A gameplay video for Typing at Depth."
     }
   ],
-  "content": "## An action typing game! ⌨️💥🐟\r\n\r\n\r\n> Type to trigger abilities and maneuver down into marine depths.\r\n\r\n⏰ This was made in 72 hours for [Ludum Dare 57 game jam](https:\/\/ldjam.com\/events\/ludum-dare\/57\/ld57-2).\r\n\r\n⭐ The theme for the jam was \"Depth\".\r\n\r\nI had a lot of fun making all sorts of nuanced text animations for this one!\r\n\r\n\r\n### 🛒 Content we did not create\r\n\r\n*   We did not create Clippy ([source](https:\/\/tenor.com\/search\/microsoft-clippy-gifs)).\r\n*   Nor did we create the gorgeous Courier Prime font ([source](https:\/\/fonts.google.com\/specimen\/Courier+Prime)).\r\n*   Everything else is pure, unfiltered, and fresh-squeezed originality (includes pulp!).\r\n\r\n\r\n### 🛠️ Our tools\r\n\r\n*   **[Godot](https:\/\/godotengine.org)**: Game engine\r\n*   **[Pro Tools](https:\/\/www.avid.com\/pro-tools)**: Digital audio workstation\r\n\r\n\r\n### 👋 Our team\r\n\r\n*   **Alden Witt** — _Music, Sound, and Game Design_ — **[instagram.com\/aldenwitty](https:\/\/instagram.com\/aldenwitty)**\r\n*   **Levi Lindsey** — _Code_ — **[levi.dev](https:\/\/levi.dev)**\r\n"
+  "content": "## An action typing game! ⌨️💥🐟\r\n\r\n\r\n> Type to trigger abilities and maneuver down into marine depths.\r\n\r\n⏰ This was made in 72 hours for the [Ludum Dare 57 game jam](https:\/\/ldjam.com\/events\/ludum-dare\/57\/ld57-2).\r\n\r\n⭐ The theme for the jam was \"Depth\".\r\n\r\nI had a lot of fun making all sorts of nuanced text animations for this one!\r\n\r\n\r\n### 🛒 Content we did not create\r\n\r\n*   We did not create Clippy ([source](https:\/\/tenor.com\/search\/microsoft-clippy-gifs)).\r\n*   Nor did we create the gorgeous Courier Prime font ([source](https:\/\/fonts.google.com\/specimen\/Courier+Prime)).\r\n*   Everything else is pure, unfiltered, and fresh-squeezed originality (includes pulp!).\r\n\r\n\r\n### 🛠️ Our tools\r\n\r\n*   **[Godot](https:\/\/godotengine.org)**: Game engine\r\n*   **[Pro Tools](https:\/\/www.avid.com\/pro-tools)**: Digital audio workstation\r\n\r\n\r\n### 👋 Our team\r\n\r\n*   **Alden Witt** — _Music, Sound, and Game Design_ — **[instagram.com\/aldenwitty](https:\/\/instagram.com\/aldenwitty)**\r\n*   **Levi Lindsey** — _Code_ — **[levi.dev](https:\/\/levi.dev)**\r\n"
 }
