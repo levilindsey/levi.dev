@@ -180,7 +180,7 @@ const redirects = [
   },
   // GGJ26
   {
-    routeRegex: /^\/(masks?)|(imaginations?)|((the-?)?masks?-?of-?imaginations?)|(ggj|global-?game-?jam)-?((20)?26)?)(?:\/.*)?$/i,
+    routeRegex: /^\/(masks?)|(imaginations?)|((the-?)?masks?-?of-?imaginations?)|(ggj|global-?game-?jam)-?((20)?26)?(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.itch.io/mask-of-imaginations',
   },
   // Ludum Dare 47
