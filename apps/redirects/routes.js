@@ -178,6 +178,11 @@ const redirects = [
     routeRegex: /^\/(((((oh-?)?the-?)?places-?you(ll)?-?blow)|blow|(bubble(-?gum)?))|(ggj|global-?game-?jam)-?((20)?25)?)(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.itch.io/oh-the-places-youll-blow',
   },
+  // GGJ26
+  {
+    routeRegex: /^\/(masks?)|(imaginations?)|((the-?)?masks?-?of-?imaginations?)|(ggj|global-?game-?jam)-?((20)?26)?)(?:\/.*)?$/i,
+    redirectUrl: 'https://levilindsey.itch.io/mask-of-imaginations',
+  },
   // Ludum Dare 47
   {
     routeRegex: /^\/(ld47|ludum-?dare-?47|stuck-in-an-inner-tube|tube-climber)(?:\/.*)?$/i,
