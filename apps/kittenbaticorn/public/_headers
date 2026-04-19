@@ -1,0 +1,11 @@
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
+# Cloudflare Pages / Netlify format. Place at the site root during
+# deploy (i.e. copy build/web/ + this file together, OR deploy build/web
+# as the site root with this file copied to build/web/_headers).
+#
+# These headers enable SharedArrayBuffer, required by the Godot web
+# template's thread support (which Kittenbaticorn's C++ GDExtension
+# needs for its std::thread terrain worker).
