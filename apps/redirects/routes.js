@@ -238,6 +238,11 @@ const redirects = [
     routeRegex: /^\/((ld|ludum-?dare-?)58|if-?i-?ran-?the(-?alien)?-?zoo|zoo|alien-?(abduction)?|ufo)(?:\/.*)?$/i,
     redirectUrl: 'https://levilindsey.itch.io/if-i-ran-the-alien-zoo',
   },
+  // Ludum Dare 59
+  {
+    routeRegex: /^\/((ld|ludum-?dare-?)59|((kitten|cat)-?|bat-?)i?corn)(?:\/.*)?$/i,
+    redirectUrl: 'https://levi.dev/kittenbaticorn',
+  },
 ];
 
 // Attaches the route handlers for this app.

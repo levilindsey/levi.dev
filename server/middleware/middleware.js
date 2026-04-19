@@ -8,8 +8,20 @@ exports.init = server => {
 
   attachExpressMiddleware(server);
   attachCacheBusterRemover(server);
+  attachCrossOriginIsolationHeaders(server);
   staticFiles.init(server);
 };
+
+// Godot's threaded web template requires a cross-origin-isolated
+// context so it can use SharedArrayBuffer. Scoped to /kittenbaticorn
+// so other apps that embed cross-origin content are unaffected.
+function attachCrossOriginIsolationHeaders(server) {
+  server.use('/kittenbaticorn', (req, res, next) => {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    next();
+  });
+}
 
 /**
  * @param {Object} server
