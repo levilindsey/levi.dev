@@ -13,7 +13,8 @@
     "url": "https://github.com/levilindsey/levi.dev"
   },
   "scripts": {
-    "start": "node server/main.js"
+    "start": "node server/main.js",
+    "heroku-postbuild": "node scripts/touch-kittenbaticorn.js"
   },
   "domains": [
     "levi.dev",
