@@ -6,11 +6,25 @@ const config = require('../config/config');
 exports.init = server => {
   const staticFiles = require('./static-files');
 
+  attachCompression(server);
   attachExpressMiddleware(server);
   attachCacheBusterRemover(server);
   attachCrossOriginIsolationHeaders(server);
   staticFiles.init(server);
 };
+
+// Gzip / Brotli all responses. Wired BEFORE static-files so the
+// large Godot web assets (.wasm, .pck, .js) are compressed on the
+// fly. Saves ~30 MB on the kittenbaticorn deploy alone (the side
+// module wasm shrinks ~4x; the bootstrap JS shrinks ~5x; the .pck
+// gets a smaller bump because it embeds already-compressed assets).
+function attachCompression(server) {
+  const compression = require('compression');
+  // Default `compression` filter handles `application/wasm`,
+  // `application/javascript`, etc. via the `compressible` package
+  // — covers everything we ship.
+  server.use(compression());
+}
 
 // Godot's threaded web template requires a cross-origin-isolated
 // context so it can use SharedArrayBuffer. Scoped to /kittenbaticorn
