@@ -25,6 +25,22 @@ Heroku as the `levi-dev` app from this repo's `master` branch.
 
 ## Deploying
 
+**If you edited any `apps/<name>/index.html` (template source),
+you MUST re-render it before committing:**
+
+```bash
+npx gulp templates
+```
+
+The Express server serves `apps/<name>/public/index.html` (the
+rendered static output), NOT the templated source at the app
+root. The gulp task compiles `apps/*/*.html` → `apps/*/public/`
+applying lodash `<%= %>` substitutions for `cacheBuster`,
+`baseDir`, analytics scripts, etc. **Skipping this means the
+deploy ships the previous render — confusing because git shows
+your source-template change was committed, but the live HTML
+still references the old asset version.**
+
 ```bash
 git add <changed files>
 git commit -m "<short imperative summary>"
@@ -65,4 +81,14 @@ repo is `../ld59_private`; that repo's `CLAUDE.md` has the
 end-to-end "Deploying to levi.dev/kittenbaticorn" recipe.
 Tl;dr: re-export web, copy `build/web/*` (NOT `index.html`) into
 `apps/kittenbaticorn/public/`, bump `cacheBuster`, update
-`GODOT_CONFIG.fileSizes`, commit, `git push heroku master`.
+`GODOT_CONFIG.fileSizes`, run `npx gulp templates`, commit,
+`git push heroku master`.
+
+**Gotcha:** `GODOT_CONFIG.gdextensionLibs` MUST be a bare
+basename (`["libkbterrain.web.template_release.wasm32.wasm"]`),
+NOT `["<%= baseDir %>/libkbterrain..."]`. The string is the
+Emscripten in-FS storage key, and Godot's runtime resolves the
+GDExtension manifest path by basename. Adding the path prefix
+breaks `findLibraryFS`, the wasm appears "not found" to dlopen
+even though it fetched fine, and `TerrainWorld` becomes a
+placeholder (no terrain on the deployed build).
