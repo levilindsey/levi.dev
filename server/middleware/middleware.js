@@ -20,10 +20,18 @@ exports.init = server => {
 // gets a smaller bump because it embeds already-compressed assets).
 function attachCompression(server) {
   const compression = require('compression');
-  // Default `compression` filter handles `application/wasm`,
-  // `application/javascript`, etc. via the `compressible` package
-  // — covers everything we ship.
-  server.use(compression());
+  // The default `compression` filter skips
+  // `application/octet-stream` (its compressibility is unknown
+  // since octet-stream covers anything from already-compressed
+  // archives to raw text). Godot ships its main `.pck` as
+  // octet-stream and it gzips well (~30%). Force-compress those
+  // files; fall back to the standard filter for everything else.
+  server.use(compression({
+    filter: (req, res) => {
+      if (req.url && /\.pck(\?|$)/i.test(req.url)) return true;
+      return compression.filter(req, res);
+    },
+  }));
 }
 
 // Godot's threaded web template requires a cross-origin-isolated
