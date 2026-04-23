@@ -1,0 +1,56 @@
+{
+  "id": "kittenbaticorn",
+  "titleShort": "Immersive\nEcholocation\nPlatformer",
+  "titleLong": "Kittenbaticorn",
+  "emphasis": 0.6,
+  "color": "#f5d74c",
+  "urls": {
+    "demo": "https://levi.dev/kittenbaticorn",
+    "ludum-dare": "https://ldjam.com/events/ludum-dare/59/kittenbaticorn",
+    "github": "https://github.com/levilindsey/ld59/"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "4/2026",
+  "categories": [
+    "Side-Project",
+    "App",
+    "Art",
+    "Godot",
+    "Game",
+    "2D",
+    "Game-Jam",
+    "Animation",
+    "Music"
+  ],
+  "images": [
+    {
+      "fileName": "echolocation.gif",
+      "description": "Echolocate to see your surroundings and navigate in this dark environment."
+    },
+    {
+      "fileName": "frequencies.gif",
+      "description": "Tune your horn to different frequencies to resonate with the right blocks and enemies."
+    },
+    {
+      "fileName": "coins.gif",
+      "description": "Collect all the coins for something magical! I wonder what they spell..."
+    },
+    {
+      "fileName": "fluid-simulations.gif",
+      "description": "Collapsing the wrong blocks can cause water or sand to flow!"
+    },
+    {
+      "fileName": "kittenbaticorn_128.gif",
+      "description": "🐈🦇🦄"
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "iGTgsIkmHQQ",
+      "description": "A gameplay video for Kittenbaticorn."
+    }
+  ],
+  "content": "> You're a kitten! Oh, wait, a bat? No, a unicorn??\r\n\r\nYou are a Kittenbaticorn lost in the darkness. You echolocate to navigate your world, and you can tune your frequencies to interact with your environment. This game has destructible terrain and immersive shader effects!\r\n\r\n⏰ This was made in 48 hours for [Ludum Dare 59](https:\/\/ldjam.com\/events\/ludum-dare\/59\/kittenbaticorn).\r\n\r\n⭐ The theme for the jam was **\"Signal\"**.\r\n\r\n### ⌨️\/🎮 Instructions\r\n\r\n- Arrows, QE, and Space.\r\n  - Gamepads should work too, but they're untested!\r\n- Fly with W.\r\n- Echolocate with Space.\r\n- Toggle echolocation frequencies with Q\/E.\r\n- Avoid enemies and hazardous terrain, and find your way home!\r\n\r\n### 🛠️ Our tools\r\n\r\n*   **[Godot](https:\/\/godotengine.org)**: Game engine.\r\n*   **[Aseprite](https:\/\/www.aseprite.org\/):** Pixel-art image editor.\r\n*   **[FamiStudio](https:\/\/famistudio.org\/)**: Music tracker.\r\n*   **[BFXR](https:\/\/www.bfxr.net\/)**: 8-bit SFX generator.\r\n*   **[VSCode](https:\/\/code.visualstudio.com\/)**: IDE.\r\n*   **[Claude Code](https:\/\/code.claude.com)**: Code assist.\r\n\r\n_All art, music, and sound effects were made without the use of AI._\r\n\r\n🐈🦇🦄\r\n"
+}
