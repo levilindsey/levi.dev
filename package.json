@@ -1,6 +1,6 @@
 {
   "name": "levi.dev",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Levi Lindsey's web portfolio",
   "licenses": [
     {
@@ -19,11 +19,7 @@
     "levi.dev",
     "www.levi.dev",
     "levilindsey.com",
-    "www.levilindsey.com",
-    "snoringcat.games",
-    "www.snoringcat.games",
-    "snoringcatgames.com",
-    "www.snoringcatgames.com"
+    "www.levilindsey.com"
   ],
   "dependencies": {
     "@sendgrid/mail": "^8.1.0",
