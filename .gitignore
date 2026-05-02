@@ -39,3 +39,7 @@ app.yaml
 
 # Firebase service account private key
 *firebase-adminsdk*.json
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
