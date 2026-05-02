@@ -10,10 +10,12 @@
   },
   "scripts": {
     "build": "node build.js",
-    "preview": "npx --yes serve dist"
+    "preview": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
     "lodash.template": "^4.5.0",
-    "pug": "^3.0.3"
+    "pug": "^3.0.3",
+    "wrangler": "^4.87.0"
   }
 }
