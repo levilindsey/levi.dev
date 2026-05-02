@@ -60,7 +60,8 @@ const APPS = [
 //                        Function (functions/inner-tube-climber.js).
 //   redirects          — ~50 short-URL aliases; replaced with a
 //                        Pages Function (functions/[[catchall]].js).
-//   snoring-cat        — snoringcat.games is being killed.
+// snoring-cat directory was deleted — snoringcat.games has its own
+// repo and hosting now.
 
 // Apps whose assets must NOT be content-hashed. References to .wasm
 // and .pck files live inside JS string literals in Godot's
