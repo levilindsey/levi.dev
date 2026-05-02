@@ -1,6 +1,3 @@
-- var currentVersion = '?v=2.3.1';
-- var baseDir = '/wedding';
-
 doctype html
 html(lang='en')
   head
@@ -11,10 +8,10 @@ html(lang='en')
     meta(name='keywords', content='Levi Lindsey, Jackie Schwartzstein, Jackie Lindsey, marriage, wedding')
     meta(name='author', content='Levi Lindsey, Jackie Schwartzstein')
 
-    link(href='#{baseDir}/styles/wedding.css#{currentVersion}', type='text/css', rel='stylesheet')
-    link(href='#{baseDir}/images/icon.ico#{currentVersion}', type='image/gif', rel='shortcut icon')
+    link(href='/wedding/styles/wedding.css', type='text/css', rel='stylesheet')
+    link(href='/wedding/images/icon.ico', type='image/gif', rel='shortcut icon')
 
-  script(async src='https://www.googletagmanager.com/gtag/js?id=#{portfolioAnalyticsScriptGA4ID}')
+  script(async, src='https://www.googletagmanager.com/gtag/js?id=' + portfolioAnalyticsScriptGA4ID)
   script
     | window.dataLayer = window.dataLayer || [];
     | function gtag(){dataLayer.push(arguments);}
@@ -24,6 +21,6 @@ html(lang='en')
   body
 
     a#ribbon(href='/wedding/photos')
-      img(src='#{baseDir}/images/wedding_photos_ribbon.png', alt='Check out Jackie and Levi\'s wedding photos!')
+      img(src='/wedding/images/wedding_photos_ribbon.png', alt='Check out Jackie and Levi\'s wedding photos!')
 
     block content

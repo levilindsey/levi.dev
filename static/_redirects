@@ -1,0 +1,12 @@
+# Cloudflare Pages redirects.
+# https://developers.cloudflare.com/pages/configuration/redirects/
+#
+# Most short-URL aliases live in functions/[[catchall]].js because
+# the source patterns use regex that can't be expressed in this
+# format. This file holds only the rules that ARE expressible here.
+
+# fat-cat-chat used to live at fat-cat-chat.herokuapp.com (Heroku).
+# Now that we're killing Heroku, point it at the GitHub repo as a
+# default. Update if the source lives elsewhere.
+/fat-cat-chat   https://github.com/levilindsey/fat-cat-chat   301
+/fat-cat-chat/* https://github.com/levilindsey/fat-cat-chat   301
