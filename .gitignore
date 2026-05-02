@@ -30,6 +30,7 @@ selenium
 aws_config.json
 secure-config.js
 dist
+.wrangler
 
 # Contains secret configuration details
 app.json
