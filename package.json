@@ -1,51 +1,19 @@
 {
   "name": "levi.dev",
-  "version": "1.5.3",
+  "version": "2.0.0",
   "description": "Levi Lindsey's web portfolio",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/levilindsey/levi.dev/blob/master/LICENSE"
-    }
-  ],
+  "private": true,
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/levilindsey/levi.dev"
   },
   "scripts": {
-    "start": "node server/main.js"
-  },
-  "domains": [
-    "levi.dev",
-    "www.levi.dev",
-    "levilindsey.com",
-    "www.levilindsey.com"
-  ],
-  "dependencies": {
-    "@sendgrid/mail": "^8.1.0",
-    "body-parser": "^1.20.4",
-    "compression": "^1.8.1",
-    "cookie-parser": "^1.4.7",
-    "dotenv": "^8.2.0",
-    "express": "^4.22.1",
-    "express-session": "^1.18.1",
-    "jade": "^0.29.0",
-    "morgan": "^1.10.0",
-    "q": "^1.5.1",
-    "serve-favicon": "^2.5.0",
-    "serve-static": "^1.16.2"
+    "build": "node build.js",
+    "preview": "npx --yes serve dist"
   },
   "devDependencies": {
-    "bower": "^1.8.12",
-    "gulp": "^5.0.0",
-    "gulp-bump": "^3.2.0",
-    "gulp-load-plugins": "^2.0.7",
-    "gulp-plumber": "^1.2.1",
-    "gulp-rename": "^2.0.0",
-    "gulp-template": "^5.0.0",
-    "natives": "^1.1.6"
-  },
-  "engines": {
-    "node": "23.x"
+    "lodash.template": "^4.5.0",
+    "pug": "^3.0.3"
   }
 }

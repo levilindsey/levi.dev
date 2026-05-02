@@ -1,4 +1,4 @@
-extends invite-layout
+extends invite-layout.jade
 
 block content
 
@@ -39,7 +39,7 @@ block content
 
     h2
       | RSVP
-    form(action='#{baseDir}/wedding.php', method='post')
+    form(action='/wedding/wedding.php', method='post')
       span#rsvp_by
         | (Please RSVP before June 25th!)
       br
@@ -70,10 +70,10 @@ block content
     h2
       | Registry
     p
-      | Should you wish to buy a gift for the bride and groom, there are two registry options. The traditional registry is at 
+      | Should you wish to buy a gift for the bride and groom, there are two registry options. The traditional registry is at
       a(href='http://www.surlatable.com/registry/giftRegistryList.jsp?id=200513960343', target='_blank')
         | Sur La Table
-      | , which can be accessed online or in person at one of the store locations. An alternate option is the 
+      | , which can be accessed online or in person at one of the store locations. An alternate option is the
       a(href='https://www.nrdcgreengifts.org/shopping-for-green-gifts-is-as-easy-as-1-2-3', target='_blank')
         | NRDC's Green Gift
       |  program, where you can donate to a good cause of your choice in honor of the bride and groom.

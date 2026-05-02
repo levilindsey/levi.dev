@@ -1,0 +1,60 @@
+# Cloudflare Pages headers config.
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+# Cross-origin isolation for Godot threaded web template.
+# kittenbaticorn's C++ GDExtension uses std::thread, which requires
+# SharedArrayBuffer in the browser, which requires COOP/COEP.
+/kittenbaticorn/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
+# Long cache for content-hashed assets (filename includes a sha1
+# prefix, so the URL changes any time the file changes).
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+/*.m4a
+  Cache-Control: public, max-age=31536000, immutable
+/*.ogg
+  Cache-Control: public, max-age=31536000, immutable
+/*.mp3
+  Cache-Control: public, max-age=31536000, immutable
+/*.mp4
+  Cache-Control: public, max-age=31536000, immutable
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+/*.otf
+  Cache-Control: public, max-age=31536000, immutable
+
+# Godot apps' .pck and .wasm files are NOT content-hashed (their
+# filenames are referenced by hardcoded JS strings inside
+# GODOT_CONFIG, which the build's ref-rewriter cannot update). Use a
+# short cache so deploys take effect within minutes; ETags handle
+# the rest.
+/kittenbaticorn/*.pck
+  Cache-Control: public, max-age=300, must-revalidate
+/kittenbaticorn/*.wasm
+  Cache-Control: public, max-age=300, must-revalidate
+
+# Short cache on HTML so deploys propagate quickly.
+/*.html
+  Cache-Control: public, max-age=300
+/
+  Cache-Control: public, max-age=300
