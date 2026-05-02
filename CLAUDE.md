@@ -107,14 +107,34 @@ them a short Cache-Control instead.
 
 ## Deploying
 
-Push to GitHub. Cloudflare Pages auto-builds on every push to
-`master` and deploys to `levi.dev`. Build settings (set in the
-Cloudflare dashboard):
+**Direct upload from local machine via wrangler.** The Cloudflare
+"Workers & Pages" dashboard wizard funnels new projects through
+Workers Static Assets (which doesn't honor Pages-style
+`functions/`), so we bypass the dashboard and deploy via API.
 
-- **Framework preset:** None.
-- **Build command:** `npm install && npm run build`.
-- **Build output directory:** `dist`.
-- **Node version:** 20 (from `.node-version`).
+```powershell
+. ~/.claude/secrets/personal-cloudflare.ps1
+$env:CLOUDFLARE_ACCOUNT_ID='7ffa3f982c11a7b588f5500cdb8bc692'
+npm run deploy
+```
+
+`npm run deploy` runs `node build.js` then
+`wrangler pages deploy dist --project-name=levi-dev --branch=master`.
+
+**Setup that's done once (already in place — for reference only):**
+
+- Pages project `levi-dev` was created via
+  `wrangler pages project create levi-dev --production-branch master`.
+- R2 binding `ASSETS_BUCKET` → `levi-dev-assets` was attached
+  via PATCH to `/accounts/<id>/pages/projects/levi-dev` with
+  `deployment_configs.{production,preview}.r2_buckets`.
+- R2 bucket `levi-dev-assets` was created via
+  `wrangler r2 bucket create levi-dev-assets`.
+
+**Auto-deploy on git push (optional, not yet set up):** add a
+GitHub Actions workflow that runs `npm run deploy` on push to
+`master`, with `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+in repo secrets.
 
 Cloudflare provisions and renews HTTPS certs automatically. DNS
 for `levi.dev` is at Squarespace and points at Cloudflare's
