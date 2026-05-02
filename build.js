@@ -69,6 +69,35 @@ const APPS = [
 // short Cache-Control instead.
 const NO_HASH_APPS = new Set(['kittenbaticorn']);
 
+// Path patterns (POSIX-style, relative to dist root, e.g.
+// "hex-grid/example/data/foo.json") that must NOT be content-hashed.
+// Same reason as NO_HASH_APPS: refs are constructed at runtime by
+// JS string concatenation that the rewriter cannot follow.
+const NO_HASH_PATTERNS = [
+	// hex-grid example dynamically fetches per-post data files.
+	/^hex-grid\/example\/data\//,
+	/^hex-grid\/example\/dist\/data\.min\.json$/,
+];
+
+// Path patterns to drop entirely from dist/. Used for assets that
+// exceed Cloudflare's 25 MiB per-file cap and are served via R2 +
+// a Pages Function proxy instead. Any file matching is NOT copied
+// into dist/ (the corresponding Function in functions/ handles the
+// URL at request time).
+const SKIP_DEPLOY_PATTERNS = [
+	// Godot's threaded-export side wasm. Served by
+	// functions/kittenbaticorn/index.side.wasm.js from R2.
+	/^kittenbaticorn\/index\.side\.wasm$/,
+];
+
+function shouldHashPath(relPosixPath) {
+	return !NO_HASH_PATTERNS.some(rx => rx.test(relPosixPath));
+}
+
+function shouldDeployPath(relPosixPath) {
+	return !SKIP_DEPLOY_PATTERNS.some(rx => rx.test(relPosixPath));
+}
+
 // Asset extensions to content-hash (within hashable apps only).
 const HASHABLE_EXTENSIONS = new Set([
 	'.css', '.js', '.json', '.jpg', '.jpeg', '.png', '.gif',
@@ -260,6 +289,17 @@ async function copyTree(srcDir, dstDir, hashable, app, relSubdir, manifest) {
 		const ext = path.extname(entry.name).toLowerCase();
 		let dstName = entry.name;
 
+		// Manifest keys/values use forward-slash POSIX paths, rooted at
+		// the app name. e.g. "hex-grid/example/main.css" →
+		// "hex-grid/example/main.abc1234567.css".
+		const relSrc = relSubdir
+			? app + '/' + relSubdir + '/' + entry.name
+			: app + '/' + entry.name;
+
+		if (!shouldDeployPath(relSrc)) {
+			continue;  // Served at runtime by a Pages Function from R2.
+		}
+
 		// Strip cache-buster substrings from copied HTML/CSS/JS so the
 		// later rewriteRefs() step can match the unversioned manifest
 		// keys. Hash the *stripped* content so the hash is stable
@@ -271,7 +311,7 @@ async function copyTree(srcDir, dstDir, hashable, app, relSubdir, manifest) {
 			buf = Buffer.from(stripCacheBusters(text));
 		}
 
-		if (hashable && HASHABLE_EXTENSIONS.has(ext)) {
+		if (hashable && HASHABLE_EXTENSIONS.has(ext) && shouldHashPath(relSrc)) {
 			if (!buf) {
 				buf = await fs.promises.readFile(srcPath);
 			}
@@ -279,13 +319,6 @@ async function copyTree(srcDir, dstDir, hashable, app, relSubdir, manifest) {
 			const stem = entry.name.slice(0, entry.name.length - ext.length);
 			dstName = stem + '.' + hash + ext;
 
-			// Manifest keys/values use forward-slash POSIX paths,
-			// rooted at the app name. e.g.:
-			//   "hex-grid/example/main.css" →
-			//   "hex-grid/example/main.abc1234567.css"
-			const relSrc = relSubdir
-				? app + '/' + relSubdir + '/' + entry.name
-				: app + '/' + entry.name;
 			const relDst = relSubdir
 				? app + '/' + relSubdir + '/' + dstName
 				: app + '/' + dstName;
