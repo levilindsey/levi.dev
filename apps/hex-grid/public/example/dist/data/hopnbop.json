@@ -1,0 +1,42 @@
+{
+  "id": "hopnbop",
+  "titleShort": "Online\nCompetitive\nArena Brawler",
+  "titleLong": "Hop 'n Bop",
+  "emphasis": 0.8,
+  "color": "#f5d74c",
+  "urls": {
+    "demo": "https://hopnbop.net",
+    "github": "https://github.com/snoringcatgames/hopnbop/"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "2026",
+  "categories": [
+    "Side-Project",
+    "App",
+    "Art",
+    "Godot",
+    "Game",
+    "2D",
+    "Animation",
+    "Networking",
+    "Competitive",
+    "Platformer",
+    "Music",
+    "Solo-Work"
+  ],
+  "images": [
+    {
+      "fileName": "TODO.gif",
+      "description": "TODO"
+    }
+  ],
+  "videos": [
+    {
+      "videoHost": "youtube",
+      "id": "TODO",
+      "description": "TODO"
+    }
+  ],
+  "content": "> Boing, boing, splat!\r\n\r\nHop 'n Bop is an online, cross-platform, competitive 2D arena brawler.\r\n\r\nThis game is based-off a true work of art from the 90s called Jump 'n Bump--which you can also play online at (jumpnbump.net)[https:\/\/jumpnbump.net\/]!\r\n\r\nLevi used Hop 'n Bop as a simple game to develop and test a [custom rollback netcode library](https:\/\/github.com\/SnoringCatGames\/godot-rollback-netcode), which features instant input response and server-authoritative gameplay.\r\n\r\n### 🛠️ Tools\r\n\r\n*   **[Godot](https:\/\/godotengine.org)**: Game engine.\r\n*   **[Aseprite](https:\/\/www.aseprite.org\/):** Pixel-art image editor.\r\n*   **[FamiStudio](https:\/\/famistudio.org\/)**: Music tracker.\r\n*   **[BFXR](https:\/\/www.bfxr.net\/)**: 8-bit SFX generator.\r\n*   **[VSCode](https:\/\/code.visualstudio.com\/)**: IDE.\r\n*   **[Claude Code](https:\/\/code.claude.com)**: Code assist.\r\n\r\n_All art, music, and sound effects were made without the use of AI._\r\n\r\n🐇\r\n"
+}
