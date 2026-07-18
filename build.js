@@ -35,6 +35,19 @@ const APPS_DIR = 'apps';
 const DIST_DIR = 'dist';
 const STATIC_DIR = 'static';
 
+// Hex-grid's homepage bakes a static JSON dump of every post into a
+// hidden <div> (for SEO / no-JS crawlers) between these two markers.
+// The vendored template ships with EMPTY markers; injectCombinedMetadata()
+// fills them from data.min.json at build time, so the static dump can
+// never drift from the live post list. (The interactive grid fetches
+// data.min.json over XHR at runtime regardless — this is only the
+// static fallback.) hex-grid's own gulp `data` task does the same for
+// its example build; this replicates it for the levi.dev vendor copy.
+const COMBINED_METADATA_START = '<!-- inject:combinedMetadata -->';
+const COMBINED_METADATA_END = '<!-- endinject -->';
+const HEX_GRID_DATA_MIN = path.join(
+	APPS_DIR, 'hex-grid', 'public', 'example', 'dist', 'data.min.json');
+
 // Apps included in the deploy.
 const APPS = [
 	'chess',
@@ -190,6 +203,7 @@ async function renderAppHtml(app) {
 		const compiled = lodashTemplate(src);
 		let rendered = compiled(TEMPLATE_LOCALS);
 		rendered = stripCacheBusters(rendered);
+		rendered = await injectCombinedMetadata(app, rendered);
 		await writeDist(path.join(app, 'index.html'), rendered);
 		console.log('  ' + app + '/index.html (lodash)');
 	} else if (await exists(inviteJade)) {
@@ -227,6 +241,34 @@ async function renderAppHtml(app) {
 	} else {
 		console.log('  ' + app + ' (no HTML source — assets only)');
 	}
+}
+
+// Replaces the content between the hex-grid homepage's inject markers
+// (see COMBINED_METADATA_* above) with the current data.min.json, on a
+// single line at the marker's indentation — mirroring hex-grid's gulp
+// `inject:combinedMetadata`. No-op for apps that don't carry the marker.
+async function injectCombinedMetadata(app, html) {
+	if (app !== 'hex-grid') return html;
+	if (!html.includes(COMBINED_METADATA_START)) return html;
+	if (!(await exists(HEX_GRID_DATA_MIN))) {
+		console.warn('  [hex-grid] data.min.json missing — SEO dump left as-is');
+		return html;
+	}
+	const data = (await fs.promises.readFile(HEX_GRID_DATA_MIN, 'utf8'))
+		.replace(/\r?\n$/, '');
+	const rx = new RegExp(
+		'([ \\t]*)' + escapeRegExp(COMBINED_METADATA_START)
+		+ '[\\s\\S]*?' + escapeRegExp(COMBINED_METADATA_END));
+	const m = html.match(rx);
+	if (!m) return html;
+	const indent = m[1];
+	const block =
+		COMBINED_METADATA_START + '\n'
+		+ indent + data + '\n'
+		+ indent + COMBINED_METADATA_END;
+	console.log('  [hex-grid] injected combinedMetadata SEO dump ('
+		+ data.length + ' bytes)');
+	return html.replace(rx, indent + block);
 }
 
 async function render404() {
@@ -435,6 +477,10 @@ async function exists(p) {
 	} catch {
 		return false;
 	}
+}
+
+function escapeRegExp(s) {
+	return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 async function writeDist(relPath, content) {
