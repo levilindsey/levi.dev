@@ -140,6 +140,11 @@ const redirects = [
     routeRegex: /^\/(meteor(-?power)?)(?:\/.*)?$/i,
     redirectUrl: 'https://snoringcatgames.github.io/meteor_power/',
   },
+  // Hop 'n Bop
+  {
+    routeRegex: /^\/(hop(-?n)?(-?bop)?|bunn(y|ies)|rabbits?)(?:\/.*)?$/i,
+    redirectUrl: 'https://hopnbop.net',
+  },
 
   // --- Game jams --- //
 

@@ -122,6 +122,11 @@ const REDIRECTS = [
 		rx: /^\/(meteor(-?power)?)(?:\/.*)?$/i,
 		to: 'https://snoringcatgames.github.io/meteor_power/',
 	},
+	// Hop 'n Bop.
+	{
+		rx: /^\/(hop(-?n)?(-?bop)?|bunn(y|ies)|rabbits?)(?:\/.*)?$/i,
+		to: 'https://hopnbop.net',
+	},
 
 	// Game jams.
 	{
