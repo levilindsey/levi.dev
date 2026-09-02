@@ -30,7 +30,7 @@ All design, code, images, sound effects, and music were created during the jam.
 
 ## The jam
 
-This game was created in 72-hours as a [submission](https://ldjam.com/events/ludum-dare/52/what-must-be-done) for the [Ludum Dare 52 game jam](https://ldjam.com/events/ludum-dare/52).
+This game was created in 72-hours as a [submission](https://ldj.am/52/what-must-be-done) for the [Ludum Dare 52 game jam](https://ldj.am/52).
 
 **Theme: "Harvest"**
 

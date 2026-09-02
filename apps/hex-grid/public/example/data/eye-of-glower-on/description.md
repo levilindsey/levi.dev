@@ -5,7 +5,7 @@ _In this point-and-click game, you control the vast power of an unstable mountai
 
 > The heroes of the land aim to ascend **Mount Oh No** to destroy the vessel of your vast power! You must CRUSH THEM! And send them flying! They will FEEL YOUR ANGER!! They think they can scale Mount Oh No?? Not while **The Eye of Glower-On** is watching!
 
-This game was originally created in 48-hours as a [submission](https://ldjam.com/events/ludum-dare/49/ludum-dare-49) for the [Ludum Dare 49 game jam](https://ldjam.com/events/ludum-dare/49).
+This game was originally created in 48-hours as a [submission](https://ldj.am/49/ludum-dare-49) for the [Ludum Dare 49 game jam](https://ldj.am/49).
 
 All design, code, images, sound effects, and music were created by Levi.
 
@@ -34,7 +34,7 @@ Mouse or touch!
 
 ## What reviewers are saying
 
-[(See the reviews on ldjam.com)](https://ldjam.com/events/ludum-dare/49/ludum-dare-49)
+[(See the reviews on ldjam.com)](https://ldj.am/49/ludum-dare-49)
 
 *   "Great game! I love the SFX and the art. The AI is really cool too and i love that if you shake them off and they land on another platform they start going again. Good work!"
 *   "Loving it, dig the simplicity! The forces of good surely felt my wrath as i pounded them with countless tremors, a hailstorm of meteors and they trembled by the sight of my orc army!(though I’m having a harder time then I’d like to admit with lvl 2 haha) The sounds you’ve made are incredible(I’m biased to anything midi or bit-like), fits really well with the all-around aesthetics of the game, and the soundtrack is just 😙👌. Gotta do some other stuff, but i have just put a solid 30-45 minutes into this haha, will definitely get back to it"

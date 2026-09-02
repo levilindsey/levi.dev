@@ -2,7 +2,7 @@
 
 You are a Kittenbaticorn lost in the darkness. You echolocate to navigate your world, and you can tune your frequencies to interact with your environment. This game has destructible terrain and immersive shader effects!
 
-⏰ This was made in 48 hours for [Ludum Dare 59](https://ldjam.com/events/ludum-dare/59/kittenbaticorn).
+⏰ This was made in 48 hours for [Ludum Dare 59](https://ldj.am/59/kittenbaticorn).
 
 ⭐ The theme for the jam was **"Signal"**.
 

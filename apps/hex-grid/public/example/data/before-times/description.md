@@ -8,7 +8,7 @@ Give it a click!
 
 ## Ludum Dare 48
 
-This game was made for the [Ludum Dare 48 game jam](https://ldjam.com/events/ludum-dare/48/the-before-times).
+This game was made for the [Ludum Dare 48 game jam](https://ldj.am/48/the-before-times).
 
 The theme for this jam was "deeper and deeper".
 

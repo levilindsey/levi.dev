@@ -10,7 +10,7 @@
 
 ## The jam
 
-This game was created in 72-hours as a [submission](https://ldjam.com/events/ludum-dare/54/ludum-dare-54) for the [Ludum Dare 54 game jam](https://ldjam.com).
+This game was created in 72-hours as a [submission](https://ldj.am/54/ludum-dare-54) for the [Ludum Dare 54 game jam](https://ldjam.com).
 
 **Theme: "Limited Space"**
 

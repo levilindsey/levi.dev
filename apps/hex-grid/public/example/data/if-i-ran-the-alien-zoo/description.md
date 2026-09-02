@@ -3,7 +3,7 @@
 
 > There are lots of interesting Earthlings out there. Gotta catch 'em all!
 
-⏰ This was made in 72 hours for the [Ludum Dare 58 game jam](https://ldjam.com/events/ludum-dare/58/if-i-ran-the-alien-zoo).
+⏰ This was made in 72 hours for the [Ludum Dare 58 game jam](https://ldj.am/58/if-i-ran-the-alien-zoo).
 
 ⭐ The theme for the jam was "Collector".
 
