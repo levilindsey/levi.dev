@@ -11,10 +11,14 @@
   "scripts": {
     "build": "node build.js",
     "preview": "npx --yes serve dist",
-    "deploy": "node build.js && npx --yes wrangler pages deploy dist --project-name=levi-dev --branch=master --commit-dirty=true"
+    "deploy": "node build.js && npx --yes wrangler pages deploy dist --project-name=levi-dev --branch=master --commit-dirty=true",
+    "vendor": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/vendor-hex-grid.ps1",
+    "media:prepare": "node scripts/media-prepare.mjs",
+    "media:upload": "node scripts/media-upload.mjs"
   },
   "devDependencies": {
     "lodash.template": "^4.5.0",
-    "pug": "^3.0.3"
+    "pug": "^3.0.3",
+    "sharp": "^0.34.4"
   }
 }

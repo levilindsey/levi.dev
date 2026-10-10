@@ -9,8 +9,8 @@
 // To add a new short URL, append an entry. To match the body of
 // the request path, the regex is applied to `url.pathname`.
 //
-// Ported from the legacy Express middleware at
-// apps/redirects/routes.js (pre-migration).
+// Ported from the legacy Express middleware at apps/redirects/routes.js
+// (removed 2026-10; git history has it). This file is the only copy.
 
 const REDIRECTS = [
 	// Profiles.
@@ -127,6 +127,14 @@ const REDIRECTS = [
 		rx: /^\/(hop(-?n)?(-?bop)?|bunn(y|ies)|rabbits?)(?:\/.*)?$/i,
 		to: 'https://hopnbop.net',
 	},
+	// Knots (github.com/levilindsey/knotmaze, deployed by its own
+	// GitHub Actions workflow). The app keeps its whole state in the
+	// URL, so the query string is forwarded.
+	{
+		rx: /^\/(knots?|knot-?maze|celtic-?knots?)(?:\/.*)?$/i,
+		to: 'https://knotmaze.pages.dev',
+		keepQuery: true,
+	},
 
 	// Game jams.
 	{
@@ -215,7 +223,8 @@ export async function onRequest(context) {
 	const url = new URL(context.request.url);
 	for (const r of REDIRECTS) {
 		if (r.rx.test(url.pathname)) {
-			return Response.redirect(r.to, 301);
+			const to = r.keepQuery ? r.to + url.search : r.to;
+			return Response.redirect(to, 301);
 		}
 	}
 	// No match: let Pages serve its default 404.html.

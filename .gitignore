@@ -29,7 +29,9 @@ selenium
 .idea
 aws_config.json
 secure-config.js
-dist
+# Root build output only. A bare `dist` also matched the vendored
+# hex-grid build under apps/hex-grid/public/, which is committed.
+/dist
 .wrangler
 
 # Contains secret configuration details

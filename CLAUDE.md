@@ -25,12 +25,24 @@ git log for the cutover commit.)
   - `_redirects` — Plain redirects expressible in Cloudflare's
     glob syntax. Complex regex redirects live in `functions/`.
 - `functions/` — Cloudflare Pages Functions:
-  - `[[catchall]].js` — ~50 short-URL aliases ported from
-    `apps/redirects/routes.js`.
+  - `[[catchall]].js` — ~50 short-URL aliases. **The only copy**: the
+    Express-era mirror `apps/redirects/routes.js` was removed
+    2026-10. To add an alias, append an entry: `rx` (regex on the
+    pathname), `to` (URL), optional `keepQuery: true` to forward the
+    query string (knotmaze keeps its state in the URL).
+  - `media/[[path]].js` — serves portfolio media from the R2 bucket
+    `levi-portfolio-media` at `/media/<post-id>/<file>`. See
+    "Portfolio media (R2)" below.
   - `inner-tube-climber/[[path]].js` — User-Agent-based redirect
     to Play Store (Android) / App Store (iOS) / itch.io
     (everything else).
+  - `kittenbaticorn/index.side.wasm.js` — streams the >25 MiB Godot
+    side wasm from R2 (`ASSETS_BUCKET` → `levi-dev-assets`).
 - `build.js` — The build pipeline. Run via `npm run build`.
+- `scripts/` — `vendor-hex-grid.ps1` (refresh the vendored hex-grid
+  build), `media-prepare.mjs` (compress/normalize post images with
+  sharp), `media-upload.mjs` (push them to R2). npm aliases:
+  `npm run vendor`, `npm run media:prepare`, `npm run media:upload`.
 
 ## Deployed apps
 
@@ -45,8 +57,6 @@ git log for the cutover commit.)
   rule in `static/_redirects` pointing at the GitHub repo.
 - `apps/inner-tube-climber/` — UA-based redirect; replaced by a
   Pages Function.
-- `apps/redirects/` — Short-URL aliases; replaced by
-  `functions/[[catchall]].js`.
 - `apps/snoring-cat/` — `snoringcat.games` was killed during the
   migration. The Express app served snoringcat.games as a second
   domain with live SendGrid email integration; that's gone.
@@ -89,7 +99,13 @@ That mounts `dist/` as the static site, applies `_headers` and
    the rewriter cannot safely update.
 4. Walk `dist/` and rewrite asset references in HTML/CSS/JS using
    the manifest.
-5. Copy `static/` config (sitemap, `_headers`, `_redirects`).
+5. Copy `static/` config (`_headers`, `_redirects`) and the sitemap.
+   The sitemap is **derived**: hex-grid's gulp `data` task generates
+   it (root + devlog + one `#<post-id>` entry per post) and the
+   vendor script lands it at
+   `apps/hex-grid/public/example/dist/sitemap.xml`, which `build.js`
+   ships at `/sitemap.xml`. Never hand-maintain a sitemap here; the
+   old `apps/sitemap.xml` copy went stale and was removed 2026-10.
 6. Mount `dist/hex-grid/index.html` at `dist/index.html` (the
    homepage), and copy hex-grid's favicon to `dist/favicon.ico`.
 
@@ -130,16 +146,86 @@ npm run deploy
   `deployment_configs.{production,preview}.r2_buckets`.
 - R2 bucket `levi-dev-assets` was created via
   `wrangler r2 bucket create levi-dev-assets`.
+- R2 bucket `levi-portfolio-media` (portfolio media, 2026-10-10) was
+  created through the R2 API and bound as `MEDIA_BUCKET` with the
+  same PATCH, merged alongside `ASSETS_BUCKET` (the PATCH replaces
+  the whole `r2_buckets` map per environment, so always send both).
+- The knots demo behind the `/knots` alias is a separate Pages
+  project, `knotmaze`, deployed from github.com/levilindsey/knotmaze
+  by that repo's own workflow with the same two secrets.
 
-**Auto-deploy on git push (optional, not yet set up):** add a
-GitHub Actions workflow that runs `npm run deploy` on push to
-`master`, with `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
-in repo secrets.
+**Auto-deploy on git push is the normal path.**
+`.github/workflows/deploy.yml` runs `npm ci && npm run build` (Node
+20, per `.node-version`) and `wrangler pages deploy` on every push to
+`master`, using the `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`
+repo secrets. The manual `npm run deploy` above is for out-of-band
+redeploys only (the `levi-dev-deploy` skill); check
+`gh run list -R levilindsey/levi.dev --workflow=deploy.yml --limit 3`
+first so two deploys don't race.
 
 Cloudflare provisions and renews HTTPS certs automatically. DNS
 for `levi.dev` is at Squarespace and points at Cloudflare's
 target records (apex CNAME flattening). The `devlog.levi.dev`
 CNAME for Blogger is independent and unaffected.
+
+## hex-grid vendoring
+
+The homepage is `../hex-grid`'s example app. **levi.dev does not
+build hex-grid.** `apps/hex-grid/public/` is a vendored snapshot of
+hex-grid's build output, refreshed only by
+
+```powershell
+npm run vendor        # scripts/vendor-hex-grid.ps1
+```
+
+which runs hex-grid's full gulp build (`gulp --series clean data
+scripts styles`) and robocopy-mirrors `hex-grid/dist` →
+`public/dist` and `hex-grid/example/{data,dist,images,scripts,
+styles,index.html}` → `public/example/`. Post data
+(`example/data/<post-id>/`) is edited in hex-grid, never here. The
+`levi-dev-post` skill (claude-config) is the end-to-end procedure:
+post text, media, vendor, commit both repos, deploy.
+
+- `apps/hex-grid/index.html` is this repo's own template. Its
+  `cacheBuster` var is cosmetic (stripped at build). The SEO dump
+  between the `inject:combinedMetadata` markers is filled by
+  `build.js` from `public/example/dist/data.min.json`; keep the
+  committed markers empty.
+- The runtime fetches only `/hex-grid/example/dist/data.min.json`.
+  Per-post JSONs under `public/example/dist/data/` are vendored for
+  parity but never requested (and get content-hashed, so their URLs
+  404). Verify a deploy with
+  `curl -s https://levi.dev/hex-grid/example/dist/data.min.json | grep -c '"id":"<post-id>"'`.
+- `.gitignore` ignores only the root `/dist`; the vendored
+  `public/dist` and `public/example/dist` are committed.
+- hex-grid's `example/docs` (stale SVG masters) and `example/gulp`
+  are deliberately not vendored.
+
+## Portfolio media (R2)
+
+Post logos, thumbnails, and carousel images are served from the R2
+bucket `levi-portfolio-media` through `functions/media/[[path]].js`
+at `https://levi.dev/media/<post-id>/<file>`, which is the `baseUrl`
+in hex-grid's `example/data/collection-metadata.json`. Migrated
+2026-10-10 from the public S3 bucket of the same name (us-west-2),
+which is now a cold backup until deleted. levi.dev's DNS is at
+Squarespace, so the bucket cannot have a custom domain of its own;
+the Function is its public face and caches at the edge for a week.
+
+Per post:
+
+```powershell
+. ~/.claude/secrets/personal-cloudflare.ps1      # CLOUDFLARE_API_TOKEN (has R2 Edit)
+npm run media:prepare -- <raw-dir>               # → <raw-dir>/ready, prints before/after
+npm run media:upload -- <post-id> <raw-dir>/ready --verify
+```
+
+What hex-grid's layout expects, enforced by `media-prepare`:
+`logo.png` 128 px tall (any width), `thumbnail.png` 128×128,
+screenshots as palette-quantized PNG, captures as GIF (0.5–3 MB
+each is typical). Object key = `<post-id>/<file>`; re-uploading
+overwrites, but a replaced file may stay edge-cached for up to a
+week, so prefer a new file name for a changed image.
 
 ## App-specific notes
 
