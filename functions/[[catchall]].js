@@ -1,8 +1,12 @@
 // Cloudflare Pages Function — short-URL alias redirects.
 //
-// Cloudflare serves static assets first; this function only fires
-// for paths that don't match a static file (or another, more
-// specific Function like functions/inner-tube-climber/...).
+// Functions run BEFORE static assets: this root catchall makes the
+// generated _routes.json include "/*", so every request reaches a
+// Function. More specific ones (functions/knotmaze/, functions/media/,
+// ...) claim their paths first; this one sees the rest and falls
+// through to the static site via context.next() when no alias
+// matches. An alias therefore also shadows any static file under its
+// path.
 //
 // Each entry below is a regex that matches a short-URL alias
 // pattern (with synonyms, plurals, etc.) and the destination URL.
@@ -127,12 +131,16 @@ const REDIRECTS = [
 		rx: /^\/(hop(-?n)?(-?bop)?|bunn(y|ies)|rabbits?)(?:\/.*)?$/i,
 		to: 'https://hopnbop.net',
 	},
-	// Knots (github.com/levilindsey/knotmaze, deployed by its own
-	// GitHub Actions workflow). The app keeps its whole state in the
-	// URL, so the query string is forwarded.
+	// Knots (github.com/levilindsey/knotmaze, deployed to its own Pages
+	// project by its own GitHub Actions workflow). The app is served at
+	// /knotmaze/ by functions/knotmaze/[[path]].js, which is more
+	// specific than this catchall, so /knotmaze itself never reaches
+	// this entry; the aliases (and old shared /knots links) land on that
+	// canonical URL. The app keeps its whole state in the URL, so the
+	// query string is forwarded.
 	{
 		rx: /^\/(knots?|knot-?maze|celtic-?knots?)(?:\/.*)?$/i,
-		to: 'https://knotmaze.pages.dev',
+		to: '/knotmaze/',
 		keepQuery: true,
 	},
 
@@ -223,8 +231,10 @@ export async function onRequest(context) {
 	const url = new URL(context.request.url);
 	for (const r of REDIRECTS) {
 		if (r.rx.test(url.pathname)) {
-			const to = r.keepQuery ? r.to + url.search : r.to;
-			return Response.redirect(to, 301);
+			// Resolved against the request so a root-relative `to` stays
+			// on whichever host served it (levi.dev, www, pages.dev).
+			const to = new URL(r.keepQuery ? r.to + url.search : r.to, url);
+			return Response.redirect(to.href, 301);
 		}
 	}
 	// No match: let Pages serve its default 404.html.

@@ -24,12 +24,27 @@ git log for the cutover commit.)
   - `_headers` — Cache-Control, COOP/COEP, etc.
   - `_redirects` — Plain redirects expressible in Cloudflare's
     glob syntax. Complex regex redirects live in `functions/`.
-- `functions/` — Cloudflare Pages Functions:
+- `functions/` — Cloudflare Pages Functions. **Functions run before
+  static assets**: the root catchall makes the generated `_routes.json`
+  include `/*`, so every request is a Functions invocation, and
+  `_headers` rules do not apply to responses a Function generates
+  (only to static assets reached through `context.next()`).
   - `[[catchall]].js` — ~50 short-URL aliases. **The only copy**: the
     Express-era mirror `apps/redirects/routes.js` was removed
     2026-10. To add an alias, append an entry: `rx` (regex on the
-    pathname), `to` (URL), optional `keepQuery: true` to forward the
-    query string (knotmaze keeps its state in the URL).
+    pathname), `to` (absolute URL, or a root-relative path resolved
+    against the request's host), optional `keepQuery: true` to forward
+    the query string. An alias shadows static files under its path.
+  - `knotmaze/[[path]].js` — serves the Knotmaze app at
+    `levi.dev/knotmaze/` with the address bar staying on levi.dev, by
+    proxying the separate `knotmaze` Pages project
+    (`knotmaze.pages.dev`). `/knotmaze` 301s to `/knotmaze/` (the app's
+    Vite base is relative, so it needs the trailing slash);
+    `/knotmaze/<rest>` streams `knotmaze.pages.dev/<rest><query>`
+    through and rewrites upstream Locations under `/knotmaze/`; GET and
+    HEAD only. The `/knots` aliases in `[[catchall]].js` 301 to
+    `/knotmaze/` with the query kept (the app keeps its state in the
+    URL).
   - `media/[[path]].js` — serves portfolio media from the R2 bucket
     `levi-portfolio-media` at `/media/<post-id>/<file>`. See
     "Portfolio media (R2)" below.
@@ -150,9 +165,12 @@ npm run deploy
   created through the R2 API and bound as `MEDIA_BUCKET` with the
   same PATCH, merged alongside `ASSETS_BUCKET` (the PATCH replaces
   the whole `r2_buckets` map per environment, so always send both).
-- The knots demo behind the `/knots` alias is a separate Pages
-  project, `knotmaze`, deployed from github.com/levilindsey/knotmaze
-  by that repo's own workflow with the same two secrets.
+- The Knotmaze app served at `/knotmaze/` (proxied by
+  `functions/knotmaze/[[path]].js`) is a separate Pages project,
+  `knotmaze`, deployed from github.com/levilindsey/knotmaze by that
+  repo's own workflow with the same two secrets. A knotmaze push is
+  live at `/knotmaze/` as soon as its own deploy finishes; levi.dev
+  does not redeploy.
 
 **Auto-deploy on git push is the normal path.**
 `.github/workflows/deploy.yml` runs `npm ci && npm run build` (Node
