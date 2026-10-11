@@ -9,7 +9,7 @@ All design, code, images, sound effects, and music were created during the jam.
 
 ## ‍💻 The jam
 
-[Ludum Dare](https://ldjam.com/events/ludum-dare/51/) is a semi-annual event where people create a game over the weekend.
+[Ludum Dare](https://ldj.am/51) is a semi-annual event where people create a game over the weekend.
 -   It is a ranked competition, with a clever voting system that gets more eyes on your game when you in turn rate other games.
 -   There are a few different tracks you can participate in; I usually do the more-challenging "**Compo**" track, where you must create all your own art, music, sounds, etc. from scratch, work by yourself, and finish within **48 hours**.
 -   The games all follow some central theme, which is only announced at the start of the jam.
