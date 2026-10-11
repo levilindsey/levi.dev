@@ -34,7 +34,12 @@ git log for the cutover commit.)
     2026-10. To add an alias, append an entry: `rx` (regex on the
     pathname), `to` (absolute URL, or a root-relative path resolved
     against the request's host), optional `keepQuery: true` to forward
-    the query string. An alias shadows static files under its path.
+    the query string. An alias shadows static files under its path, so
+    `rx` must be shaped `/^\/(alias|alias|...)(?:\/.*)?$/i` with
+    **every** alternative inside that one group. A top-level `|` drops
+    the anchors from the other branches. Until 2026-10-11 the GGJ24/26
+    entries matched "fart", "imagination" etc. anywhere in a path and
+    301'd vendored hex-grid data files.
   - `knotmaze/[[path]].js` — serves the Knotmaze app at
     `levi.dev/knotmaze/` with the address bar staying on levi.dev, by
     proxying the separate `knotmaze` Pages project

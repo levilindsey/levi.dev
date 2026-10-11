@@ -13,6 +13,14 @@
 // To add a new short URL, append an entry. To match the body of
 // the request path, the regex is applied to `url.pathname`.
 //
+// Every rx has the shape /^\/(alias|alias|...)(?:\/.*)?$/i: the alias
+// is the path's leading segment, and EVERY alternative sits inside
+// that one group. A top-level `|` splits the anchors off. Before
+// 2026-10-11, the GGJ24/GGJ26 entries read `^\/(beans?)|(farts?)|...`,
+// which matched "fart", "imagination", "pull-my-finger" anywhere in any
+// path. Because Functions run first, that 301'd real static files such
+// as /hex-grid/example/data/pull-my-finger/metadata.json.
+//
 // Ported from the legacy Express middleware at apps/redirects/routes.js
 // (removed 2026-10; git history has it). This file is the only copy.
 
@@ -166,7 +174,7 @@ const REDIRECTS = [
 		to: 'https://voithos.itch.io/uprooted',
 	},
 	{
-		rx: /^\/(beans?)|(farts?)|(pull-?my-?finger((-?a)?-?bean-?based-?survival-?game)?|(ggj|global-?game-?jam)-?((20)?24)?)(?:\/.*)?$/i,
+		rx: /^\/(beans?|farts?|pull-?my-?finger((-?a)?-?bean-?based-?survival-?game)?|(ggj|global-?game-?jam)-?((20)?24)?)(?:\/.*)?$/i,
 		to: 'https://levilindsey.itch.io/pull-my-finger-a-bean-based-survival-game',
 	},
 	{
@@ -174,7 +182,7 @@ const REDIRECTS = [
 		to: 'https://levilindsey.itch.io/oh-the-places-youll-blow',
 	},
 	{
-		rx: /^\/(masks?)|(imaginations?)|((the-?)?masks?-?of-?imaginations?)|(ggj|global-?game-?jam)-?((20)?26)?(?:\/.*)?$/i,
+		rx: /^\/(masks?|imaginations?|(the-?)?masks?-?of-?imaginations?|(ggj|global-?game-?jam)-?((20)?26)?)(?:\/.*)?$/i,
 		to: 'https://levilindsey.itch.io/mask-of-imaginations',
 	},
 	{
