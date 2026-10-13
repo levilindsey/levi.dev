@@ -47,8 +47,8 @@ git log for the cutover commit.)
     Vite base is relative, so it needs the trailing slash);
     `/knotmaze/<rest>` streams `knotmaze.pages.dev/<rest><query>`
     through and rewrites upstream Locations under `/knotmaze/`; GET and
-    HEAD only. The `/knots` aliases in `[[catchall]].js` 301 to
-    `/knotmaze/` with the query kept (the app keeps its state in the
+    HEAD only. The `/knots` and `/maze` aliases in `[[catchall]].js` 301
+    to `/knotmaze/` with the query kept (the app keeps its state in the
     URL).
   - `media/[[path]].js` — serves portfolio media from the R2 bucket
     `levi-portfolio-media` at `/media/<post-id>/<file>`. See

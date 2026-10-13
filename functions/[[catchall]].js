@@ -143,11 +143,11 @@ const REDIRECTS = [
 	// project by its own GitHub Actions workflow). The app is served at
 	// /knotmaze/ by functions/knotmaze/[[path]].js, which is more
 	// specific than this catchall, so /knotmaze itself never reaches
-	// this entry; the aliases (and old shared /knots links) land on that
-	// canonical URL. The app keeps its whole state in the URL, so the
+	// this entry; the aliases (old shared /knots links, and /maze) land on
+	// that canonical URL. The app keeps its whole state in the URL, so the
 	// query string is forwarded.
 	{
-		rx: /^\/(knots?|knot-?maze|celtic-?knots?)(?:\/.*)?$/i,
+		rx: /^\/(knots?|knot-?maze|celtic-?knots?|mazes?)(?:\/.*)?$/i,
 		to: '/knotmaze/',
 		keepQuery: true,
 	},
