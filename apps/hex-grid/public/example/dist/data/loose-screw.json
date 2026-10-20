@@ -1,0 +1,49 @@
+{
+  "id": "loose-screw",
+  "titleShort": "Retro\nRepair-Shop\nMicrogames",
+  "titleLong": "Loose Screw",
+  "emphasis": 0.6,
+  "color": "#f5d74c",
+  "urls": {
+    "itchio": "https://levilindsey.itch.io/loose-screw",
+    "github": "https://github.com/levilindsey/ld60/"
+  },
+  "jobTitle": "",
+  "location": "",
+  "date": "10/2026",
+  "categories": [
+    "Side-Project",
+    "Game",
+    "2D",
+    "Godot",
+    "Game-Jam",
+    "Teamwork",
+    "Web",
+    "Art",
+    "Music"
+  ],
+  "images": [
+    {
+      "fileName": "shrink-ray-blast.gif",
+      "description": "Careful with that hammer around the shrink ray. It fires back."
+    },
+    {
+      "fileName": "glue-repair.gif",
+      "description": "Squeeze glue onto the break, then hold the piece steady until it sticks."
+    },
+    {
+      "fileName": "yank-and-fit.gif",
+      "description": "Wiggle the busted key out, then fetch a fresh one from the parts drawers."
+    },
+    {
+      "fileName": "atari-screw.png",
+      "description": "Every tool is its own little microgame, screws included."
+    },
+    {
+      "fileName": "receipt-card.png",
+      "description": "Ship it out and get rated: three stars if the desk stays tidy."
+    }
+  ],
+  "videos": [],
+  "content": "> Welcome to Loose Screw. Come on in!\n\nBroken gadgets pile onto your workbench: a toaster that won't sit still, a TV held together by habit, an Atari joystick, a Game & Watch, even a shrink ray with a hair trigger. Every tool on the bench is its own tiny microgame. Drive screws, wiggle busted parts out, glue pieces back on, wipe the grime, blow the dust, and try not to whack anything that whacks back. Ship each repair out for a one-to-three-star rating, if the mess on your desk doesn't cost you.\n\nWatch the trailer: https:\/\/levi.dev\/media\/loose-screw\/trailer.mp4\n\n⏰ This was made for [Ludum Dare 60](https:\/\/ldjam.com\/events\/ludum-dare\/60), with Zaven.\n\n⭐ The theme for the jam was **\"Old Tech\"**.\n\n### 🖱️ Instructions\n\n- Mouse or touch does everything.\n- Pick up a tool, use it on the gadget, put it back.\n- Parts live in the drawers. So does everything else. Check the drawers.\n- Finish the repair, drag the gadget to the outbox, and mind the rating.\n\n### 🛠️ Our tools\n\n*   **[Godot](https:\/\/godotengine.org)**: Game engine.\n*   **[Krita](https:\/\/krita.org)**: Hand-drawn art.\n*   **[Claude Code](https:\/\/code.claude.com)**: Code assist.\n\n_All art, music, and sound effects were made without the use of AI._\n\n🔧\n"
+}
