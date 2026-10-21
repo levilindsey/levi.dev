@@ -1,6 +1,6 @@
 {
   "id": "loose-screw",
-  "titleShort": "Retro\nRepair-Shop\nMicrogames",
+  "titleShort": "Cozy\nRepair Shop\nGame",
   "titleLong": "Loose Screw",
   "emphasis": 0.6,
   "color": "#f5d74c",
@@ -19,7 +19,6 @@
     "Game-Jam",
     "Teamwork",
     "Web",
-    "Art",
     "Music"
   ],
   "images": [
@@ -39,5 +38,5 @@
       "description": "The Loose Screw trailer."
     }
   ],
-  "content": "> Welcome to Loose Screw. Come on in!\n\nBroken gadgets pile onto your workbench: a toaster that won't sit still, a TV held together by habit, an Atari joystick, a Game & Watch, even a shrink ray with a hair trigger. Every tool on the bench is its own tiny microgame. Drive screws, wiggle busted parts out, glue pieces back on, wipe the grime, blow the dust, and try not to whack anything that whacks back. Ship each repair out for a one-to-three-star rating, if the mess on your desk doesn't cost you.\n\nWatch the trailer: https:\/\/www.youtube.com\/watch?v=yp9wOOx1W9M\n\n⏰ This was made for [Ludum Dare 60](https:\/\/ldjam.com\/events\/ludum-dare\/60), with Zaven.\n\n⭐ The theme for the jam was **\"Old Tech\"**.\n\n### 🖱️ Instructions\n\n- Mouse or touch does everything.\n- Pick up a tool, use it on the gadget, put it back.\n- Parts live in the drawers. So does everything else. Check the drawers.\n- Finish the repair, drag the gadget to the outbox, and mind the rating.\n\n### 🛠️ Our tools\n\n*   **[Godot](https:\/\/godotengine.org)**: Game engine.\n*   **[Krita](https:\/\/krita.org)**: Hand-drawn art.\n*   **[Claude Code](https:\/\/code.claude.com)**: Code assist.\n\n_All art, music, and sound effects were made without the use of AI._\n\n🔧\n"
+  "content": "> Don't lose your screws!\n\n_🪛 Repair old stuff. And maybe some new stuff._\n\n⏰ This was made for [Ludum Dare 60](https:\/\/ldjam.com\/events\/ludum-dare\/60).\n\n⭐ The theme for the jam was **\"Old Tech\"**.\n\n### 🛠️ Our tools\n\n*   **[Godot](https:\/\/godotengine.org)**: Game engine\n*   **[Krita](https:\/\/krita.org\/en\/):** Painting program\n*   **[FL Studio](https:\/\/www.image-line.com\/)**: Digital audio workstation\n*   **[Claude Code](https:\/\/code.claude.com)**: Code assist\n\n### 👋 Our team\n\n*   Taryn Schwartzstein.\n*   **[Zaven Muradyan](https:\/\/voithos.io\/)**\n*   **[Levi Lindsey](https:\/\/levi.dev)**\n\n_All **art**, **music**, and **sound effects** were made without the use of AI._\n"
 }
