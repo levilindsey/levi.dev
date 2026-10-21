@@ -233,6 +233,13 @@ const REDIRECTS = [
 		rx: /^\/((ld|ludum-?dare-?)59|((kitten|cat)-?|bat-?)i?corn)(?:\/.*)?$/i,
 		to: 'https://levi.dev/kittenbaticorn',
 	},
+	// Loose Screw (the LD60 repair-shop game). The jam-name aliases
+	// follow the house pattern; the screw aliases are the game's
+	// title with the 'loose' optional, like the 'celtic' in /knots.
+	{
+		rx: /^\/(ld60|ludum-?dare-?60|(loose-?)?screws?)(?:\/.*)?$/i,
+		to: 'https://levilindsey.itch.io/loose-screw',
+	},
 ];
 
 export async function onRequest(context) {
