@@ -33,8 +33,13 @@ const CONTENT_TYPES = {
 
 // A week in browsers and at the edge. Media is referenced by a stable
 // file name per post; a replaced file propagates within the week, a
-// new file name is live immediately.
+// new file name is live immediately. When a replaced file must show
+// NOW (the loose-screw logo/thumbnail swap, 2026-10-21), bump
+// CACHE_KEY_VERSION: every edge entry keys off it, so the bump
+// orphans the stale copies and the next request refills from R2.
+// Browsers keep their own week; a hard refresh covers that side.
 const CACHE_CONTROL = 'public, max-age=604800';
+const CACHE_KEY_VERSION = '2';
 
 export async function onRequest(context) {
 	const { request, env, params } = context;
@@ -65,7 +70,9 @@ export async function onRequest(context) {
 	}
 
 	const cache = caches.default;
-	const cacheKey = new Request(request.url, { method: 'GET' });
+	const cacheUrl = new URL(request.url);
+	cacheUrl.searchParams.set('__cv', CACHE_KEY_VERSION);
+	const cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
 	const cached = await cache.match(cacheKey);
 	if (cached) {
 		return request.method === 'HEAD'
